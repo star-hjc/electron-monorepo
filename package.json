@@ -1,0 +1,24 @@
+{
+  "name": "all-chat-pc",
+  "version": "1.0.0",
+  "description": "electron基础架构",
+  "scripts": {
+    "start": "echo '启动所有服务'",
+    "prepare": "husky",
+    "spell-check": "cspell .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "cspell": "^8.17.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier-eslint": "^16.3.0"
+  }
+}

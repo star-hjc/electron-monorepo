@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# npm run lint
+
+# 只检测git add的文件
+npx lint-staged
+
+npm run spell-check
+
+
+

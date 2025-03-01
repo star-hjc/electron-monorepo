@@ -1,0 +1,18 @@
+{
+    "version": "0.2",
+    "language": "en",
+    "ignorePaths": [
+        "node_modules/**",
+        "dist/**",
+        "client/dist/**",
+        "_sourcemaps/**",
+        "_temp/**",
+        "src/cpp/**",
+        "src/rusts/native/target/**",
+        "src/rusts/native/artifacts.json",
+        "src/rusts/native/Cargo.lock",
+        "src/rusts/native/Cargo.toml"
+    ],
+    "words": [],
+    "flagWords": []
+}

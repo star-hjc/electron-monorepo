@@ -1,0 +1,7 @@
+#!/bin/sh
+
+commit_msg_file=$(git rev-parse --git-dir)/COMMIT_EDITMSG
+
+commit_msg=$(cat "$commit_msg_file")
+
+node ./.husky/validate-commit-msg.js "$commit_msg"

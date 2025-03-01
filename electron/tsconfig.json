@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "target": "ESNext",
+    "module": "NodeNext",
+    "rootDir": "src",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    // "typeRoots": [
+    //   "./src/typings"
+    // ],
+    "types": [
+      "node",
+      "./src/typings/global.d.ts",
+      "./client/typings/global.d.ts"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
