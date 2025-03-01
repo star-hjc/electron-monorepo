@@ -1,0 +1,67 @@
+{
+  "name": "view",
+  "private": true,
+  "version": "0.0.0",
+  "type": "commonjs",
+  "main": "./application/main/index.js",
+  "scripts": {
+    "appview": "vite ./renderer",
+    "app": "nodemon --exec electron . --watch ./ --ignore ./renderer --ext .js",
+    "serve": "concurrently -k \"npm run appview\" \"npm run app\"",
+    "build": "vite build ./renderer && electron-builder",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@arco-design/web-vue": "^2.54.1",
+    "concurrently": "^8.2.2",
+    "dayjs": "^1.11.10",
+    "electron-log": "^5.0.3",
+    "less": "^4.2.0",
+    "less-loader": "^11.1.4",
+    "nodemon": "^3.0.2",
+    "unplugin-auto-import": "^0.17.3",
+    "unplugin-vue-components": "^0.26.0",
+    "vue": "^3.3.11"
+  },
+  "devDependencies": {
+    "@arco-plugins/vite-vue": "^1.4.5",
+    "@vercel/ncc": "^0.38.1",
+    "@vitejs/plugin-vue": "^4.5.2",
+    "electron": "^28.1.2",
+    "electron-builder": "^24.9.1",
+    "vite": "^5.0.8"
+  },
+  "build": {
+    "appId": "com.xxx.xxx",
+    "productName": "xxx",
+    "copyright": "Copyright © 2023 <star>",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "icon": "./icons/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "installerIcon": "./icons/icon.ico",
+      "uninstallerIcon": "./icons/icon.ico",
+      "installerHeader": "icons/icon.ico",
+      "allowToChangeInstallationDirectory": true
+    },
+    "extraResources": {
+      "from": "./resources/",
+      "to": "./"
+    },
+    "files": [
+      "./**/*",
+      "!.app/**/*",
+      "!icons/**/*",
+      "!renderer/**/*",
+      "!pnpm-lock.yaml"
+    ],
+    "directories": {
+      "buildResources": "./",
+      "output": "./.app"
+    }
+  }
+}
