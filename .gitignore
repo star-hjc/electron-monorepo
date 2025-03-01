@@ -17,11 +17,12 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 .idea
-.app/*
-.out/*
+electron/.app/*
+electron/.out/*
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+yarn.lock
