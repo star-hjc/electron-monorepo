@@ -20,7 +20,6 @@ function createMainWindow() {
             // preload: path.join(app.getAppPath(), '/preload/index.js'),
             nodeIntegration: true,
         },
-        title: 'xxx',
     })
 
     win.loadURL(`http://localhost:5173/`)

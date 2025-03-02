@@ -1,13 +1,8 @@
 {
-    "exec":{
-        "command": "electron ."
-    },
-    "watch": [
-        "electron/**/*"
-    ],
+    "verbose": true,
+    "ignore": [],
+    "watch": ["."],
     "ext": "ts,json",
-    "ignore": [
-        "node_modules"
-    ],
-    "delay": "500"
-}
+    "exec": "tsc && electron .",
+    "delay": 200
+  }

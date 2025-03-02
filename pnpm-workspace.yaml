@@ -1,4 +1,4 @@
 packages:
   - 'electron/renderer/'
-  - 'electron/main/'
+  - 'electron/app/'
   - 'electron/common/'

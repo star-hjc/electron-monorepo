@@ -13,13 +13,10 @@
     // ],
     "types": [
       "node",
-      "./src/typings/global.d.ts",
-      "./client/typings/global.d.ts"
     ]
   },
   "include": [
-    "app/**/*",
-    "renderer/**/*"
+    "cli/**/*"
   ],
   "exclude": [
     "node_modules"

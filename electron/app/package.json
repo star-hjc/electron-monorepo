@@ -1,16 +1,17 @@
 {
+  "name": "app",
   "version": "1.0.0",
-  "main": "./main.js",
+  "main": "./dist/main.js",
+  "type": "commonjs",
   "scripts": {
-    "app": "electron ."
+    "dev": "nodemon",
+    "build": "tsup"
   },
   "dependencies": {
     "dayjs": "^1.11.13"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "electron": "^34.3.0"
+    "electron": "^34.3.0",
+    "nodemon": "^3.1.9"
   }
 }

@@ -1,0 +1,21 @@
+{
+    "tasks": {
+        "build": {
+            "outputs": [
+                "dist/**",
+                ".next/**"
+            ],
+            "dependsOn": [
+                "^build"
+            ]
+        },
+        "dev": {
+            "cache": false,
+            "persistent": true
+        },
+        "preview": {
+            "cache": false,
+            "persistent": true
+        }
+    }
+}
