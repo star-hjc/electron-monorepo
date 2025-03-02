@@ -15,7 +15,7 @@ module.exports = {
     rules: {
         "@typescript-eslint/ban-ts-comment": 1,
         'no-alert': 2,
-        semi: [2, 'always'], // 语句强制分号结尾
+        semi: [0, 'never'],
         'comma-dangle': [
             2,
             {

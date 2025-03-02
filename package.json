@@ -2,23 +2,37 @@
   "name": "all-chat-pc",
   "version": "1.0.0",
   "description": "electron基础架构",
+  "main": "electron/main/main.js",
+  "type": "commonjs",
   "scripts": {
     "start": "echo '启动所有服务'",
     "prepare": "husky",
     "spell-check": "cspell .",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "dev": "vite electron/renderer",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint"
     ]
   },
+  "dependencies": {
+    "vue": "^3.5.13"
+  },
   "devDependencies": {
+    "@types/node": "^22.13.8",
     "@typescript-eslint/eslint-plugin": "^8.25.0",
     "cspell": "^8.17.5",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
-    "prettier-eslint": "^16.3.0"
+    "prettier-eslint": "^16.3.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0",
+    "vue-tsc": "^2.2.4"
   }
 }

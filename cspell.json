@@ -11,8 +11,9 @@
         "src/rusts/native/target/**",
         "src/rusts/native/artifacts.json",
         "src/rusts/native/Cargo.lock",
-        "src/rusts/native/Cargo.toml"
+        "src/rusts/native/Cargo.toml",
+        "*.svg"
     ],
-    "words": [],
+    "words": ["Avenir"],
     "flagWords": []
 }
