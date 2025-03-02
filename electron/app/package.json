@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "main": "./main.js",
+  "scripts": {
+    "app": "electron ."
+  },
+  "dependencies": {
+    "dayjs": "^1.11.13"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^34.3.0"
+  }
+}

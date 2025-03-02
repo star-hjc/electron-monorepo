@@ -9,7 +9,13 @@
     "prepare": "husky",
     "spell-check": "cspell .",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "view:v": "vite electron/renderer",
+    "dev": "electron electron/app"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -22,12 +28,14 @@
   "devDependencies": {
     "@types/node": "^22.13.8",
     "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/tsconfig": "^0.7.0",
+    "concurrently": "^9.1.2",
     "cspell": "^8.17.5",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
+    "nodemon": "^3.1.9",
     "prettier-eslint": "^16.3.0",
-    "@vitejs/plugin-vue": "^5.2.1",
-    "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
     "vue-tsc": "^2.2.4"

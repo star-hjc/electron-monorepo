@@ -1,0 +1,13 @@
+{
+    "exec":{
+        "command": "electron ."
+    },
+    "watch": [
+        "electron/**/*"
+    ],
+    "ext": "ts,json",
+    "ignore": [
+        "node_modules"
+    ],
+    "delay": "500"
+}

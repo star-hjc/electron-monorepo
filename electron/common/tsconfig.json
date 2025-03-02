@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "declaration": true
+    },
+    "include": ["src"]
+}

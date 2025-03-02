@@ -12,7 +12,8 @@
         "src/rusts/native/artifacts.json",
         "src/rusts/native/Cargo.lock",
         "src/rusts/native/Cargo.toml",
-        "*.svg"
+        "*.svg",
+        "*.yaml"
     ],
     "words": ["Avenir"],
     "flagWords": []

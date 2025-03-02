@@ -1,0 +1,4 @@
+packages:
+  - 'electron/renderer/'
+  - 'electron/main/'
+  - 'electron/common/'

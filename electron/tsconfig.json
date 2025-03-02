@@ -18,7 +18,8 @@
     ]
   },
   "include": [
-    "src/**/*"
+    "app/**/*",
+    "renderer/**/*"
   ],
   "exclude": [
     "node_modules"
