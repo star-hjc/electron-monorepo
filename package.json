@@ -9,10 +9,7 @@
     "prepare": "husky",
     "spell-check": "cspell .",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "dev": "vite electron/renderer",
-    "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --fix"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
