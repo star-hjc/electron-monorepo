@@ -21,7 +21,8 @@
     "words": [
         "Avenir",
         "dylib",
-        "libloading"
+        "libloading",
+        "Vite"
     ],
     "flagWords": []
 }

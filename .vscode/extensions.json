@@ -1,3 +1,9 @@
 {
-  "recommendations": ["Vue.volar"]
+    "recommendations": [
+        "Vue.volar",
+        "usernamehw.errorlens",
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "wix.vscode-import-cost"
+    ]
 }

@@ -1,8 +1,8 @@
-import { defineConfig } from "tsup"
+import { defineConfig } from 'tsup'
 
 export default defineConfig({
-    entryPoints: ["src"],
-    format: ["esm","cjs"],
+    entryPoints: ['src'],
+    format: ['esm','cjs'],
     dts: true,
-    outDir: "dist",
+    outDir: 'dist',
 })
