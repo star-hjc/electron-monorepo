@@ -16,3 +16,4 @@ neon-build = "0.10.1"
 
 [dependencies]
 neon = "0.10.1"
+libloading = "0.7"

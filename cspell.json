@@ -20,7 +20,8 @@
     ],
     "words": [
         "Avenir",
-        "dylib"
+        "dylib",
+        "libloading"
     ],
     "flagWords": []
 }
