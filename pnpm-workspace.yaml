@@ -2,3 +2,4 @@ packages:
   - 'electron/renderer/'
   - 'electron/app/'
   - 'electron/common/'
+  - 'platform/macos/'

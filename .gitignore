@@ -7,3 +7,6 @@ dist
 *.lock
 pnpm-lock.yaml
 package-lock.json
+
+*.dylib
+**/.DS_Store
