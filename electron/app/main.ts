@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 
-// TODO:使用monorepo的方式引入
+// 后面使用monorepo的方式引入
 import NeonBridge from '../../neon-bridge/index'
 console.log(NeonBridge.hello(), 'main.ts::3行')
 
