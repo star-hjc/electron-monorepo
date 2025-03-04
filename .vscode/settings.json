@@ -3,9 +3,12 @@
         "source.fixAll.eslint": "always"
     },
     "editor.formatOnSave": true,
-    "[vue]": {
-        "editor.defaultFormatter": "Vue.volar",
-        "editor.formatOnSave": true
-    },
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "eslint.enable": true,
+    "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
 }

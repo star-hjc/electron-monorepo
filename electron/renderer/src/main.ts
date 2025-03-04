@@ -5,5 +5,4 @@ import { greet } from 'common'
 
 greet()
 
-
 createApp(App).mount('#app')
