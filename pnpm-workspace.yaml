@@ -1,5 +1,6 @@
 packages:
   - 'electron/renderer/'
   - 'electron/main/'
-  - 'package/*'
   - 'process/napi-rs'
+  - 'package/*'
+  - 'cli/'
