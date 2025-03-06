@@ -2,13 +2,14 @@
   "name": "app",
   "version": "1.0.0",
   "main": "./dist/main.js",
+  "types": "",
   "scripts": {
     "dev": "nodemon",
     "build": "tsup"
   },
   "dependencies": {
     "dayjs": "^1.11.13",
-    "@chat/native": "workspace:*"
+    "@chat/bridge": "workspace:*"
   },
   "devDependencies": {
     "electron": "^34.3.0",

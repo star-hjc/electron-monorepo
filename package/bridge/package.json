@@ -1,15 +1,16 @@
 {
-  "name": "bridge",
+  "name": "@chat/bridge",
   "version": "0.1.0",
   "description": "",
-  "main": "index.node",
+  "main": "dist/index.js",
+
   "scripts": {
     "test": "cargo test",
     "cargo-build": "cargo build --message-format=json-render-diagnostics > cargo.log",
     "cross-build": "cross build --message-format=json-render-diagnostics > cross.log",
-    "postcargo-build": "mkdir dist || neon dist -o ./dist/index.node < cargo.log",
+    "postcargo-build": "neon dist -o ./libs/index.node  < cargo.log",
     "postcross-build": "neon dist -m /target < cross.log",
-    "dev": "npm run cargo-build --",
+    "dev": "npm run cargo-build -- && tsup",
     "build": "npm run cargo-build -- --release",
     "cross": "npm run cross-build -- --release"
   },

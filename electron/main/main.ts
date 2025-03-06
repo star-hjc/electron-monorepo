@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron'
-import nativeModule from '@chat/native'
+import nativeModule from '@chat/bridge'
 
 // // 后面使用monorepo的方式引入
 // import NeonBridge from '../../neon-bridge/index'
@@ -30,5 +30,6 @@ function createMainWindow() {
 	win.on('close', async() => {
 		console.log(win.id)
 	})
+	win.webContents.openDevTools()
 	return win
 }
