@@ -1,0 +1,9 @@
+[package]
+name = "acu"
+version = "0.1.0"
+edition = "2024"
+[[bin]]
+name = "acu"
+path = "process/acu/src/main.rs"
+[dependencies]
+interprocess = "2.2.1"

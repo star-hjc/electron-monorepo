@@ -16,14 +16,18 @@
         "**/native/Cargo.toml",
         "*.svg",
         "*.yaml",
-        "**/dist/**"
+        "**/dist/**",
+        "**/target/**"
     ],
     "words": [
         "Avenir",
         "dylib",
         "libloading",
         "nonwords",
-        "Vite"
+        "Vite",
+        "rdev",
+        "interprocess",
+        "cdylib"
     ],
     "flagWords": []
 }

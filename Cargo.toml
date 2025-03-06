@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "package/bridge", # Path to the `bridge` crate
+    "process/main",   # Path to the `main` crate
+]

@@ -1,5 +1,6 @@
 packages:
   - 'electron/renderer/'
-  - 'electron/app/'
-  - 'electron/common/'
-  - 'platform/macos/'
+  - 'electron/main/'
+  - 'package/common/'
+  - 'package/bridge/'
+  - 'process/napi-rs'

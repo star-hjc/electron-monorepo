@@ -4,7 +4,7 @@
   "description": "electron基础架构",
   "main": "electron/main/main.js",
   "type": "module",
-  "packageManager": "pnpm@9.15.2",
+  "packageManager": "pnpm@9.0.0",
   "scripts": {
     "start": "echo '启动所有服务'",
     "prepare": "husky",

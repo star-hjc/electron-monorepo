@@ -1,0 +1,21 @@
+{
+  "name": "bridge",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.node",
+  "scripts": {
+    "test": "cargo test",
+    "cargo-build": "cargo build --message-format=json-render-diagnostics > cargo.log",
+    "cross-build": "cross build --message-format=json-render-diagnostics > cross.log",
+    "postcargo-build": "mkdir dist || neon dist -o ./dist/index.node < cargo.log",
+    "postcross-build": "neon dist -m /target < cross.log",
+    "dev": "npm run cargo-build --",
+    "build": "npm run cargo-build -- --release",
+    "cross": "npm run cross-build -- --release"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@neon-rs/cli": "0.1.82"
+  }
+}
