@@ -22,8 +22,7 @@ export default [
 	{ languageOptions: { globals: { ...globals.browser, ...globals.node }}},
 	{
 		rules: {
-			'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-			'no-console': process.env.NODE_ENV === 'production' ? 2 : 1,
+			'@typescript-eslint/no-require-imports': 1,
 			'vue/max-attributes-per-line': [2, {
 				'singleline': 4,
 				'multiline': 1
@@ -202,8 +201,9 @@ export default [
 			'array-bracket-spacing': [2, 'never'],
 			'no-async-promise-executor': 'off',
 			'require-atomic-updates': 'off',
-			'@typescript-eslint/no-require-imports': 1,
-			'no-prototype-builtins': 'off'
+			'no-prototype-builtins': 'off',
+			'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+			'no-console': process.env.NODE_ENV === 'production' ? 2 : 1
 		}
 	}
 ]
