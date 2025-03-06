@@ -17,7 +17,7 @@
     "clean": "ts-node cli/clean.ts"
   },
   "engines": {
-    "node": ">=20",
+    "node": ">=18",
     "pnpm": ">=9"
   },
   "lint-staged": {
