@@ -17,7 +17,8 @@
         "*.svg",
         "*.yaml",
         "**/dist/**",
-        "**/target/**"
+        "**/target/**",
+        "configs/tsconfig.schema.json"
     ],
     "words": [
         "Avenir",
