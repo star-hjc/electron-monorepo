@@ -30,6 +30,6 @@ function createMainWindow() {
 	win.on('close', async() => {
 		console.log(win.id)
 	})
-	win.webContents.openDevTools()
+	win.webContents.openDevTools({ mode: 'undocked' })
 	return win
 }

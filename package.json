@@ -6,12 +6,8 @@
   "type": "module",
   "packageManager": "pnpm@9.0.0",
   "scripts": {
-    "start": "echo '启动所有服务'",
-    "prepare": "husky",
     "spell-check": "cspell .",
     "lint": "eslint .",
-    "init": "eslint --init",
-    "lint:fix": "eslint . --fix",
     "dev": "turbo run dev",
     "build": "turbo run build",
     "clean": "ts-node cli/clean.ts"
@@ -34,7 +30,6 @@
     "globals": "^16.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
-    "prettier-eslint": "^16.3.0",
     "ts-node": "^10.9.2",
     "tsup": "^8.4.0",
     "turbo": "^2.4.4",

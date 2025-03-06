@@ -28,7 +28,8 @@
         "Vite",
         "rdev",
         "interprocess",
-        "cdylib"
+        "cdylib",
+        "undocked"
     ],
     "flagWords": []
 }
