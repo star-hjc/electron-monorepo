@@ -11,3 +11,5 @@ package-lock.json
 
 *.dylib
 **/.DS_Store
+**/cargo.log
+*index.node

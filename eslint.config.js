@@ -202,6 +202,7 @@ export default [
 			'array-bracket-spacing': [2, 'never'],
 			'no-async-promise-executor': 'off',
 			'require-atomic-updates': 'off',
+			'@typescript-eslint/no-require-imports': 1,
 			'no-prototype-builtins': 'off'
 		}
 	}
