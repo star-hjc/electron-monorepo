@@ -29,7 +29,8 @@
         "rdev",
         "interprocess",
         "cdylib",
-        "undocked"
+        "undocked",
+        "dotenv"
     ],
     "flagWords": []
 }

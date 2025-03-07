@@ -5,4 +5,6 @@ import { greet } from '@chat/common'
 
 greet()
 
+console.log('main', import.meta.env)
+
 createApp(App).mount('#app')

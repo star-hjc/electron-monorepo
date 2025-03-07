@@ -1,9 +1,9 @@
 import { app, BrowserWindow } from 'electron'
 import nativeModule from '@chat/bridge'
+import { config as loadEnv } from 'dotenv'
+import path from 'path'
 
-// // 后面使用monorepo的方式引入
-// import NeonBridge from '../../neon-bridge/index'
-// console.log(NeonBridge.hello(), 'main.ts::3行')
+loadEnv({ path: path.resolve(__dirname, `../../../.env`) })
 
 app.whenReady().then(async() => {
 	console.log(nativeModule.hello(), 'main.ts::9行')
@@ -25,7 +25,7 @@ function createMainWindow() {
 		}
 	})
 
-	win.loadURL(`http://localhost:5173/`)
+	win.loadURL(`http://localhost:${process.env.VITE_PORT}/`)
 
 	win.on('close', async() => {
 		console.log(win.id)

@@ -1,0 +1,8 @@
+{
+  "name": "@process/main",
+  "version": "0.1.0",
+  "description": "主进程",
+  "scripts": {
+    "dev": "cargo run"
+  }
+}

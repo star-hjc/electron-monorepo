@@ -8,10 +8,11 @@
     "build": "tsup"
   },
   "dependencies": {
-    "dayjs": "^1.11.13",
-    "@chat/bridge": "workspace:*"
+    "@chat/bridge": "workspace:*",
+    "dayjs": "^1.11.13"
   },
   "devDependencies": {
+    "dotenv": "^16.4.7",
     "electron": "^34.3.0",
     "nodemon": "^3.1.9"
   }
