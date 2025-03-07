@@ -5,6 +5,7 @@
   "types": "",
   "scripts": {
     "dev": "nodemon",
+    "dev:pro": "nodemon .production",
     "build": "tsup"
   },
   "dependencies": {
@@ -12,7 +13,6 @@
     "dayjs": "^1.11.13"
   },
   "devDependencies": {
-    "dotenv": "^16.4.7",
     "electron": "^34.3.0",
     "nodemon": "^3.1.9"
   }

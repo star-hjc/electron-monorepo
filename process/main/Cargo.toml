@@ -2,7 +2,10 @@
 name = "acu"
 version = "0.1.0"
 edition = "2024"
+build = "build.rs"
 
 [dependencies]
 interprocess = "2.2.1"
-dotenv = "0.15.0"
+
+[build-dependencies]
+dotenv = "0.15"

@@ -1,12 +1,9 @@
 import { app, BrowserWindow } from 'electron'
 import nativeModule from '@chat/bridge'
-import { config as loadEnv } from 'dotenv'
-import path from 'path'
-
-loadEnv({ path: path.resolve(__dirname, `../../../.env`) })
+import env from './env/index'
 
 app.whenReady().then(async() => {
-	console.log(nativeModule.hello(), 'main.ts::9行')
+	console.log(nativeModule.hello(), env.VITE_PORT, 'main.ts::9行')
 	createMainWindow()
 	app.on('activate', () => {
 		if (BrowserWindow.getAllWindows().length === 0) createMainWindow()
@@ -25,7 +22,7 @@ function createMainWindow() {
 		}
 	})
 
-	win.loadURL(`http://localhost:${process.env.VITE_PORT}/`)
+	win.loadURL(`http://localhost:${env.VITE_PORT}/`)
 
 	win.on('close', async() => {
 		console.log(win.id)

@@ -8,7 +8,7 @@
   "scripts": {
     "spell-check": "cspell .",
     "lint": "eslint .",
-    "dev": "turbo run dev",
+    "dev": "ts-node cli/dev.ts && turbo run dev",
     "build": "turbo run build",
     "clean": "ts-node cli/clean.ts"
   },

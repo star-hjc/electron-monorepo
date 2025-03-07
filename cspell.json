@@ -27,6 +27,7 @@
         "nonwords",
         "Vite",
         "rdev",
+        "rustc",
         "interprocess",
         "cdylib",
         "undocked",
