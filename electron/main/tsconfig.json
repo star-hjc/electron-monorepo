@@ -6,6 +6,7 @@
         "baseUrl": ".",
         "moduleResolution": "node",
         "outDir": "dist",
+        "noImplicitAny": false,
         "types": [
             "vite/client"
         ],

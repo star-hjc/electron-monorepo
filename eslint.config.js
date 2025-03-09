@@ -27,6 +27,7 @@ export default [
 				'singleline': 4,
 				'multiline': 1
 			}],
+			'@typescript-eslint/no-explicit-any': 1,
 			'vue/html-closing-bracket-newline': [2, {
 				'singleline': 'never',
 				'multiline': 'always'
