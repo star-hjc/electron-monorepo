@@ -1,11 +1,24 @@
 {
     "compilerOptions": {
+        "target": "ES2015",
+        "module": "commonjs",
         "esModuleInterop": true,
         "baseUrl": ".",
-        "module": "ESNext",
         "moduleResolution": "node",
         "outDir": "dist",
-        "types": ["vite/client"]
+        "types": [
+            "vite/client"
+        ],
+        "plugins": [
+            {
+                "transform": "./plugins/variable-replace-plugin.ts"
+            }
+        ]
     },
-    "include": ["."],
+    "include": [
+        "."
+    ],
+    "exclude": [
+        "./plugins/*"
+    ]
 }

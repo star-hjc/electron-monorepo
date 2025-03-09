@@ -3,16 +3,21 @@
   "version": "0.0.1",
   "main": "./dist/main.js",
   "scripts": {
-    "dev": "vite build --mode '' && electron .",
-    "dev:pro": "vite build --mode production && electron .",
-    "build": "tsup"
+    "dev": "cross-env NODE_ENV=development tsc && electron .",
+    "build": "cross-env NODE_ENV=production tsc",
+    "postinstall": "ts-patch install"
   },
   "dependencies": {
     "@chat/bridge": "workspace:*",
     "dayjs": "^1.11.13"
   },
   "devDependencies": {
+    "@types/node": "^22.13.8",
+    "cross-env": "^7.0.3",
     "electron": "^34.3.0",
+    "ts-node": "^10.9.2",
+    "ts-patch": "^3.3.0",
+    "typescript": "^5.8.2",
     "vite": "^6.2.0"
   }
 }
