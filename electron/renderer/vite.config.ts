@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
 	const envDir = path.resolve(__dirname, '../../')
 	const env = loadEnv(mode, envDir)
 	return {
-		envDir: path.join(__dirname, '../../'),
+		envDir,
 		plugins: [vue()],
 		resolve: {
 			alias: {

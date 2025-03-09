@@ -12,7 +12,7 @@
     "postcargo-build": "neon dist -o ./libs/index.node  < cargo.log",
     "postcross-build": "neon dist -m /target < cross.log",
     "dev": "npm run cargo-build -- && tsup",
-    "build": "npm run cargo-build -- --release",
+    "build": "npm run cargo-build -- --release && tsup",
     "cross": "npm run cross-build -- --release"
   },
   "author": "",
