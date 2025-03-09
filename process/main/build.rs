@@ -1,3 +1,5 @@
+use std::fs;
+use std::path::Path;
 use std::{collections::HashSet, env};
 
 fn main() {
@@ -8,4 +10,29 @@ fn main() {
             println!("cargo:rustc-env={}={}", key, value);
         }
     }
+
+    let demo_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
+    let out_dir = std::env::var("OUT_DIR").unwrap();
+    let target_dir = Path::new(&out_dir).ancestors().nth(3).unwrap();
+    let dll_source = Path::new(&demo_dir).join("src/libs/");
+    if let Ok(entries) = fs::read_dir(&dll_source) {
+        for entry in entries {
+            if let Ok(entry) = entry {
+                let file_path = entry.path();
+                if file_path.is_file() {
+                    let file_name = file_path.file_name().unwrap();
+                    let target_path = target_dir.join(file_name);
+                    if let Err(e) = fs::copy(&file_path, &target_path) {
+                        eprintln!("Failed to copy {}: {}", file_path.display(), e);
+                    } else {
+                        println!("Copied {} to {}", file_path.display(), target_path.display());
+                    }
+                }
+            }
+        }
+    } else {
+        eprintln!("Failed to read directory: {}", dll_source.display());
+    }
+    println!("cargo:rustc-link-search={}", target_dir.display());
+    println!("cargo:rustc-link-lib=dylib=create_dll");
 }

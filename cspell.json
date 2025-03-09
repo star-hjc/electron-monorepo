@@ -31,7 +31,9 @@
         "interprocess",
         "cdylib",
         "undocked",
-        "dotenv"
+        "dotenv",
+        "dumpbin",
+        "otool"
     ],
     "flagWords": []
 }

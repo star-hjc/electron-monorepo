@@ -9,7 +9,9 @@
 `pnpm eslint --init`
 
 ## init print, no install dependencies.
+
 monorepo Install may encounter errors, Custom installation required.
+
 ```
 √ How would you like to use ESLint? · problems
 √ What type of modules does your project use? · esm
@@ -25,4 +27,14 @@ You will need to install the dependencies yourself.
 ```
 
 ## Install dependencies
+
 `pnpm add -D -w eslint globals @eslint/js typescript-eslint eslint-plugin-vue`
+
+### Check if the dynamic link library is referenced by the executable file
+
+## windows
+`dumpbin /dependents  {exe_file_path}`
+
+## mac
+`otool -l {exe_file_path} `
+
