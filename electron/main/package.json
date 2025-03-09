@@ -1,11 +1,10 @@
 {
   "name": "app",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "./dist/main.js",
-  "types": "",
   "scripts": {
-    "dev": "nodemon",
-    "dev:pro": "nodemon .production",
+    "dev": "vite build --mode '' && electron .",
+    "dev:pro": "vite build --mode production && electron .",
     "build": "tsup"
   },
   "dependencies": {
@@ -14,6 +13,6 @@
   },
   "devDependencies": {
     "electron": "^34.3.0",
-    "nodemon": "^3.1.9"
+    "vite": "^6.2.0"
   }
 }

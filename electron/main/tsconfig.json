@@ -2,9 +2,10 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "baseUrl": ".",
-        "module": "CommonJS",
+        "module": "ESNext",
         "moduleResolution": "node",
         "outDir": "dist",
+        "types": ["vite/client"]
     },
     "include": ["."],
 }

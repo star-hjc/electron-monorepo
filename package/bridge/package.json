@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
-
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "cargo test",
     "cargo-build": "cargo build --message-format=json-render-diagnostics > cargo.log",

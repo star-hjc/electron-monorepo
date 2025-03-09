@@ -1,9 +1,10 @@
 import { app, BrowserWindow } from 'electron'
 import nativeModule from '@chat/bridge'
-import env from './env/index'
+import dayjs from 'dayjs'
 
 app.whenReady().then(async() => {
-	console.log(nativeModule.hello(), env.VITE_PORT, 'main.ts::9行')
+	console.log(nativeModule.hello(), import.meta.env.VITE_PORT, dayjs().format(), 'main.ts::9行')
+
 	createMainWindow()
 	app.on('activate', () => {
 		if (BrowserWindow.getAllWindows().length === 0) createMainWindow()
@@ -21,8 +22,8 @@ function createMainWindow() {
 			nodeIntegration: true
 		}
 	})
-
-	win.loadURL(`http://localhost:${env.VITE_PORT}/`)
+	// env?.VITE_PORT
+	win.loadURL(`http://localhost:${import.meta.env.VITE_PORT}/`)
 
 	win.on('close', async() => {
 		console.log(win.id)
