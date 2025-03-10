@@ -3,8 +3,9 @@
         "prettier"
     ],
     "printWidth": 100,
-    "trailingComma": "es5",
-    "tabWidth": 4,
     "semi": false,
+    "useTabs": true,
+    "trailingComma": "none",
+    "spaceBeforeFunctionParen": false,
     "singleQuote": true
 }

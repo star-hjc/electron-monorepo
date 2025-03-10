@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import { config as loadEnv } from 'dotenv'
 import path from 'path'
 
-const env = (mode:string, envDir:string) => {
+const env = (mode: string, envDir: string) => {
 	const envPath = path.join(envDir, `.env`)
 	const defaultEnvPath = path.join(envDir, `.env.${mode}`)
 	const defaultEnv = loadEnv({ path: defaultEnvPath }).parsed || {}
@@ -34,6 +34,14 @@ export default defineConfig(({ mode }) => {
 		server: {
 			host: '0.0.0.0',
 			port: Number('8888')
+		},
+		build: {
+			rollupOptions: {
+				input: {
+					main: path.resolve(__dirname, './index.html'),
+					mini: path.resolve(__dirname, './mini.html')
+				}
+			}
 		}
 	}
 })

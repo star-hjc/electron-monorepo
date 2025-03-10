@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@chat/bridge": "workspace:*",
-    "dayjs": "^1.11.13"
+    "dayjs": "^1.11.13",
+    "menubar": "^9.5.1"
   },
   "devDependencies": {
     "@types/node": "^22.13.8",
