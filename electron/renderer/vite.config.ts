@@ -1,13 +1,13 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { config as loadEnv } from 'dotenv'
+import * as dotenv from 'dotenv'
 import path from 'path'
 
 const env = (mode: string, envDir: string) => {
 	const envPath = path.join(envDir, `.env`)
 	const defaultEnvPath = path.join(envDir, `.env.${mode}`)
-	const defaultEnv = loadEnv({ path: defaultEnvPath }).parsed || {}
-	const env = loadEnv({ path: envPath }).parsed || {}
+	const defaultEnv = dotenv.config({ path: defaultEnvPath }).parsed || {}
+	const env = dotenv.config({ path: envPath }).parsed || {}
 	return { ...defaultEnv, ...env }
 }
 
@@ -33,7 +33,7 @@ export default defineConfig(({ mode }) => {
 		},
 		server: {
 			host: '0.0.0.0',
-			port: Number('8888')
+			port: Number(process.env.VITE_PORT)
 		},
 		build: {
 			rollupOptions: {

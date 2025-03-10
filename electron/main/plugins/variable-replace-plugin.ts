@@ -1,13 +1,13 @@
 import * as ts from 'typescript'
+import * as dotenv from 'dotenv'
 import path from 'path'
-import { config as loadEnv } from 'dotenv'
 
 const env = () => {
 	const envDir = path.join(__dirname, `../../../`)
 	const envPath = path.join(envDir, `.env`)
 	const defaultEnvPath = path.join(envDir, `.env.${process.env.NODE_ENV || 'development'}`)
-	const defaultEnv = loadEnv({ path: defaultEnvPath }).parsed || {}
-	const env = loadEnv({ path: envPath }).parsed || {}
+	const defaultEnv = dotenv.config({ path: defaultEnvPath }).parsed || {}
+	const env = dotenv.config({ path: envPath }).parsed || {}
 	return { ...defaultEnv, ...env }
 }
 

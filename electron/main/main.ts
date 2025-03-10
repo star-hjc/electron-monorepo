@@ -1,6 +1,8 @@
 import { app, BrowserWindow } from 'electron'
 import nativeModule from '@chat/bridge'
 import dayjs from 'dayjs'
+import path from 'path'
+import './logger/index'
 import { initMiniWindow } from './mini'
 
 app.whenReady().then(async() => {
@@ -21,7 +23,7 @@ function createMainWindow() {
 		height: 830,
 		autoHideMenuBar: true,
 		webPreferences: {
-			// preload: path.join(app.getAppPath(), '/preload/index.js'),
+			preload: path.join(__dirname, 'preload.js'),
 			nodeIntegration: true
 		}
 	})
