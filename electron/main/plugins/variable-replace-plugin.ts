@@ -2,17 +2,19 @@ import * as ts from 'typescript'
 import path from 'path'
 import { config as loadEnv } from 'dotenv'
 
-const env = (() => {
-	let env = {}
-	if (process.env.NODE_ENV) {
-		env = loadEnv({ path: path.resolve(__dirname, `../../../.env.${process.env.NODE_ENV}`) }).parsed || {}
-	}
-	env = { ...loadEnv({ path: path.resolve(__dirname, `../../../.env`) }).parsed || {}}
-	return Object.entries(env).reduce((a, b) => {
-		a[`process.env.${b[0]}`] = b[1]
-		return a
-	}, {})
-})()
+const env = () => {
+	const envDir = path.join(__dirname, `../../../`)
+	const envPath = path.join(envDir, `.env`)
+	const defaultEnvPath = path.join(envDir, `.env.${process.env.NODE_ENV || 'development'}`)
+	const defaultEnv = loadEnv({ path: defaultEnvPath }).parsed || {}
+	const env = loadEnv({ path: envPath }).parsed || {}
+	return { ...defaultEnv, ...env }
+}
+
+const envMap = Object.entries(env()).reduce((a, b) => {
+	a[`process.env.${b[0]}`] = b[1]
+	return a
+}, {})
 
 export default function stringReplaceTransformer() {
 	return (context) => {
@@ -20,8 +22,8 @@ export default function stringReplaceTransformer() {
 			function visitor(node: ts.Node): ts.Node {
 				if (ts.isPropertyAccessExpression(node)) {
 					const key = node.getFullText().trim()
-					if (env[key]) {
-						return ts.factory.createStringLiteral(env[key])
+					if (envMap[key]) {
+						return ts.factory.createStringLiteral(envMap[key])
 					}
 				}
 				return ts.visitEachChild(node, visitor, context)
