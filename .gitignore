@@ -15,3 +15,5 @@ package-lock.json
 **/*/cargo.log
 
 **/dist/**
+**/.DS_Store
+.DS_Store
