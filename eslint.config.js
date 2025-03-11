@@ -18,7 +18,7 @@ export default [
 		}
 	},
 	{ files: ['**/*.{ts, vue}'] },
-	{ ignores: ['.husky/**/*', '**/dist/**', '**/node_modules/**', 'neon-bridge/**'] },
+	{ ignores: ['.husky/**/*', '**/dist/**', '**/node_modules/**', 'neon-bridge/**', 'doc/*'] },
 	{ languageOptions: { globals: { ...globals.browser, ...globals.node }}},
 	{
 		rules: {
