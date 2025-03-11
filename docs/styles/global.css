@@ -1,0 +1,22 @@
+.markdown pre {
+  font-size: 15px !important;
+  font-family: Monaco !important;
+}
+
+blockquote {
+  border: 1px solid #42b883 !important;
+  background-color: #f9f9f9;
+  color: #0000008c;
+  border-radius: 8px;
+}
+
+blockquote p {
+  margin: 0 !important;
+  line-height: 1.6 !important;
+  font-style: normal;
+}
+
+/* 在比较快的网速下会闪一下 */
+.dumi-default-loading-skeleton {
+  display: none;
+}

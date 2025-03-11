@@ -1,0 +1,10 @@
+node_modules
+/dist
+.dumi/tmp
+.dumi/tmp-test
+.dumi/tmp-production
+.DS_Store
+.dumi/*
+_bak/*
+docs-dist/*
+.obsidian
