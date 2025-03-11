@@ -22,18 +22,21 @@
     ],
     "words": [
         "Avenir",
+        "cdylib",
+        "dotenv",
+        "dumi",
+        "dumirc",
+        "dumpbin",
         "dylib",
+        "interprocess",
         "libloading",
         "nonwords",
-        "Vite",
+        "otool",
         "rdev",
         "rustc",
-        "interprocess",
-        "cdylib",
+        "umijs",
         "undocked",
-        "dotenv",
-        "dumpbin",
-        "otool"
+        "Vite"
     ],
     "flagWords": []
 }
