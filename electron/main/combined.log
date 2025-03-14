@@ -1,0 +1,82 @@
+{"level":"info","message":"hello 2025-03-14T23:04:03+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"hello 2025-03-14T23:04:28+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"hello 2025-03-14T23:04:32+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"error","message":"(node:10800) UnhandledPromiseRejectionWarning: Error: Failed to load image from path 'D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\state-ok-20.png'\n    at setOkIcon (D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\main.js:89:13)\n    at D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\main.js:126:7\n(Use `electron --trace-warnings ...` to show where the warning was created)"}
+{"level":"error","message":"(node:10800) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)"}
+{"level":"error","message":"(node:10800) UnhandledPromiseRejectionWarning: Error: ERR_INVALID_URL (-300) loading ''\n    at rejectAndCleanup (node:electron/js2c/browser_init:2:77183)\n    at finishListener (node:electron/js2c/browser_init:2:77345)\n    at WebContents.failListener (node:electron/js2c/browser_init:2:77631)\n    at WebContents.emit (node:events:518:28)\n    at _.loadURL (node:electron/js2c/browser_init:2:82381)\n    at n.loadURL (node:electron/js2c/browser_init:2:14451)\n    at Menubar.<anonymous> (D:\\code\\electron\\ai-chat-ultral-pc\\node_modules\\.pnpm\\menubar@9.5.1_electron@34.3.0\\node_modules\\menubar\\lib\\Menubar.js:363:66)\n    at step (D:\\code\\electron\\ai-chat-ultral-pc\\node_modules\\.pnpm\\menubar@9.5.1_electron@34.3.0\\node_modules\\menubar\\lib\\Menubar.js:59:23)\n    at Object.next (D:\\code\\electron\\ai-chat-ultral-pc\\node_modules\\.pnpm\\menubar@9.5.1_electron@34.3.0\\node_modules\\menubar\\lib\\Menubar.js:40:53)\n    at D:\\code\\electron\\ai-chat-ultral-pc\\node_modules\\.pnpm\\menubar@9.5.1_electron@34.3.0\\node_modules\\menubar\\lib\\Menubar.js:34:71"}
+{"level":"error","message":"(node:10800) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 2)"}
+{"level":"info","message":"hello 2025-03-14T23:17:51+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"error","message":"(node:3664) UnhandledPromiseRejectionWarning: Error: Failed to load image from path 'D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\state-ok-20.png'\n    at setOkIcon (D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\main.js:89:13)\n    at D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\main.js:126:7\n(Use `electron --trace-warnings ...` to show where the warning was created)"}
+{"level":"error","message":"(node:3664) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)"}
+{"level":"info","message":"1"}
+{"level":"info","message":"hello 2025-03-14T23:24:19+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"error","message":"(node:5852) UnhandledPromiseRejectionWarning: Error: Failed to load image from path 'D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\state-ok-20.png'\n    at setOkIcon (D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\main.js:89:13)\n    at D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\main.js:126:7\n(Use `electron --trace-warnings ...` to show where the warning was created)"}
+{"level":"error","message":"(node:5852) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)"}
+{"level":"info","message":"hello 2025-03-14T23:25:29+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"hello 2025-03-14T23:25:41+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"hello 2025-03-14T23:27:16+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"error","message":"(node:6440) UnhandledPromiseRejectionWarning: Error: Failed to load image from path 'D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\state-ok-20.png'\n    at setOkIcon (D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\mini.js:44:13)\n    at D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\mini.js:81:7\n(Use `electron --trace-warnings ...` to show where the warning was created)"}
+{"level":"error","message":"(node:6440) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)"}
+{"level":"info","message":"hello 2025-03-15T00:22:37+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"hello 2025-03-15T00:26:33+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"hello 2025-03-15T00:27:23+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"hello 2025-03-15T00:27:37+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"error","message":"(node:13780) UnhandledPromiseRejectionWarning: Error: Failed to load image from path 'D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\state-ok-20.png'\n    at setOkIcon (D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\mini.js:44:13)\n    at D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\mini.js:81:7\n(Use `electron --trace-warnings ...` to show where the warning was created)"}
+{"level":"error","message":"(node:13780) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)"}
+{"level":"info","message":"hello 2025-03-15T00:31:59+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"hello 2025-03-15T00:37:34+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"hello 2025-03-15T00:38:59+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T00:39:35+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T00:43:47+08:00 main.ts::6行"}
+{"level":"info","message":"12312 777"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T00:44:32+08:00 main.ts::6行"}
+{"level":"info","message":"hello 2025-03-15T00:45:06+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T00:45:20+08:00 main.ts::6行"}
+{"level":"info","message":"hello 2025-03-15T00:49:08+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T00:51:07+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T00:51:17+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T00:51:32+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T00:52:39+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T00:52:59+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T00:56:42+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T01:00:52+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T01:02:12+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T01:03:36+08:00 main.ts::6行"}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T01:10:19+08:00 main.ts::6行"}
+{"level":"info","message":"preload preload"}
+{"level":"warn","message":"%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged."}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}
+{"level":"info","message":"hello 2025-03-15T01:11:15+08:00 main.ts::6行"}
+{"level":"info","message":"preload preload"}
+{"level":"warn","message":"%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged."}
+{"level":"info","message":"D:\\code\\electron\\ai-chat-ultral-pc\\electron\\main\\dist\\static\\icons\\IconTemplate.png"}

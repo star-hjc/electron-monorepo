@@ -1,16 +1,17 @@
 {
-  "name": "cli",
+  "name": "@chat/cli",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "bin": {
+    "clean": "./dist/clean.js"
   },
-  "keywords": [],
+  "scripts": {
+    "postinstall": "tsup"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "inquirer": "^12.4.2",
-    "dotenv": "^16.4.7"
+    "chokidar": "^4.0.3",
+    "inquirer": "^12.4.2"
   }
 }

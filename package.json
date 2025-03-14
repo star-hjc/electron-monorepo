@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "clean": "ts-node cli/clean.ts"
+    "clean": "clean"
   },
   "engines": {
     "node": ">=18",
@@ -21,6 +21,7 @@
     ]
   },
   "devDependencies": {
+    "@chat/cli": "workspace:*",
     "@eslint/js": "^9.21.0",
     "@types/node": "^22.13.8",
     "cspell": "^8.17.5",

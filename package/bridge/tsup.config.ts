@@ -18,15 +18,5 @@ export default defineConfig({
 				}))
 			}
 		}
-		// {
-		//   name: 'copy-node-file',
-		//   setup(build) {
-		//     build.onEnd(async () => {
-		//       const source = path.resolve('./libs/index.node');
-		//       const target = path.resolve('dist/index.node');
-		//       fs.copyFileSync(source, target);
-		//     });
-		//   } ,
-		// }
 	]
 })

@@ -1,9 +1,0 @@
-{
-    "verbose": true,
-    "ignore": [],
-    "watch": [
-        "."
-    ],
-    "ext": "ts,json",
-    "delay": 200
-}

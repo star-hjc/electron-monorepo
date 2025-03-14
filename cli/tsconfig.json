@@ -1,9 +1,11 @@
 {
-  "$schema": "../configs/tsconfig.schema.json",
   "compilerOptions": {
-    "esModuleInterop": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": "."
+      "forceConsistentCasingInFileNames": true,
+      "target": "ESNext",
+      "module": "NodeNext",
+      "outDir": "dist",
+      "strict": true,
+      "esModuleInterop": true,
+      "noImplicitAny": false,
   }
 }

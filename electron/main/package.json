@@ -1,29 +1,22 @@
 {
-  "name": "app",
+  "name": "@electron/main",
   "version": "0.0.1",
   "main": "./dist/main.js",
   "scripts": {
-    "start": "tsc && electron .",
-    "dev": "nodemon --exec cross-env NODE_ENV=development npm run start",
-    "dev:pro": "nodemon --exec cross-env NODE_ENV=production npm run start",
-    "build": "cross-env NODE_ENV=production tsc",
-    "postinstall": "ts-patch install"
+    "dev": "tsup --watch --env.NODE_ENV production",
+    "dev:pro": "tsup --watch --env.NODE_ENV production",
+    "build": "tsup --env.NODE_ENV production"
   },
   "dependencies": {
     "@chat/bridge": "workspace:*",
+    "@chat/cli": "workspace:*",
     "dayjs": "^1.11.13",
     "menubar": "^9.5.1",
     "winston": "^3.17.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.8",
-    "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
-    "electron": "^34.3.0",
-    "nodemon": "^3.1.9",
-    "ts-node": "^10.9.2",
-    "ts-patch": "^3.3.0",
-    "typescript": "^5.8.2",
-    "vite": "^6.2.0"
+    "electron": "^34.3.0"
   }
 }

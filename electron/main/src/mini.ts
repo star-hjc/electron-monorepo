@@ -1,8 +1,8 @@
-import { app } from 'electron'
+// import { app } from 'electron'
 import { menubar } from 'menubar'
 import path from 'path'
 
-const AppPath = app.getAppPath()
+const AppPath = __dirname
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 export function initMiniWindow() {
@@ -17,6 +17,8 @@ export function initMiniWindow() {
 	}
 
 	function setStaticIcon() {
+		console.log(path.join(AppPath, 'static/icons/IconTemplate.png'))
+
 		mb.tray.setImage(path.join(AppPath, 'static/icons/IconTemplate.png'))
 	}
 

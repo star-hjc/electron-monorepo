@@ -28,6 +28,8 @@
         "dumirc",
         "dumpbin",
         "dylib",
+        "jepg",
+        "icns",
         "interprocess",
         "libloading",
         "nonwords",
