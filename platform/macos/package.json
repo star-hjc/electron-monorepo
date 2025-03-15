@@ -1,0 +1,13 @@
+{
+  "name": "macos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node build-macos.ts",
+    "build": "ts-node build-macos.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

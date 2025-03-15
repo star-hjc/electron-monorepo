@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "clean": "clean"
+    "clean": "ts-node cli/src/clean.ts"
   },
   "engines": {
     "node": ">=18",

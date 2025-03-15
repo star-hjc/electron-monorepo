@@ -17,3 +17,5 @@ package-lock.json
 **/dist/**
 **/.DS_Store
 .DS_Store
+electron/main/logs/*
+combined.log

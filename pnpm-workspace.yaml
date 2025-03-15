@@ -4,3 +4,4 @@ packages:
   - 'process/main/'
   - 'package/*'
   - 'cli/'
+  - 'platform/*'

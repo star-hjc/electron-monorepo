@@ -6,7 +6,7 @@ import './logger/index'
 import { initMiniWindow } from './mini'
 
 app.whenReady().then(async() => {
-	console.log(nativeModule.hello(), dayjs().format(), 'main.ts::6行')
+	console.log(nativeModule.hello(), nativeModule.sum(3, 5), dayjs().format(), 'main.ts::622行')
 
 	// TODO: 后续考虑把主窗口和mini窗放到外面入口文件统一初始化
 	createMainWindow()

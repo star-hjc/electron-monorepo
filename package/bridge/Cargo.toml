@@ -14,3 +14,4 @@ crate-type = ["cdylib"]
 rdev = "0.5.3"
 neon = "1"
 interprocess = "2.2.1"
+libloading = "0.8"

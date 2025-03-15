@@ -3,7 +3,8 @@ import path from 'path'
 import { askByCmd } from './helper/inquirer.helper'
 
 const needExcludeDirs = [
-	'node_modules'
+	'node_modules',
+	'target',
 ]
 
 /**

@@ -6,6 +6,7 @@
     "clean": "./dist/clean.js"
   },
   "scripts": {
+    "clean": "ts-node src/clean.ts",
     "postinstall": "tsup"
   },
   "author": "",
