@@ -4,7 +4,7 @@ import { askByCmd } from './helper/inquirer.helper'
 
 const needExcludeDirs = [
 	'node_modules',
-	'target',
+	'target'
 ]
 
 /**
