@@ -32,10 +32,13 @@
         "icns",
         "interprocess",
         "libloading",
+        "maxsize",
         "nonwords",
         "otool",
         "rdev",
         "rustc",
+        "sington",
+        "tailable",
         "umijs",
         "undocked",
         "Vite"

@@ -2,11 +2,14 @@ import { app, BrowserWindow } from 'electron'
 import nativeModule from '@chat/bridge'
 import dayjs from 'dayjs'
 import path from 'path'
-import './logger/index'
+import create_tags from './logger'
 import { initMiniWindow } from './mini'
 
+const log = create_tags('main')
+log.info('main', 888)
+
 app.whenReady().then(async() => {
-	console.log(nativeModule.hello(), nativeModule.sum(3, 5), dayjs().format(), 'main.ts::622行')
+	console.log(nativeModule.hello(), dayjs().format(), 'main.ts::622行')
 
 	// TODO: 后续考虑把主窗口和mini窗放到外面入口文件统一初始化
 	createMainWindow()

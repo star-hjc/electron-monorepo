@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "主进程",
   "scripts": {
-    "dev2": "cargo run",
+    "dev": "cargo build",
     "dev:pro": "cargo run -- .production",
     "dev:case": "cargo run -- \"\" 2 3 4 5 ..."
   }

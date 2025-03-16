@@ -1,36 +1,84 @@
 import winston from 'winston'
 
-// 创建一个 logger 实例
-const logger = winston.createLogger({
-	level: 'info', // 设置日志级别
-	// format: winston.format.json(),
-	transports: [
-		// 输出到控制台
-		new winston.transports.Console(),
-		// 输出到文件
-		new winston.transports.File({ filename: 'combined.log' }),
+const levels = { log: 'info', error: 'error', warn: 'warn', debug: 'debug' }
 
-		new winston.transports.File({ filename: 'logs/application.log' })
-	]
-})
+const formatIsCombine = [
+	winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
+	winston.format.printf(({ timestamp, level, message }) => `${timestamp} (${level}) ${message}`)
+]
 
-console.log = (...args) => {
-	logger.info(args.join(' '))
+const logger = () => {
+	const log = winston.createLogger({
+		level: 'debug',
+		format: winston.format.combine(...formatIsCombine),
+		transports: [
+			new winston.transports.Console({
+				format: winston.format.combine(
+					winston.format.colorize(),
+					...formatIsCombine
+				)
+			}),
+			new winston.transports.File({
+				filename: `main.log`,
+				dirname: `../resources/logs`,
+				maxFiles: 5,
+				// maxsize: 20 * 1024 * 1024,
+				maxsize: 5 * 1024,
+				tailable: true
+			})
+		]
+	})
+	for (const [key, value] of Object.entries(levels)) {
+		// eslint-disable-next-line no-console
+		console[key] = (...args) => {
+			log[value](logFormat(args))
+		}
+	}
+	return log
 }
 
-console.error = (...args) => {
-	logger.error(args.join(' '))
+const logFormat = (args, tags:string|undefined = 'test') => {
+	return [`[${tags}]:`, ...args].map(v => {
+		if (typeof v === 'string') {
+			return v.replace(/\n/g, '\t\t')
+		} else if (v instanceof Error) {
+			return `Error: ${v.message}\n Stack: ${v.stack}`
+		} else if (typeof v === 'object' || v === void 0) {
+			return JSON.stringify(v, (key, value) => {
+				if (key === 'self') return '[Circular]'
+				return value
+			})
+		}
+		return v.toString()
+	}).join('  ')
+}
+const log = logger()
+
+export default (tags:string) => {
+	return new Proxy(log, {
+		get(target, prop, receiver) {
+			const logLevels = Object.values(levels)
+			if (logLevels.includes(String(prop))) {
+				return (...args) => {
+					return Reflect.get(target, prop, receiver)(logFormat(args, tags))
+				}
+			}
+
+			return Reflect.get(target, prop, receiver)
+		}
+	})
 }
 
-console.warn = (...args) => {
-	logger.warn(args.join(' '))
-}
-
-console.debug = (...args) => {
-	logger.debug(args.join(' '))
-}
-
-// const test = (args) => {
-// 	const opt = args.splice(args.length - 1)
-
+// function sington(className) {
+// 	let ins = null
+// 	const proxy = new Proxy(className, {
+// 		construct(target, args) {
+// 			if (!ins) {
+// 				ins = Reflect.construct(target, args)
+// 			}
+// 			return ins
+// 		}
+// 	})
+// 	proxy.prototype.constructor = proxy
+// 	return proxy
 // }

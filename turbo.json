@@ -9,16 +9,22 @@
                 "^build"
             ]
         },
-        "dev": {
-            "cache": false,
-            "persistent": true,
-            "dependsOn": [
-                "^build"
-            ]
-        },
         "preview": {
             "cache": false,
             "persistent": true
+        },
+        "dev:init": {
+            "cache": false,
+            "persistent": false
+        },
+        "dev": {
+            "cache": false,
+            "persistent": true
+        },
+        "@electron/main#dev": {
+            "dependsOn": [
+                "@chat/bridge#dev:init"
+            ]
         }
     }
 }
