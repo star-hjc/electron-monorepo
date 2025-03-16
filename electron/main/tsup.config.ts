@@ -16,13 +16,14 @@ export default defineConfig(({ env }) => {
 	}, {})
 	return {
 		define,
+		shims: true,
 		clean: true,
 		minify: true,
 		entry: ['./src'],
 		format: ['cjs'],
 		tsconfig: 'tsconfig.json',
 		outDir: 'dist',
-		external: ['electron', '@chat/bridge', /^electron\/.+/, ...builtinModules.flatMap(m => [m, `node:${m}`])],
+		external: ['electron', /^@chat\/.+/, /^electron\/.+/, ...builtinModules.flatMap(m => [m, `node:${m}`])],
 		loader: {
 			'.icns': 'copy',
 			'.png': 'copy',
@@ -58,8 +59,8 @@ function getEnv(mode: string, envDir: string) {
 function getElectronPath(): string {
 	let electronExecPath = process.env.ELECTRON_EXEC_PATH || ''
 	if (!electronExecPath) {
-		const _require = createRequire(import.meta.url)
-		const electronModulePath = path.dirname(_require.resolve('electron'))
+		const require = createRequire(__filename)
+		const electronModulePath = path.dirname(require.resolve('electron'))
 		const pathFile = path.join(electronModulePath, 'path.txt')
 		let executablePath = ''
 		if (existsSync(pathFile)) {

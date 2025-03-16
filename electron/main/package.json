@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@chat/bridge": "workspace:*",
-    "@chat/cli": "workspace:*",
+    "@chat/common": "workspace:*",
     "dayjs": "^1.11.13",
     "menubar": "^9.5.1",
     "winston": "^3.17.0"

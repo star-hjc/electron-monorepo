@@ -1,5 +1,7 @@
 import winston from 'winston'
 
+const mainProcessLogFileName = 'main'
+
 const levels = { log: 'info', error: 'error', warn: 'warn', debug: 'debug' }
 
 const formatIsCombine = [
@@ -7,7 +9,7 @@ const formatIsCombine = [
 	winston.format.printf(({ timestamp, level, message }) => `${timestamp} (${level}) ${message}`)
 ]
 
-const logger = () => {
+export const logger = (filename: string | undefined = mainProcessLogFileName) => {
 	const log = winston.createLogger({
 		level: 'debug',
 		format: winston.format.combine(...formatIsCombine),
@@ -19,7 +21,7 @@ const logger = () => {
 				)
 			}),
 			new winston.transports.File({
-				filename: `main.log`,
+				filename: `${filename}.log`,
 				dirname: `../resources/logs`,
 				maxFiles: 5,
 				// maxsize: 20 * 1024 * 1024,
@@ -28,10 +30,12 @@ const logger = () => {
 			})
 		]
 	})
-	for (const [key, value] of Object.entries(levels)) {
-		// eslint-disable-next-line no-console
-		console[key] = (...args) => {
-			log[value](logFormat(args))
+	if (filename === mainProcessLogFileName) {
+		for (const [key, value] of Object.entries(levels)) {
+			// eslint-disable-next-line no-console
+			console[key] = (...args) => {
+				log[value](logFormat(args))
+			}
 		}
 	}
 	return log
@@ -54,7 +58,7 @@ const logFormat = (args, tags:string|undefined = 'test') => {
 }
 const log = logger()
 
-export default (tags:string) => {
+export const create_tags = (tags:string) => {
 	return new Proxy(log, {
 		get(target, prop, receiver) {
 			const logLevels = Object.values(levels)

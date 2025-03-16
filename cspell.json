@@ -33,6 +33,7 @@
         "interprocess",
         "libloading",
         "maxsize",
+        "nodenext",
         "nonwords",
         "otool",
         "rdev",

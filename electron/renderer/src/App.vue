@@ -15,6 +15,9 @@
 
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
+import { create_tags } from './logger'
+const console = create_tags('vue')
+console.log(7777)
 </script>
 
 <style scoped>

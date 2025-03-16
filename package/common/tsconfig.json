@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
-        "module": "esnext",
-        "moduleResolution": "node",
+        "module": "NodeNext",
+        "moduleResolution": "nodenext",
         "baseUrl": ".",
-        "declaration": true
+        "declaration": true,
+        "allowSyntheticDefaultImports":true
     },
     "include": ["src"]
 }

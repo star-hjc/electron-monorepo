@@ -1,10 +1,13 @@
 // import { app } from 'electron'
 import { menubar } from 'menubar'
 import path from 'path'
-import create_tags from './logger'
+import { create_tags } from './logger'
 
 const log = create_tags('mini')
 log.info('mini', 123)
+log.debug('mini', 123)
+log.error('mini', 123)
+log.warn('mini', 123)
 
 const AppPath = __dirname
 const isDevelopment = process.env.NODE_ENV === 'development'

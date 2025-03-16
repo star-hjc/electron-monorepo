@@ -2,7 +2,7 @@ import { app, BrowserWindow } from 'electron'
 import nativeModule from '@chat/bridge'
 import dayjs from 'dayjs'
 import path from 'path'
-import create_tags from './logger'
+import { logger, create_tags } from './logger'
 import { initMiniWindow } from './mini'
 
 const log = create_tags('main')
@@ -36,5 +36,9 @@ function createMainWindow() {
 		console.log(win.id)
 	})
 	win.webContents.openDevTools({ mode: 'undocked' })
+	win.webContents.on('console-message', (event, level, message, line, sourceId) => {
+		const log = logger(`renderer-main`)
+		log[['debug', 'info', 'warn', 'error'][level]](`${message} (${sourceId}:${line})`)
+	})
 	return win
 }
