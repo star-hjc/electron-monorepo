@@ -1,0 +1,27 @@
+{
+  "name": "electron",
+  "productName": "test-app",
+  "appId": "com.xxx.xxx",
+  "artifactName": "${tsup.config.ts}",
+  "files": [
+    "./**/*"
+  ],
+  "directories": {
+    "buildResources": "./",
+    "output": "../app"
+  },
+  "extraResources": {
+    "from": "../resources/",
+    "to": "./"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": false,
+    "uninstallDisplayName": "${productName} ${version}",
+    "shortcutName": "123"
+  },
+  "asar": true,
+  "asarUnpack": [
+    "./node_modules/@package/common/**/*"
+  ]
+}

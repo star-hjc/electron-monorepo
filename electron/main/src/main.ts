@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron'
-import nativeModule from '@chat/bridge'
+import nativeModule from '@package/bridge'
 import dayjs from 'dayjs'
 import path from 'path'
 import { logger, create_tags } from './logger'
@@ -30,7 +30,11 @@ function createMainWindow() {
 			nodeIntegration: true
 		}
 	})
-	win.loadURL(`http://localhost:${process.env.VITE_PORT}`)
+	if (app.isPackaged) {
+		win.loadURL(`file://${path.join(app.getAppPath(), '/renderer/index.html')}`)
+	} else {
+		win.loadURL(`http://localhost:${process.env.VITE_PORT}`)
+	}
 
 	win.on('close', async() => {
 		console.log(win.id)

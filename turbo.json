@@ -1,12 +1,17 @@
 {
     "tasks": {
         "build": {
-            "outputs": [
-                "dist/**",
-                ".next/**"
-            ],
+            "cache": false,
+            "persistent": false,
             "dependsOn": [
                 "^build"
+            ]
+        },
+        "@electron/main#build": {
+            "cache": false,
+            "persistent": false,
+            "dependsOn": [
+                "@electron/renderer#build"
             ]
         },
         "preview": {
@@ -23,7 +28,7 @@
         },
         "@electron/main#dev": {
             "dependsOn": [
-                "@chat/bridge#dev:init"
+                "@package/bridge#dev:init"
             ]
         }
     }

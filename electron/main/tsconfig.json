@@ -2,9 +2,10 @@
     "compilerOptions": {
         "module": "NodeNext",
         "esModuleInterop": true,
-        "baseUrl": ".",
+        "baseUrl": "./src",
         "moduleResolution": "nodenext",
         "outDir": "dist",
         "noImplicitAny": false,
+        "resolveJsonModule": true
     }
 }

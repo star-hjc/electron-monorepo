@@ -1,5 +1,5 @@
 {
-  "name": "@chat/common",
+  "name": "@package/common",
   "version": "1.0.0",
   "exports": {
     ".": {

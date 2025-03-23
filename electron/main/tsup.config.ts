@@ -1,29 +1,34 @@
 
 import path from 'node:path'
 import * as dotenv from 'dotenv'
+import dayjs from 'dayjs'
 import { defineConfig } from 'tsup'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { createRequire, builtinModules } from 'node:module'
-import { type ChildProcess, spawn } from 'node:child_process'
+import { type ChildProcess, spawn, execSync } from 'node:child_process'
+import fs from 'fs-extra'
+import { dependencies, devDependencies, main, name as packageName } from './package.json'
+import electronConfig from './electron.config.json'
+import { version } from '../../package.json'
 
 let ps:ChildProcess = null
 
-export default defineConfig(({ env }) => {
+export default defineConfig(({ env, watch }) => {
 	const envDir = path.resolve(__dirname, '../../')
 	const define = Object.entries(getEnv(env.NODE_ENV, envDir)).reduce((a: { [key: string]: string }, b) => {
 		a[`process.env.${b[0]}`] = b[1] as string
 		return a
 	}, {})
+	const outDir = 'dist'
 	return {
 		define,
+		outDir: `./${outDir}`,
 		shims: true,
-		clean: true,
 		minify: true,
 		entry: ['./src'],
 		format: ['cjs'],
 		tsconfig: 'tsconfig.json',
-		outDir: 'dist',
-		external: ['electron', /^@chat\/.+/, /^electron\/.+/, ...builtinModules.flatMap(m => [m, `node:${m}`])],
+		external: ['electron', /^@package\/.+/, /^electron\/.+/, ...builtinModules.flatMap(m => [m, `node:${m}`])],
 		loader: {
 			'.icns': 'copy',
 			'.png': 'copy',
@@ -35,16 +40,49 @@ export default defineConfig(({ env }) => {
 		plugins: [
 			{
 				name: 'electron-plugin',
-				buildEnd: () => {
+				buildStart: async() => {
+					fs.removeSync(outDir)
+				},
+				buildEnd: async() => {
 					if (ps) {
 						ps.removeAllListeners()
 						ps.kill()
 					}
-					const electronPath = getElectronPath()
-					ps = spawn(electronPath, ['.'], { stdio: 'inherit' })
+					if (watch) {
+						const electronPath = getElectronPath()
+						ps = spawn(electronPath, ['.'], { stdio: 'inherit' })
+						return
+					}
+					for (const { name, path } of getWorkspace()) {
+						if (name === packageName) continue
+						if (dependencies[name] !== void 0) {
+							dependencies[name] = `file:${path}`
+							continue
+						}
+						if (devDependencies[name] !== void 0) {
+							devDependencies[name] = `file:${path}`
+							continue
+						}
+					}
 				}
 			}
-		]
+		],
+		onSuccess: async() => {
+			const { name, ...electronBuildConfig } = electronConfig
+			const mainPathSegments = main.split('/')
+			const buildMainPath = mainPathSegments.slice(mainPathSegments.indexOf(outDir) + 1).join('/')
+			const outputAppPath = path.join(envDir, 'app')
+			electronBuildConfig.directories.output = outputAppPath
+			electronBuildConfig.artifactName = `\${productName}-\${version}-\${arch}-${dayjs().format('YYMMDDHHmmss')}.\${ext}`
+			fs.removeSync(path.join(outputAppPath, 'win-unpacked'))
+			const packageJson = { main: buildMainPath, name, version, dependencies, devDependencies, scripts: { build: 'electron-builder --config=electron.config.json' }}
+			writeFileSync(`${outDir}/package.json`, JSON.stringify(packageJson, null, 2))
+			writeFileSync(`${outDir}/electron.config.json`, JSON.stringify(electronBuildConfig, null, 2))
+			const cwd = path.join(__dirname, outDir)
+			fs.copySync(path.join(envDir, 'electron/renderer/dist'), path.join(__dirname, '/dist/renderer'))
+			execSync('npm install', { cwd, stdio: 'inherit' })
+			execSync('electron-builder --config=electron.config.json', { cwd, stdio: 'inherit' })
+		}
 	}
 })
 
@@ -76,7 +114,7 @@ function getElectronPath(): string {
 	return electronExecPath
 }
 
-// "dev": "nodemon --exec cross-env NODE_ENV=development npm run start",
-// "dev:pro": "nodemon --exec cross-env NODE_ENV=production npm run start",
-// "build": "cross-env NODE_ENV=production tsc",
-// "postinstall": "ts-patch install",
+function getWorkspace() {
+	const workspaceJson = String(execSync(`pnpm ls -r --json`))
+	return JSON.parse(workspaceJson)
+}

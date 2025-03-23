@@ -1,7 +1,7 @@
 packages:
-  - 'electron/renderer/'
-  - 'electron/main/'
-  - 'process/main/'
-  - 'package/*'
-  - 'cli/'
-  - 'platform/*'
+  - electron/renderer/
+  - electron/main/
+  - process/main/
+  - package/*
+  - cli/
+  - platform/*

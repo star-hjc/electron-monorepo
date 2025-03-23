@@ -18,10 +18,11 @@ export default defineConfig(({ mode }) => {
 		if (b[0].startsWith(envPrefix) || b[0] === 'NODE_ENV') {
 			return a
 		}
-		a[`import.meta.env.${b[0]}`] = b[1]
+		a[`import.meta.env.${b[0]}`] = JSON.stringify(b[1])
 		return a
 	}, {})
 	return {
+		base: './',
 		envPrefix,
 		envDir,
 		define,

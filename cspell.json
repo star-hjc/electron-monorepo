@@ -2,6 +2,7 @@
     "version": "0.2",
     "language": "en",
     "ignorePaths": [
+        "app/**",
         "platform/package.json",
         "**/config.gypi",
         "**/node_modules/**",
@@ -21,6 +22,7 @@
         "configs/tsconfig.schema.json"
     ],
     "words": [
+        "asar",
         "Avenir",
         "cdylib",
         "dotenv",
@@ -33,6 +35,8 @@
         "interprocess",
         "libloading",
         "maxsize",
+        "makensis",
+        "nsis",
         "nodenext",
         "nonwords",
         "otool",
@@ -42,7 +46,8 @@
         "tailable",
         "umijs",
         "undocked",
-        "Vite"
+        "Vite",
+        "YYMMDDHHmmss"
     ],
     "flagWords": []
 }

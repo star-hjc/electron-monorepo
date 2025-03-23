@@ -1,16 +1,16 @@
 {
-  "name": "renderer",
+  "name": "@electron/renderer",
   "private": true,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite --mode development",
     "dev:pro": "vite --mode production",
-    "build": "vue-tsc -b && vite build",
+    "build": "vue-tsc -b && vite build --mode production",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@chat/common": "workspace:*",
+    "@package/common": "workspace:*",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.13",
     "vue": "^3.5.13"

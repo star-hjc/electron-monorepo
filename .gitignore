@@ -20,3 +20,5 @@ package-lock.json
 combined.log
 
 electron/resources/logs/*
+
+**/app

@@ -8,15 +8,18 @@
     "build": "tsup --env.NODE_ENV production"
   },
   "dependencies": {
-    "@chat/bridge": "workspace:*",
-    "@chat/common": "workspace:*",
+    "@package/bridge": "workspace:*",
+    "@package/common": "workspace:*",
     "dayjs": "^1.11.13",
+    "fs-extra": "^11.3.0",
     "menubar": "^9.5.1",
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.13.8",
     "dotenv": "^16.4.7",
-    "electron": "^34.3.0"
+    "electron": "32.2.7",
+    "electron-builder": "^26.0.1"
   }
 }

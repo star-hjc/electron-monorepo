@@ -1,13 +1,12 @@
 {
-  "name": "@chat/cli",
+  "name": "cli",
   "version": "1.0.0",
   "description": "",
   "bin": {
     "clean": "./dist/clean.js"
   },
   "scripts": {
-    "clean": "ts-node src/clean.ts",
-    "postinstall": "tsup"
+    "clean": "ts-node src/clean.ts"
   },
   "author": "",
   "license": "ISC",
