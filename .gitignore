@@ -5,8 +5,9 @@ target
 .turbo
 **/.turbo/**
 
+
 *.lock
-pnpm-lock.yaml
+*lock.yaml
 package-lock.json
 
 *.dylib
