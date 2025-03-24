@@ -68,6 +68,7 @@ export default defineConfig(({ env, watch }) => {
 			}
 		],
 		onSuccess: async() => {
+			if (watch) return
 			const { name, ...electronBuildConfig } = electronConfig
 			const mainPathSegments = main.split('/')
 			const buildMainPath = mainPathSegments.slice(mainPathSegments.indexOf(outDir) + 1).join('/')
@@ -79,9 +80,7 @@ export default defineConfig(({ env, watch }) => {
 			writeFileSync(`${outDir}/package.json`, JSON.stringify(packageJson, null, 2))
 			writeFileSync(`${outDir}/electron.config.json`, JSON.stringify(electronBuildConfig, null, 2))
 			const cwd = path.join(__dirname, outDir)
-			if (!watch) {
-				fs.copySync(path.join(envDir, 'electron/renderer/dist'), path.join(__dirname, '/dist/renderer'))
-			}
+			fs.copySync(path.join(envDir, 'electron/renderer/dist'), path.join(__dirname, '/dist/renderer'))
 			execSync('npm install', { cwd, stdio: 'inherit' })
 			execSync('electron-builder --config=electron.config.json', { cwd, stdio: 'inherit' })
 		}
