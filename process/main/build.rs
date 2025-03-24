@@ -29,7 +29,7 @@ fn load_dylib(demo_dir: String, target_dir: &Path) {
 
 #[cfg(target_os = "macos")]
 fn load_dylib(demo_dir: String, target_dir: &Path) {
-    todo!()
+    // todo!()
 }
 
 fn load_env() {

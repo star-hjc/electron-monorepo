@@ -50,7 +50,7 @@ export default defineConfig(({ env, watch }) => {
 					}
 					if (watch) {
 						const electronPath = getElectronPath()
-						ps = spawn(electronPath, ['.'], { stdio: 'inherit' })
+						ps = spawn(electronPath, ['--disable-gpu ', '.'], { stdio: 'inherit' })
 						return
 					}
 					for (const { name, path } of getWorkspace()) {
@@ -79,7 +79,9 @@ export default defineConfig(({ env, watch }) => {
 			writeFileSync(`${outDir}/package.json`, JSON.stringify(packageJson, null, 2))
 			writeFileSync(`${outDir}/electron.config.json`, JSON.stringify(electronBuildConfig, null, 2))
 			const cwd = path.join(__dirname, outDir)
-			fs.copySync(path.join(envDir, 'electron/renderer/dist'), path.join(__dirname, '/dist/renderer'))
+			if (!watch) {
+				fs.copySync(path.join(envDir, 'electron/renderer/dist'), path.join(__dirname, '/dist/renderer'))
+			}
 			execSync('npm install', { cwd, stdio: 'inherit' })
 			execSync('electron-builder --config=electron.config.json', { cwd, stdio: 'inherit' })
 		}
