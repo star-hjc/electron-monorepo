@@ -1,7 +1,8 @@
 // import { app } from 'electron'
 import { menubar } from 'menubar'
 import path from 'path'
-import { create_tags } from './logger'
+import { create_tags } from '@logger/index'
+import { rootDir } from '@config/setting'
 
 const log = create_tags('mini')
 log.info('mini', 123)
@@ -9,7 +10,6 @@ log.debug('mini', 123)
 log.error('mini', 123)
 log.warn('mini', 123)
 
-const AppPath = __dirname
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 export function initMiniWindow() {
@@ -20,20 +20,20 @@ export function initMiniWindow() {
 	}
 
 	function setOkIcon() {
-		mb.tray.setImage(path.join(AppPath, 'static/icons/state-ok-20.png'))
+		mb.tray.setImage(path.join(rootDir, 'static/icons/state-ok-20.png'))
 	}
 
 	function setStaticIcon() {
-		console.log(path.join(AppPath, 'static/icons/IconTemplate.png'))
+		console.log(path.join(rootDir, 'static/icons/IconTemplate.png'))
 
-		mb.tray.setImage(path.join(AppPath, 'static/icons/IconTemplate.png'))
+		mb.tray.setImage(path.join(rootDir, 'static/icons/IconTemplate.png'))
 	}
 
 	function frame() {
-		setTimeout(() => mb.tray.setImage(path.join(AppPath, 'static/icons/state-sync-20.png')), 300)
-		setTimeout(() => mb.tray.setImage(path.join(AppPath, 'static/icons/state-sync-20-60.png')), 600)
+		setTimeout(() => mb.tray.setImage(path.join(rootDir, 'static/icons/state-sync-20.png')), 300)
+		setTimeout(() => mb.tray.setImage(path.join(rootDir, 'static/icons/state-sync-20-60.png')), 600)
 		setTimeout(
-			() => mb.tray.setImage(path.join(AppPath, 'static/icons/state-sync-20-120.png')),
+			() => mb.tray.setImage(path.join(rootDir, 'static/icons/state-sync-20-120.png')),
 			900
 		)
 	}

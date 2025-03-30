@@ -6,6 +6,12 @@
         "moduleResolution": "nodenext",
         "outDir": "dist",
         "noImplicitAny": false,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "paths": {
+            "@config/*": ["./config/*"],
+            "@logger/*": ["./logger/*"],
+            "@windows/*": ["./windows/*"],
+            
+        }
     }
 }

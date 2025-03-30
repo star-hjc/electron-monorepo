@@ -33,7 +33,7 @@ export const logger = (filename: string | undefined = mainProcessLogFileName) =>
 	if (filename === mainProcessLogFileName) {
 		for (const [key, value] of Object.entries(levels)) {
 			// eslint-disable-next-line no-console
-			console[key] = (...args) => {
+			console[key] = (...args: unknown[]) => {
 				log[value](logFormat(args))
 			}
 		}
@@ -41,7 +41,7 @@ export const logger = (filename: string | undefined = mainProcessLogFileName) =>
 	return log
 }
 
-const logFormat = (args, tags:string|undefined = 'test') => {
+const logFormat = (args, tags: string | undefined = 'test') => {
 	return [`[${tags}]:`, ...args].map(v => {
 		if (typeof v === 'string') {
 			return v.replace(/\n/g, '\t\t')
@@ -63,11 +63,10 @@ export const create_tags = (tags:string) => {
 		get(target, prop, receiver) {
 			const logLevels = Object.values(levels)
 			if (logLevels.includes(String(prop))) {
-				return (...args) => {
+				return (...args: unknown[]) => {
 					return Reflect.get(target, prop, receiver)(logFormat(args, tags))
 				}
 			}
-
 			return Reflect.get(target, prop, receiver)
 		}
 	})

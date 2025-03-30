@@ -2,8 +2,9 @@ import { app, BrowserWindow } from 'electron'
 import nativeModule from '@package/bridge'
 import dayjs from 'dayjs'
 import path from 'path'
-import { logger, create_tags } from './logger'
-import { initMiniWindow } from './mini'
+import { logger, create_tags } from '@logger/index'
+import { initMiniWindow } from '@windows/mini'
+import { rootDir } from '@config/setting'
 
 const log = create_tags('main')
 log.info('main', 888)
@@ -26,7 +27,7 @@ function createMainWindow() {
 		height: 830,
 		autoHideMenuBar: true,
 		webPreferences: {
-			preload: path.join(__dirname, 'preload.js'),
+			preload: path.join(rootDir, 'preload/index.js'),
 			nodeIntegration: true
 		}
 	})

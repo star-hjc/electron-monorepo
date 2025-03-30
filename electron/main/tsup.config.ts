@@ -25,6 +25,7 @@ export default defineConfig(({ env, watch }) => {
 		outDir: `./${outDir}`,
 		shims: true,
 		minify: true,
+		splitting: true,
 		entry: ['./src'],
 		format: ['cjs'],
 		tsconfig: 'tsconfig.json',
@@ -59,20 +60,8 @@ export default defineConfig(({ env, watch }) => {
 						ps.kill()
 					}
 					if (watch) {
-						const electronPath = getElectronPath()
-						ps = spawn(electronPath, ['--disable-gpu ', '.'], { stdio: 'inherit' })
+						ps = spawn(getElectronPath(), ['--disable-gpu ', '.'], { stdio: 'inherit' })
 						return
-					}
-					for (const { name, path } of getWorkspace()) {
-						if (name === packageName) continue
-						if (dependencies[name] !== void 0) {
-							dependencies[name] = `file:${path}`
-							continue
-						}
-						if (devDependencies[name] !== void 0) {
-							devDependencies[name] = `file:${path}`
-							continue
-						}
 					}
 				}
 			}
@@ -86,6 +75,17 @@ export default defineConfig(({ env, watch }) => {
 			electronBuildConfig.directories.output = outputAppPath
 			electronBuildConfig.artifactName = `\${productName}-\${version}-\${arch}-${dayjs().format('YYMMDDHHmmss')}.\${ext}`
 			fs.removeSync(path.join(outputAppPath, 'win-unpacked'))
+			for (const { name, path } of getWorkspace()) {
+				if (name === packageName) continue
+				if (dependencies[name] !== void 0) {
+					dependencies[name] = `file:${path}`
+					continue
+				}
+				if (devDependencies[name] !== void 0) {
+					devDependencies[name] = `file:${path}`
+					continue
+				}
+			}
 			const packageJson = { main: buildMainPath, name, version, dependencies, devDependencies }
 			writeFileSync(`${outDir}/package.json`, JSON.stringify(packageJson, null, 2))
 			writeFileSync(`${outDir}/electron.config.json`, JSON.stringify(electronBuildConfig, null, 2))
