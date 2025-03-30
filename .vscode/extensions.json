@@ -3,8 +3,6 @@
         "Vue.volar",
         "usernamehw.errorlens",
         "streetsidesoftware.code-spell-checker",
-        "wix.vscode-import-cost",
-        "oderwat.indent-rainbow",
-        "usernamehw.errorlens"
+        "wix.vscode-import-cost"
     ]
 }
