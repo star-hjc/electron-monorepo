@@ -1,17 +1,20 @@
 
 import path from 'node:path'
 import * as dotenv from 'dotenv'
-import dayjs from 'dayjs'
+
 import { defineConfig } from 'tsup'
 import { existsSync, readFileSync, writeFileSync, readdirSync } from 'node:fs'
 import { createRequire, builtinModules } from 'node:module'
 import { type ChildProcess, spawn, execSync } from 'node:child_process'
 import fs from 'fs-extra'
 import { dependencies, devDependencies, main, name as packageName } from './package.json'
-import electronConfig from './electron.config.json'
+import electronConfig from './electron.config'
 import { version } from '../../package.json'
+import workspace from '@package/workspace'
 
 let ps:ChildProcess = null
+
+buildBefore()
 
 export default defineConfig(({ env, watch }) => {
 	const envDir = path.resolve(__dirname, '../../')
@@ -26,6 +29,7 @@ export default defineConfig(({ env, watch }) => {
 		shims: true,
 		minify: true,
 		splitting: true,
+		keepNames: true,
 		entry: ['./src'],
 		format: ['cjs'],
 		tsconfig: 'tsconfig.json',
@@ -68,14 +72,11 @@ export default defineConfig(({ env, watch }) => {
 		],
 		onSuccess: async() => {
 			if (watch) return
-			const { name, ...electronBuildConfig } = electronConfig
 			const mainPathSegments = main.split('/')
 			const buildMainPath = mainPathSegments.slice(mainPathSegments.indexOf(outDir) + 1).join('/')
 			const outputAppPath = path.join(envDir, 'app')
-			electronBuildConfig.directories.output = outputAppPath
-			electronBuildConfig.artifactName = `\${productName}-\${version}-\${arch}-${dayjs().format('YYMMDDHHmmss')}.\${ext}`
 			fs.removeSync(path.join(outputAppPath, 'win-unpacked'))
-			for (const { name, path } of getWorkspace()) {
+			for (const { name, path } of workspace.getWorkspace()) {
 				if (name === packageName) continue
 				if (dependencies[name] !== void 0) {
 					dependencies[name] = `file:${path}`
@@ -86,17 +87,20 @@ export default defineConfig(({ env, watch }) => {
 					continue
 				}
 			}
-			const packageJson = { main: buildMainPath, name, version, dependencies, devDependencies }
+			const packageJson = { main: buildMainPath, name: electronConfig.productName, version, dependencies, devDependencies }
 			writeFileSync(`${outDir}/package.json`, JSON.stringify(packageJson, null, 2))
-			writeFileSync(`${outDir}/electron.config.json`, JSON.stringify(electronBuildConfig, null, 2))
 			const cwd = path.join(__dirname, outDir)
 			fs.copySync(path.join(envDir, 'electron/renderer/dist'), path.join(__dirname, '/dist/renderer'))
 			fs.copyFileSync(path.join(__dirname, '.npmrc'), path.join(__dirname, '/dist/.npmrc'))
 			execSync('npm install', { cwd, stdio: 'inherit' })
-			execSync('electron-builder --config=electron.config.json', { cwd, stdio: 'inherit' })
+			execSync('electron-builder --config=config/electron.config.js', { cwd, stdio: 'inherit' })
 		}
 	}
 })
+
+function buildBefore() {
+	fs.copyFileSync(path.join(__dirname, 'electron.config.ts'), path.join(__dirname, '/src/config/electron.config.ts'))
+}
 
 function getEnv(mode: string, envDir: string) {
 	const envPath = path.join(envDir, `.env`)
@@ -126,7 +130,3 @@ function getElectronPath(): string {
 	return electronExecPath
 }
 
-function getWorkspace() {
-	const workspaceJson = String(execSync(`pnpm ls -r --json`))
-	return JSON.parse(workspaceJson)
-}

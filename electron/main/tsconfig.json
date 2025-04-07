@@ -9,9 +9,9 @@
         "resolveJsonModule": true,
         "paths": {
             "@config/*": ["./config/*"],
-            "@logger/*": ["./logger/*"],
-            "@windows/*": ["./windows/*"],
-            
+            "@logger": ["./modules/logger/index"],
+            "@windows": ["./windows/index"],
+            "@windows/*": ["./windows/*"]
         }
     }
 }

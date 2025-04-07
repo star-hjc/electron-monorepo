@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "module": "NodeNext",
+        "moduleResolution": "nodenext",
+        "baseUrl": ".",
+        "declaration": true,
+        "allowSyntheticDefaultImports":true
+    },
+    "include": ["src"]
+}

@@ -9,7 +9,7 @@ const formatIsCombine = [
 	winston.format.printf(({ timestamp, level, message }) => `${timestamp} (${level}) ${message}`)
 ]
 
-export const logger = (filename: string | undefined = mainProcessLogFileName) => {
+export function logger(filename: string | undefined = mainProcessLogFileName) {
 	const log = winston.createLogger({
 		level: 'debug',
 		format: winston.format.combine(...formatIsCombine),
@@ -24,8 +24,7 @@ export const logger = (filename: string | undefined = mainProcessLogFileName) =>
 				filename: `${filename}.log`,
 				dirname: `../resources/logs`,
 				maxFiles: 5,
-				// maxsize: 20 * 1024 * 1024,
-				maxsize: 5 * 1024,
+				maxsize: 20 * 1024 * 1024,
 				tailable: true
 			})
 		]
@@ -33,7 +32,7 @@ export const logger = (filename: string | undefined = mainProcessLogFileName) =>
 	if (filename === mainProcessLogFileName) {
 		for (const [key, value] of Object.entries(levels)) {
 			// eslint-disable-next-line no-console
-			console[key] = (...args: unknown[]) => {
+			console[key] = (...args) => {
 				log[value](logFormat(args))
 			}
 		}
@@ -41,8 +40,8 @@ export const logger = (filename: string | undefined = mainProcessLogFileName) =>
 	return log
 }
 
-const logFormat = (args, tags: string | undefined = 'test') => {
-	return [`[${tags}]:`, ...args].map(v => {
+function logFormat(args: unknown[], tags:string|undefined = 'test') {
+	return [`[${tags}]`, ...args].map(v => {
 		if (typeof v === 'string') {
 			return v.replace(/\n/g, '\t\t')
 		} else if (v instanceof Error) {
@@ -56,14 +55,14 @@ const logFormat = (args, tags: string | undefined = 'test') => {
 		return v.toString()
 	}).join('  ')
 }
-const log = logger()
 
-export const create_tags = (tags:string) => {
+export function create_tags(tags:string) {
+	const log = logger()
 	return new Proxy(log, {
 		get(target, prop, receiver) {
 			const logLevels = Object.values(levels)
 			if (logLevels.includes(String(prop))) {
-				return (...args: unknown[]) => {
+				return (...args) => {
 					return Reflect.get(target, prop, receiver)(logFormat(args, tags))
 				}
 			}

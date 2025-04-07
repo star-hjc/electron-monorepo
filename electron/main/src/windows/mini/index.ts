@@ -1,18 +1,16 @@
-// import { app } from 'electron'
+import { app } from 'electron'
 import { menubar } from 'menubar'
 import path from 'path'
-import { create_tags } from '@logger/index'
+import { create_tags } from 'modules/logger/index'
 import { rootDir } from '@config/setting'
 
-const log = create_tags('mini')
-log.info('mini', 123)
+const log = create_tags('windows-mini')
+log.info('mini', 1231)
 log.debug('mini', 123)
 log.error('mini', 123)
 log.warn('mini', 123)
 
-const isDevelopment = process.env.NODE_ENV === 'development'
-
-export function initMiniWindow() {
+export async function createWindow() {
 	function sleep(ms) {
 		return new Promise((resolve) => {
 			setTimeout(resolve, ms)
@@ -39,22 +37,24 @@ export function initMiniWindow() {
 	}
 
 	let menubarIndexUrl = ''
-	if (isDevelopment) {
-		menubarIndexUrl = `http://localhost:${process.env.VITE_PORT}/mini.html`
+	if (app.isPackaged) {
+		menubarIndexUrl = path.join(app.getAppPath(), '/renderer/index.html')
 	} else {
-		menubarIndexUrl = `mini.html`
+		menubarIndexUrl = `http://localhost:${process.env.VITE_PORT}/mini.html`
 	}
-
+	console.log(menubarIndexUrl, process.env.NODE_ENV)
 	const mb = menubar({
 		// tray,
 		index: menubarIndexUrl,
 		showDockIcon: true,
 		browserWindow: {
+			title: 'mini',
 			width: 400,
 			height: 400,
 			webPreferences: {
-				preload: path.join(__dirname, 'preload.js')
-				// devTools: isDevelopment, // 配置为false，可禁用打开控制台
+				preload: path.join(rootDir, 'preload/index.js'),
+				nodeIntegration: true,
+				devTools: true // 配置为false，可禁用打开控制台
 			}
 		}
 	})
@@ -72,7 +72,7 @@ export function initMiniWindow() {
 	})
 
 	mb.on('after-create-window', () => {
-		console.log('窗体创建成功', 'main.ts::62行')
+		console.log('窗体创建成功', 'mini.ts::75行', mb.window.title)
 	})
 
 	return mb
