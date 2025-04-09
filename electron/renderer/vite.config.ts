@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import * as dotenv from 'dotenv'
 import path from 'path'
+import workspace from '@package/workspace'
 
 const env = (mode: string, envDir: string) => {
 	const envPath = path.join(envDir, `.env`)
@@ -12,7 +13,7 @@ const env = (mode: string, envDir: string) => {
 }
 
 export default defineConfig(({ mode }) => {
-	const envDir = path.resolve(__dirname, '../../')
+	const envDir = workspace.getRoot()
 	const envPrefix = 'VITE_'
 	const define = Object.entries(env(mode, envDir)).reduce((a: { [key: string]: string }, b) => {
 		if (b[0].startsWith(envPrefix) || b[0] === 'NODE_ENV') {

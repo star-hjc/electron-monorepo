@@ -3,6 +3,7 @@ import { menubar } from 'menubar'
 import path from 'path'
 import { create_tags } from 'modules/logger/index'
 import { rootDir } from '@config/setting'
+import { sleep } from '@package/common/time'
 
 const log = create_tags('windows-mini')
 log.info('mini', 1231)
@@ -11,12 +12,6 @@ log.error('mini', 123)
 log.warn('mini', 123)
 
 export async function createWindow() {
-	function sleep(ms) {
-		return new Promise((resolve) => {
-			setTimeout(resolve, ms)
-		})
-	}
-
 	function setOkIcon() {
 		mb.tray.setImage(path.join(rootDir, 'static/icons/state-ok-20.png'))
 	}
@@ -38,7 +33,7 @@ export async function createWindow() {
 
 	let menubarIndexUrl = ''
 	if (app.isPackaged) {
-		menubarIndexUrl = path.join(app.getAppPath(), '/renderer/index.html')
+		menubarIndexUrl = path.join(app.getAppPath(), '/renderer/mini.html')
 	} else {
 		menubarIndexUrl = `http://localhost:${process.env.VITE_PORT}/mini.html`
 	}

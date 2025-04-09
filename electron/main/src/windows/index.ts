@@ -28,7 +28,7 @@ async function initRendererLog() {
 }
 
 async function getTitle(win:BrowserWindow) {
-	return new Promise(resolve => {
+	return new Promise<string>((resolve) => {
 		const timeId = setTimeout(callback, 1000)
 		win.webContents.once('did-start-loading', callback)
 		function callback() {

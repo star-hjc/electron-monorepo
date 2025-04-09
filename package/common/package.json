@@ -7,10 +7,10 @@
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
     },
-    "./singleton": {
-      "types": "./dist/singleton.d.ts",
-      "require": "./dist/singleton.js",
-      "import": "./dist/singleton.mjs"
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "require": "./dist/*.js",
+      "import": "./dist/*.mjs"
     }
   },
   "scripts": {
