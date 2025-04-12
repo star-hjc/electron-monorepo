@@ -14,10 +14,8 @@ import workspace from '@package/workspace'
 
 let ps:ChildProcess = null
 
-buildBefore()
-
 export default defineConfig(({ env, watch }) => {
-	const envDir = path.resolve(__dirname, '../../')
+	const envDir = workspace.getRoot()
 	const define = Object.entries(getEnv(env.NODE_ENV, envDir)).reduce((a: { [key: string]: string }, b) => {
 		a[`process.env.${b[0]}`] = b[1] as string
 		return a
@@ -25,12 +23,12 @@ export default defineConfig(({ env, watch }) => {
 	const outDir = 'dist'
 	return {
 		define,
-		outDir: `./${outDir}`,
+		outDir: `./${outDir}/`,
 		shims: true,
-		minify: true,
+		// minify: true,
 		splitting: true,
-		keepNames: true,
-		entry: ['./src'],
+		// keepNames: true,
+		entry: ['src/main.ts', 'src/static', 'src/preload', 'electron.config.ts'],
 		format: ['cjs'],
 		tsconfig: 'tsconfig.json',
 		external: ['electron', /^@package\/.+/, /^electron\/.+/, ...builtinModules.flatMap(m => [m, `node:${m}`])],
@@ -91,16 +89,12 @@ export default defineConfig(({ env, watch }) => {
 			writeFileSync(`${outDir}/package.json`, JSON.stringify(packageJson, null, 2))
 			const cwd = path.join(__dirname, outDir)
 			fs.copySync(path.join(envDir, 'electron/renderer/dist'), path.join(__dirname, '/dist/renderer'))
-			fs.copyFileSync(path.join(__dirname, '.npmrc'), path.join(__dirname, '/dist/.npmrc'))
+			fs.copyFileSync(path.join(envDir, '.npmrc'), path.join(__dirname, '/dist/.npmrc'))
 			execSync('npm install', { cwd, stdio: 'inherit' })
-			execSync('electron-builder --config=config/electron.config.js', { cwd, stdio: 'inherit' })
+			execSync('electron-builder --config=electron.config.js', { cwd, stdio: 'inherit' })
 		}
 	}
 })
-
-function buildBefore() {
-	fs.copyFileSync(path.join(__dirname, 'electron.config.ts'), path.join(__dirname, '/src/config/electron.config.ts'))
-}
 
 function getEnv(mode: string, envDir: string) {
 	const envPath = path.join(envDir, `.env`)

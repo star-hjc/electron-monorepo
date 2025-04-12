@@ -1,7 +1,7 @@
 {
   "name": "@electron/main",
   "version": "0.0.1",
-  "main": "./dist/main.js",
+  "main": "./dist/src/main.js",
   "scripts": {
     "dev": "tsup --watch --env.NODE_ENV production",
     "dev:pro": "tsup --watch --env.NODE_ENV production",
