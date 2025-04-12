@@ -25,9 +25,6 @@ export async function createWindow() {
 		await win.loadURL(`http://localhost:${process.env.VITE_PORT}`)
 	}
 
-	win.on('close', async() => {
-		console.log(win.id)
-	})
 	win.webContents.openDevTools({ mode: 'undocked' })
 	return win
 }
