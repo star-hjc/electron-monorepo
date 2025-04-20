@@ -33,8 +33,23 @@ You will need to install the dependencies yourself.
 ### Check if the dynamic link library is referenced by the executable file
 
 ## windows
+
 `dumpbin /dependents  {exe_file_path}`
 
 ## mac
+
 `otool -l {exe_file_path} `
+
+### pnpm i error
+## ssh: connect to host github.com port 22: Connection refused
+# windows
+    `code C:\Windows\System32\drivers\etc\hosts`
+    add 
+    ```
+    140.82.113.4 github.com
+    ```
+    更新windows dns
+    ipconfig /flushdns
+# macos
+    ...
 

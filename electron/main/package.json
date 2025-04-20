@@ -20,7 +20,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.13.8",
     "dotenv": "^16.4.7",
-    "electron": "32.2.7",
-    "electron-builder": "^26.0.1"
+    "electron": "35.2.0",
+    "electron-builder": "26.0.1"
   }
 }

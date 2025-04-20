@@ -2,7 +2,7 @@
   "name": "all-chat-pc",
   "version": "0.0.1",
   "description": "electron基础架构",
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@10.8.1",
   "type": "module",
   "scripts": {
     "spell-check": "cspell .",

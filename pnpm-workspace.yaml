@@ -5,3 +5,6 @@ packages:
   - package/*
   - cli/
   - platform/*
+
+onlyBuiltDependencies:
+  - electron
