@@ -25,8 +25,6 @@ async function initRendererLog(win:BrowserWindow) {
 	const title = await getTitle(win)
 	win.webContents.on('console-message', ({ level, message, lineNumber, sourceId }) => {
 		const log = logger(`renderer-${title}`, win.webContents.getOSProcessId())
-		// 排除 preload 打印的日志
-		if (!/^(http|file)/.test(sourceId)) return
 		log[level === 'warning' ? 'warn' : level]?.(`${message} (${sourceId}:${lineNumber} ${win.id})`)
 	})
 }

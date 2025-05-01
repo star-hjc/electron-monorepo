@@ -1,6 +1,7 @@
 import winston from 'winston'
-
-const mainProcessLogFileName = 'main'
+import { resourcesDir } from '@config/setting'
+import config from '@config/setting'
+import path from 'node:path'
 
 const levels = { log: 'info', error: 'error', warn: 'warn', debug: 'debug' }
 
@@ -12,7 +13,7 @@ const formatIsCombine = (childPid:number = -1) => [
 	})
 ]
 
-export function logger(filename: string | undefined = mainProcessLogFileName, pid?:number):winston.Logger {
+export function logger(filename: string | undefined = config.log.mainProcessLogFileName, pid?:number):winston.Logger {
 	const log = winston.createLogger({
 		level: 'debug',
 		format: winston.format.combine(...formatIsCombine(pid)),
@@ -25,14 +26,14 @@ export function logger(filename: string | undefined = mainProcessLogFileName, pi
 			}),
 			new winston.transports.File({
 				filename: `${filename}.log`,
-				dirname: `../resources/logs`,
-				maxFiles: 5,
-				maxsize: 20 * 1024 * 1024,
+				dirname: path.join(resourcesDir, 'logs'),
+				maxFiles: config.log.maxFiles,
+				maxsize: config.log.maxsize,
 				tailable: true
 			})
 		]
 	})
-	if (filename === mainProcessLogFileName) {
+	if (filename === config.log.mainProcessLogFileName) {
 		for (const [key, value] of Object.entries(levels)) {
 			// eslint-disable-next-line no-console
 			console[key] = (...args) => {

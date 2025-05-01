@@ -2,7 +2,6 @@ import { app } from 'electron'
 import { menubar } from 'menubar'
 import path from 'path'
 import { create_tags } from 'modules/logger/index'
-import { rootDir } from '@config/setting'
 import { sleep } from '@package/common/time'
 
 const log = create_tags('windows-mini')
@@ -13,20 +12,20 @@ log.warn('mini', 123)
 
 export async function createWindow() {
 	function setOkIcon() {
-		mb.tray.setImage(path.join(rootDir, 'static/icons/state-ok-20.png'))
+		mb.tray.setImage(path.join(__dirname, 'static/icons/state-ok-20.png'))
 	}
 
 	function setStaticIcon() {
-		console.log(path.join(rootDir, 'static/icons/IconTemplate.png'))
+		console.log(path.join(__dirname, 'static/icons/IconTemplate.png'))
 
-		mb.tray.setImage(path.join(rootDir, 'static/icons/IconTemplate.png'))
+		mb.tray.setImage(path.join(__dirname, 'static/icons/IconTemplate.png'))
 	}
 
 	function frame() {
-		setTimeout(() => mb.tray.setImage(path.join(rootDir, 'static/icons/state-sync-20.png')), 300)
-		setTimeout(() => mb.tray.setImage(path.join(rootDir, 'static/icons/state-sync-20-60.png')), 600)
+		setTimeout(() => mb.tray.setImage(path.join(__dirname, 'static/icons/state-sync-20.png')), 300)
+		setTimeout(() => mb.tray.setImage(path.join(__dirname, 'static/icons/state-sync-20-60.png')), 600)
 		setTimeout(
-			() => mb.tray.setImage(path.join(rootDir, 'static/icons/state-sync-20-120.png')),
+			() => mb.tray.setImage(path.join(__dirname, 'static/icons/state-sync-20-120.png')),
 			900
 		)
 	}
@@ -47,8 +46,7 @@ export async function createWindow() {
 			width: 400,
 			height: 400,
 			webPreferences: {
-				preload: path.join(rootDir, 'preload/index.js'),
-				nodeIntegration: true,
+				preload: path.join(__dirname, 'preload/index.js'),
 				devTools: true // 配置为false，可禁用打开控制台
 			}
 		}
