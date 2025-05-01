@@ -27,7 +27,7 @@ export default {
 	},
 	asar: true,
 	asarUnpack: [
-		'./node_modules/@package/bridge/dist/**/*'
+		'./node_modules/@package/bridge/**/*'
 	],
 	afterPack: async(context:AfterPackContext) => {
 		if (context.packager.platform.buildConfigurationKey === 'win') {
@@ -36,6 +36,9 @@ export default {
 				const filePath = path.join(bridgePath, file)
 				const stats = fs.statSync(filePath)
 				if (stats.isDirectory() && file === 'dist') {
+					continue
+				}
+				if (stats.isFile() && file === 'package.json') {
 					continue
 				}
 				fs.removeSync(filePath)
