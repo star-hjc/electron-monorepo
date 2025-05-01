@@ -4,20 +4,23 @@ const mainProcessLogFileName = 'main'
 
 const levels = { log: 'info', error: 'error', warn: 'warn', debug: 'debug' }
 
-const formatIsCombine = [
+const formatIsCombine = (childPid:number = -1) => [
 	winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
-	winston.format.printf(({ timestamp, level, message }) => `${timestamp} (${level}) ${message}`)
+	winston.format.printf(({ timestamp, level, message }) => {
+		if (childPid !== -1) return `${timestamp} ${process.pid} ${childPid} [${level}] ${message}`
+		return `${timestamp} ${process.pid} [${level}] ${message}`
+	})
 ]
 
-export function logger(filename: string | undefined = mainProcessLogFileName) {
+export function logger(filename: string | undefined = mainProcessLogFileName, pid?:number):winston.Logger {
 	const log = winston.createLogger({
 		level: 'debug',
-		format: winston.format.combine(...formatIsCombine),
+		format: winston.format.combine(...formatIsCombine(pid)),
 		transports: [
 			new winston.transports.Console({
 				format: winston.format.combine(
 					winston.format.colorize(),
-					...formatIsCombine
+					...formatIsCombine(pid)
 				)
 			}),
 			new winston.transports.File({

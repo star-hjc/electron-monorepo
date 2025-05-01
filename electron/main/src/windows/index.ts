@@ -23,10 +23,11 @@ async function initApplicationAfter() {
 
 async function initRendererLog(win:BrowserWindow) {
 	const title = await getTitle(win)
-	win.webContents.on('console-message', (event, level, message, line, sourceId) => {
-		const log = logger(`renderer-${title}`)
-		message = message.replace(/^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\.\d{3}\s+\(.+\)\s+/, '')
-		log[['debug', 'info', 'warn', 'error'][level]](`${message} (${sourceId}:${line} ${win.id})`)
+	win.webContents.on('console-message', ({ level, message, lineNumber, sourceId }) => {
+		const log = logger(`renderer-${title}`, win.webContents.getOSProcessId())
+		// 排除 preload 打印的日志
+		if (!/^(http|file)/.test(sourceId)) return
+		log[level === 'warning' ? 'warn' : level]?.(`${message} (${sourceId}:${lineNumber} ${win.id})`)
 	})
 }
 
