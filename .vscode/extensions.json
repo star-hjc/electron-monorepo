@@ -3,6 +3,6 @@
         "Vue.volar",
         "usernamehw.errorlens",
         "streetsidesoftware.code-spell-checker",
-        "wix.vscode-import-cost"
+        "esbenp.prettier-vscode"
     ]
 }
