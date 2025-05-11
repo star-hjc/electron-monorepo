@@ -3,6 +3,6 @@
         "Vue.volar",
         "usernamehw.errorlens",
         "streetsidesoftware.code-spell-checker",
-        "esbenp.prettier-vscode"
-    ]
+        "tamasfe.even-better-toml"
+    ]   
 }

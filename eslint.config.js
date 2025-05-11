@@ -15,14 +15,9 @@ export default [
 			parserOptions: {
 				parser: tseslint.parser
 			}
-		}
-	},
-	{ files: ['**/*.{ts, vue}'] },
-	{ ignores: ['.husky/**/*', '**/dist/**', '**/node_modules/**', 'neon-bridge/**', 'doc/*'] },
-	{ languageOptions: { globals: { ...globals.browser, ...globals.node }}},
-	{
+		},
 		rules: {
-			'@typescript-eslint/no-require-imports': 1,
+			'vue/html-indent': [2, 'tab'],
 			'vue/max-attributes-per-line': [
 				2,
 				{
@@ -30,15 +25,20 @@ export default [
 					multiline: 1
 				}
 			],
-			'@typescript-eslint/no-explicit-any': 1,
 			'vue/html-closing-bracket-newline': [
 				2,
 				{
 					singleline: 'never',
 					multiline: 'always'
 				}
-			],
-			'vue/html-indent': [2, 'tab'],
+			]
+		}
+	},
+	{ files: ['**/*.{ts, vue}'] },
+	{ ignores: ['.husky/**/*', '**/dist/**', '**/node_modules/**', 'neon-bridge/**', 'doc/*'] },
+	{ languageOptions: { globals: { ...globals.browser, ...globals.node }}},
+	{
+		rules: {
 			'accessor-pairs': 2,
 			'arrow-spacing': [
 				2,
