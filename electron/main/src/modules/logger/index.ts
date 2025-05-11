@@ -1,7 +1,5 @@
 import winston from 'winston'
-import { resourcesDir } from '@config/setting'
 import config from '@config/setting'
-import path from 'node:path'
 
 const levels = { log: 'info', error: 'error', warn: 'warn', debug: 'debug' }
 
@@ -26,17 +24,15 @@ export function logger(filename: string | undefined = config.log.mainProcessLogF
 			}),
 			new winston.transports.File({
 				filename: `${filename}.log`,
-				dirname: path.join(resourcesDir, 'logs'),
-				maxFiles: config.log.maxFiles,
-				maxsize: config.log.maxsize,
-				tailable: true
+				tailable: true,
+				...config.log
 			})
 		]
 	})
 	if (filename === config.log.mainProcessLogFileName) {
 		for (const [key, value] of Object.entries(levels)) {
 			// eslint-disable-next-line no-console
-			console[key] = (...args) => {
+			console[key] = (...args:unknown[]) => {
 				log[value](logFormat(args))
 			}
 		}
@@ -66,7 +62,7 @@ export function create_tags(tags:string) {
 		get(target, prop, receiver) {
 			const logLevels = Object.values(levels)
 			if (logLevels.includes(String(prop))) {
-				return (...args) => {
+				return (...args:unknown[]) => {
 					return Reflect.get(target, prop, receiver)(logFormat(args, tags))
 				}
 			}
