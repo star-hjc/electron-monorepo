@@ -3,11 +3,15 @@ import { createWindow as createMiniWindow } from '@windows/mini'
 import { logger } from '@logger'
 import { app, BrowserWindow } from 'electron'
 
+const windows = {}
+
 async function initApplicationBefore() {
 	app.on('browser-window-created', async(event, win) => {
-		await initRendererLog(win)
+		const title = await getTitle(win)
+		windows[win.id] = { name: title }
+		await initRendererLog(win, title)
 		win.on('close', async() => {
-			console.log(win.id)
+			delete windows[win.id]
 		})
 	})
 }
@@ -21,10 +25,9 @@ async function initApplicationAfter() {
 	if (BrowserWindow.getAllWindows().length === 0) createMainWindow()
 }
 
-async function initRendererLog(win:BrowserWindow) {
-	const title = await getTitle(win)
+async function initRendererLog(win:BrowserWindow, name:string) {
 	win.webContents.on('console-message', ({ level, message, lineNumber, sourceId }) => {
-		const log = logger(`renderer-${title}`, win.webContents.getOSProcessId())
+		const log = logger(`renderer-${name}`, win.webContents.getOSProcessId())
 		log[level === 'warning' ? 'warn' : level]?.(`${message} (${sourceId}:${lineNumber} ${win.id})`)
 	})
 }
@@ -42,6 +45,7 @@ async function getTitle(win:BrowserWindow) {
 }
 
 export {
+	windows,
 	initApplication,
 	initApplicationAfter,
 	initApplicationBefore
