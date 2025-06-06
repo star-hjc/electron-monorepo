@@ -1,7 +1,10 @@
 import { app } from 'electron'
 import nativeModule from '@package/bridge'
+import nativeNapi from '@package/napi'
 import dayjs from 'dayjs'
 import { create_tags } from '@logger'
+
+console.log(nativeNapi.sum(1, 2), 'main.ts::7行')
 
 import { initApplication, initApplicationAfter, initApplicationBefore } from '@windows'
 
