@@ -1,6 +1,6 @@
-use std::fs;
+use std::collections::HashSet;
 use std::path::Path;
-use std::{collections::HashSet, env};
+use std::{env, fs};
 
 #[cfg(target_os = "windows")]
 fn load_dylib(demo_dir: String, target_dir: &Path) {
@@ -33,8 +33,12 @@ fn load_dylib(demo_dir: String, target_dir: &Path) {
 }
 
 fn load_env() {
+    println!("cargo:warning=ENV {:?}", std::env::var("ENV"));
+    let env = std::env::var("ENV").expect("ENV variable not set");
+    let env_name = format!(".env.{}", env);
     let initial_vars: HashSet<String> = env::vars().map(|(key, _)| key).collect();
-    dotenv::from_filename(format!(".env{}", env::args().nth(1).unwrap_or_default())).ok();
+    dotenv::dotenv().expect("Failed to load .env file");
+    dotenv::from_filename(&env_name).expect(&format!("Failed to load {} file", env_name));
     for (key, value) in env::vars() {
         if !initial_vars.contains(&key) {
             println!("cargo:rustc-env={}={}", key, value);
