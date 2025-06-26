@@ -2,7 +2,7 @@
   "name": "@package/napi",
   "version": "0.0.1",
   "types": "index.d.ts",
-  "main": "./index.mjs",
+  "main": "./index.js",
   "napi": {
     "name": "rcli",
     "triples": {
