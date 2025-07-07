@@ -1,7 +1,7 @@
 
 import path from 'node:path'
 import * as dotenv from 'dotenv'
-
+import { Project, SyntaxKind, Node } from 'ts-morph'
 import { defineConfig } from 'tsup'
 import { existsSync, readFileSync, writeFileSync, readdirSync } from 'node:fs'
 import { createRequire, builtinModules } from 'node:module'
@@ -12,7 +12,21 @@ import electronConfig from './electron.config'
 import { version } from '../../package.json'
 import workspace from '@package/workspace'
 
-let ps:ChildProcess = null
+type IpcTypeCallbackParams = Array<{ name: string; type: string }>
+
+type IpcType = {
+    filePath: string;
+    line: number;
+	functionName: string;
+    eventName: string;
+    eventNameType: string;
+    callbackParams: IpcTypeCallbackParams;
+	callbackType:string
+}
+
+type IpcTypeList = Array<IpcType>
+
+let ps: ChildProcess = null
 
 export default defineConfig(({ env, watch }) => {
 	const envDir = workspace.getRoot()
@@ -61,15 +75,17 @@ export default defineConfig(({ env, watch }) => {
 						ps.removeAllListeners()
 						ps.kill()
 					}
-					if (watch) {
-						ps = spawn(getElectronPath(), ['--disable-gpu ', '.'], { stdio: 'inherit' })
-						return
-					}
 				}
 			}
 		],
 		onSuccess: async() => {
-			if (watch) return
+			if (watch) {
+				const ipcTypes = await getIpcTypes()
+				createIpcTypeFile(ipcTypes)
+
+				ps = spawn(getElectronPath(), ['--disable-gpu ', '.'], { stdio: 'inherit' })
+				return
+			}
 			const mainPathSegments = main.split('/')
 			const buildMainPath = mainPathSegments.slice(mainPathSegments.indexOf(outDir) + 1).join('/')
 			const outputAppPath = path.join(envDir, 'app')
@@ -124,3 +140,73 @@ function getElectronPath(): string {
 	return electronExecPath
 }
 
+async function getIpcTypes() {
+	const ipcEventMap = { 'response': 'request', 'on': 'emit' }
+	const project = new Project({
+		tsConfigFilePath: path.join(workspace.getElectronMain(), 'tsconfig.json')
+	})
+	const sourceFiles = project.getSourceFiles()
+	const results: IpcTypeList = []
+	for (const sourceFile of sourceFiles) {
+		const calls = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression)
+		for (const call of calls) {
+			const expr = call.getExpression()
+			if (Node.isPropertyAccessExpression(expr)) {
+				const className = expr.getExpression().getType().getSymbol()?.getName()
+				const functionName = expr.getName()
+				if (className === 'IpcConnector' && Object.keys(ipcEventMap).includes(functionName)) {
+					const args = call.getArguments()
+
+					if (args.length >= 2) {
+						const firstArg = args[0]
+						const callback = args[1]
+						const lineNumber = call.getStartLineNumber()
+
+						const result = {
+							filePath: sourceFile.getFilePath(),
+							line: lineNumber,
+							functionName: ipcEventMap[functionName],
+							eventName: firstArg.getText(),
+							eventNameType: firstArg.getType().getText(),
+							callbackParams: [] as Array<{name: string; type: string}>,
+							callbackType: 'void'
+						}
+
+						if (Node.isFunctionExpression(callback) ||
+                Node.isArrowFunction(callback) ||
+                Node.isFunctionDeclaration(callback)) {
+							const params = callback.getParameters()
+							const callbackType = callback.getReturnType().getText()
+							result.callbackType = functionName === 'response' ? `Promise<${callbackType}>` : callbackType
+							for (const param of params) {
+								result.callbackParams.push({
+									name: param.getName(),
+									type: param.getType().getText()
+								})
+							}
+						}
+
+						results.push(result)
+					}
+				}
+			}
+		}
+	}
+
+	return results
+}
+
+function createIpcTypeFile(types:IpcTypeList) {
+	const ipcTypeFilePath = path.join(workspace.getElectronRenderer(), 'types', 'ipc.d.ts')
+	fs.removeSync(ipcTypeFilePath)
+	let content = ''
+	for (const item of types) {
+		let callbackParams = ''
+		if (item.callbackParams?.length > 1) {
+			item.callbackParams.shift()
+			callbackParams = item.callbackParams.map(param => `${param.name}: ${param.type}`).join(', ')
+		}
+		content += `${item.eventName}: (${callbackParams}) => ${item.callbackType}\n`
+	}
+	fs.writeFileSync(ipcTypeFilePath, `export interface Ipc {\n${content}}\n`)
+}

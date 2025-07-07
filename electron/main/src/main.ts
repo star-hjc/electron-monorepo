@@ -15,6 +15,9 @@ initApplicationBefore()
 
 app.whenReady().then(async() => {
 	console.log(nativeModule.hello(), dayjs().format(), 'main.ts::622行')
+	// nativeModule.callCase((...a) => {
+	// 	log.info('callCase', a, a.length)
+	// })
 	await initApplication()
 	app.on('activate', async() => {
 		await initApplicationAfter()

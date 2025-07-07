@@ -1,24 +1,24 @@
 {
+    "eslint.enable": true,
+    "eslint.format.enable": true,
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "always"
     },
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "eslint.enable": true,
-    "[javascript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": true
     },
-    "[vue]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",    
+    
     "[toml]": {
         "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
     "[rust]": {
         "editor.defaultFormatter": "rust-lang.rust-analyzer"
     },
-    "idf.pythonInstallPath": "D:\\ESP\\.espressif\\tools\\idf-python\\3.11.2\\python.exe",
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
-    },
+    }
 }

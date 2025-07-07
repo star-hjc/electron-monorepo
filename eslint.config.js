@@ -36,7 +36,7 @@ export default [
 	},
 	{ files: ['**/*.{ts, vue}'] },
 	{ ignores: ['.husky/**/*', '**/dist/**', '**/node_modules/**', 'neon-bridge/**', 'doc/*'] },
-	{ languageOptions: { globals: { ...globals.browser, ...globals.node }}},
+	{ languageOptions: { globals: { ...globals.browser, ...globals.node, ipc: true }}},
 	{
 		rules: {
 			'accessor-pairs': 2,
@@ -71,10 +71,10 @@ export default [
 			],
 			'comma-style': [2, 'last'],
 			'constructor-super': 2,
-			curly: [2, 'multi-line'],
+			'curly': [2, 'multi-line'],
 			'dot-location': [2, 'property'],
 			'eol-last': 2,
-			eqeqeq: ['error', 'always', { null: 'ignore' }],
+			'eqeqeq': ['error', 'always', { null: 'ignore' }],
 			'generator-star-spacing': [
 				2,
 				{
@@ -83,7 +83,7 @@ export default [
 				}
 			],
 			'handle-callback-err': [2, '^(err|error)$'],
-			indent: [
+			'indent': [
 				2,
 				'tab',
 				{

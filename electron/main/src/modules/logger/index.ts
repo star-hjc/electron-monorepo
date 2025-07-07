@@ -1,14 +1,12 @@
 import winston from 'winston'
 import config from '@config/setting'
+import { version } from '../../../package.json'
 
 const levels = { log: 'info', error: 'error', warn: 'warn', debug: 'debug' }
 
-const formatIsCombine = (childPid:number = -1) => [
+const formatIsCombine = (childPid:number = 0) => [
 	winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
-	winston.format.printf(({ timestamp, level, message }) => {
-		if (childPid !== -1) return `${timestamp} ${process.pid} ${childPid} [${level}] ${message}`
-		return `${timestamp} ${process.pid} [${level}] ${message}`
-	})
+	winston.format.printf(({ timestamp, level, message }) => `[${version}] ${timestamp} ${process.pid} ${childPid} [${level}] ${message}`)
 ]
 
 export function logger(filename: string | undefined = config.log.mainProcessLogFileName, pid?:number):winston.Logger {
