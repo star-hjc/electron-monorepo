@@ -1,6 +1,5 @@
-use std::collections::HashSet;
+use std::fs;
 use std::path::Path;
-use std::{env, fs};
 
 #[cfg(target_os = "windows")]
 fn load_dylib(demo_dir: String, target_dir: &Path) {
@@ -32,23 +31,29 @@ fn load_dylib(demo_dir: String, target_dir: &Path) {
     // todo!()
 }
 
+#[cfg(not(debug_assertions))]
 fn load_env() {
     println!("cargo:warning=ENV {:?}", std::env::var("ENV"));
-    let env = std::env::var("ENV").expect("ENV variable not set");
+    let env = std::env::var("ENV").unwrap_or_else(|err| {
+        println!("cargo:warning=ENV not set, defaulting to .env. err:{:?}", err);
+        "development".to_string()
+    });
     let env_name = format!(".env.{}", env);
-    let initial_vars: HashSet<String> = env::vars().map(|(key, _)| key).collect();
-    dotenv::dotenv().expect("Failed to load .env file");
-    dotenv::from_filename(&env_name).expect(&format!("Failed to load {} file", env_name));
-    for (key, value) in env::vars() {
-        if !initial_vars.contains(&key) {
-            println!("cargo:rustc-env={}={}", key, value);
-        }
+    // load the .env file
+    for item in dotenv::dotenv_iter().expect("Failed to load .env file") {
+        let (key, value) = item.unwrap_or_else(|err| panic!("{:?}", err));
+        println!("cargo:rustc-env={}={}", key, value);
+    }
+    // load the .env.<ENV> file
+    for item in dotenv::from_filename_iter(&env_name).expect(&format!("Failed to load {} file", env_name)) {
+        let (key, value) = item.unwrap_or_else(|err| panic!("{:?}", err));
+        println!("cargo:rustc-env={}={}", key, value);
     }
 }
 
 fn main() {
+    #[cfg(not(debug_assertions))]
     load_env();
-
     let demo_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
     let out_dir = std::env::var("OUT_DIR").unwrap();
     let target_dir = Path::new(&out_dir).ancestors().nth(3).unwrap();
