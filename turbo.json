@@ -1,5 +1,22 @@
 {
     "tasks": {
+        "dev": {
+            "cache": false,
+            "persistent": true,
+            "dependsOn": [
+                "^dev"
+            ]
+        },
+        "@electron/main#dev": {
+            "dependsOn": [
+                "@package/bridge#dev:init"
+            ]
+        },
+        "@electron/renderer#dev": {
+            "dependsOn": [
+                "@package/workspace#build"
+            ]
+        },
         "build": {
             "cache": false,
             "persistent": false,
@@ -21,15 +38,6 @@
         "dev:init": {
             "cache": false,
             "persistent": false
-        },
-        "dev": {
-            "cache": false,
-            "persistent": true
-        },
-        "@electron/main#dev": {
-            "dependsOn": [
-                "@package/bridge#dev:init"
-            ]
         }
     }
 }

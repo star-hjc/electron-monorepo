@@ -1,0 +1,33 @@
+[package]
+name = "network-win"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "platform"
+path = "./main.rs"
+
+[dependencies]
+tokio.workspace = true
+libc.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+sha2.workspace = true
+hex.workspace = true
+md5.workspace = true
+
+num-traits = "0.2"
+num-derive = "0.4.2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.61.3", features = [
+    "Win32",
+    "Win32_System",
+    "Win32_System_Memory",
+    "Win32_Networking_WinSock",
+    "Win32_NetworkManagement",
+    "Win32_NetworkManagement_Ndis",
+    "Win32_NetworkManagement_IpHelper",
+    "Networking",
+    "Networking_Connectivity",
+] }
