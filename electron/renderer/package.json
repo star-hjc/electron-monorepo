@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@package/common": "workspace:*",
+    "@package/wasm": "workspace:*",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.13",
     "vue": "^3.5.13"

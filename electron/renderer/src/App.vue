@@ -17,10 +17,10 @@
 import HelloWorld from './components/HelloWorld.vue'
 import { create_tags } from './logger'
 const console = create_tags('vue')
-ipc.ping(1, 2, async(a, b, c) => {
-	console.log(a, b, c)
-	console.log(await ipc.ping1())
-})
+// ipc.ping(1, 2, async(a, b, c) => {
+// 	console.log(a, b, c)
+// 	console.log(await ipc.ping1())
+// })
 </script>
 
 <style scoped>

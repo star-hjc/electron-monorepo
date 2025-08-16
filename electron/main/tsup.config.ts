@@ -40,7 +40,7 @@ export default defineConfig(({ env, watch }) => {
 		outDir: `./${outDir}/`,
 		shims: true,
 		// minify: true,
-		splitting: true,
+		splitting: false,
 		// keepNames: true,
 		entry: ['src/main.ts', 'src/static', 'src/preload', 'electron.config.ts'],
 		format: ['cjs'],

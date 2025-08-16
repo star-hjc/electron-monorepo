@@ -1,5 +1,5 @@
 [workspace]
-members = ["package/bridge", "process/main", "package/napi", "platform"]
+members = ["package/bridge", "process/main", "package/napi", "platform", "package/wasm"]
 
 [workspace.dependencies]
 uuid = { version = "1.7", features = ["v4", "serde"] }
