@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test rust wasm</title>
+</head>
+<body>
+<script type="module">
+    import init ,{md5} from '../pkg/wasm_utils.js'
+    async function initData(){
+        await init()
+        const hex = md5("123456")
+        console.log(hex)
+    }
+
+    initData()
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "@package/wasm",
+  "version": "1.0.0",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "require": "./dist/*.js",
+      "import": "./dist/*.js"
+    }
+  },
+  "scripts": {
+    "dev": "sh build.sh",
+    "build": "sh build.sh"
+  },
+  "private": true
+}
