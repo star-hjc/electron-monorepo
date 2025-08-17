@@ -14,8 +14,11 @@
     }
   },
   "scripts": {
-    "dev": "sh build.sh",
-    "build": "sh build.sh"
+    "dev": "wasm-pack build --out-dir ./dist --out-name index --target web",
+    "build": "wasm-pack build --release --out-dir ./dist --out-name index --target web"
+  },
+  "devDependencies": {
+    "wasm-pack": "0.13.1"
   },
   "private": true
 }

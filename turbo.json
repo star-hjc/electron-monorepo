@@ -1,20 +1,37 @@
 {
     "tasks": {
         "dev": {
-            "cache": false,
+            "cache": true,
             "persistent": true,
             "dependsOn": [
                 "^dev"
+            ],
+            "outputs": [
+                "dist/**"
+            ]
+        },
+        "@package/bridge#dev": {
+            "persistent": false,
+            "outputs": [
+                "dist/**",
+                "libs/**"
+            ]
+        },
+        "@package/wasm#dev": {
+            "persistent": false,
+            "outputs": [
+                "dist/**"
             ]
         },
         "@electron/main#dev": {
             "dependsOn": [
-                "@package/bridge#dev:init"
+                "@package/bridge#dev",
+                "@package/wasm#dev"
             ]
         },
         "@electron/renderer#dev": {
             "dependsOn": [
-                "@package/workspace#build"
+                "@package/wasm#dev"
             ]
         },
         "build": {
@@ -34,10 +51,6 @@
         "preview": {
             "cache": false,
             "persistent": true
-        },
-        "dev:init": {
-            "cache": false,
-            "persistent": false
         }
     }
 }

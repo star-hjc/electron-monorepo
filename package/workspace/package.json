@@ -10,7 +10,8 @@
   },
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup"
+    "build": "tsup",
+    "postinstall": "tsup"
   },
   "peerDependencies": {
     "@package/common": "workspace:*"
