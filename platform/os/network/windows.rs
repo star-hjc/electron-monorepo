@@ -1,4 +1,4 @@
-use crate::os::network::types::{ConnectionStatus, IfOperStatus, IpAdapterAddresses, NetworkStatus, ifType};
+use crate::os::network::types::{ConnectionStatus, IfOperStatus, IpAdapterAddresses, NetworkAdapter, NetworkStatus, ifType};
 use std::{
     collections::HashMap,
     net::{IpAddr, Ipv4Addr, Ipv6Addr},
@@ -15,11 +15,54 @@ use windows::{
 
 use super::error::{NetworkError, NetworkResult};
 
-static NETWORK_MONITOR: LazyLock<Arc<Mutex<Vec<NetworkStatus>>>> = LazyLock::new(|| Arc::new(Mutex::new(Vec::new())));
+pub(super) static NETWORK_MONITOR: LazyLock<Arc<Mutex<Vec<NetworkStatus>>>> = LazyLock::new(|| Arc::new(Mutex::new(Vec::new())));
 
-struct Adapter {
+pub(super) struct Adapter {
     _buffer: Vec<u8>,
     current: Option<*mut IP_ADAPTER_ADDRESSES_LH>,
+}
+
+impl NetworkAdapter for Adapter {
+    fn observer<F>(callback: F) -> NetworkResult<()>
+    where
+        F: Fn() + Send + Sync + 'static,
+    {
+        let handler = NetworkStatusChangedEventHandler::new(move |_| Ok(callback()));
+        NetworkInformation::NetworkStatusChanged(&handler).map_err(|err| NetworkError::WinOs(err))?;
+        Ok(())
+    }
+
+    fn get_network_status_list() -> NetworkResult<Vec<NetworkStatus>> {
+        let profiles = NetworkInformation::GetConnectionProfiles().map_err(NetworkError::WinOs)?;
+        let mut network_status = vec![];
+        let adapter_list = Adapter::list()?;
+        for profile in profiles {
+            let adapter = profile.NetworkAdapter().map_err(NetworkError::WinOs)?;
+            let adapter_id = adapter.NetworkAdapterId().map_err(NetworkError::WinOs)?;
+            let adapter_id = Uuid::from_u128(adapter_id.to_u128());
+            let name = profile.ProfileName().map(|v| v.to_string()).unwrap_or_default();
+            let status = if profile.GetNetworkConnectivityLevel().unwrap_or_default() == NetworkConnectivityLevel::InternetAccess {
+                ConnectionStatus::Connected
+            } else {
+                ConnectionStatus::Disconnected
+            };
+            let network_type = ifType::try_from(adapter.IanaInterfaceType().map_err(NetworkError::WinOs)?)?.network_type();
+            let adapter_item = adapter_list.iter().find(|v| v.id == adapter_id);
+            let ipv4 = adapter_item.and_then(|v| v.ipv4);
+            let ipv6 = adapter_item.and_then(|v| v.ipv6);
+            let id = format!("{:X}", md5::compute(format!("{}{}", adapter_id.to_string(), name)));
+            network_status.push(NetworkStatus {
+                id,
+                adapter_id,
+                name,
+                network_type,
+                ipv4,
+                ipv6,
+                status,
+            });
+        }
+        Ok(network_status)
+    }
 }
 
 impl Adapter {
@@ -84,6 +127,12 @@ impl Adapter {
     }
 }
 
+// impl Drop for Adapter {
+//     fn drop(&mut self) {
+//         todo!()
+//     }
+// }
+
 impl Iterator for Adapter {
     type Item = IpAdapterAddresses;
 
@@ -114,7 +163,7 @@ impl Iterator for Adapter {
                     return None;
                 }
             };
-            item.friendly_name = unsafe { adapter.FriendlyName.to_string() }.unwrap_or(String::new());
+            item.interface_name = unsafe { adapter.FriendlyName.to_string() }.unwrap_or(String::new());
             item.if_type = ifType::try_from(adapter.IfType).unwrap_or_default();
             item.oper_status = Some(IfOperStatus::try_from(adapter.OperStatus.0).unwrap_or_default());
             let mut unicast_address = adapter.FirstUnicastAddress;
@@ -144,124 +193,5 @@ impl Iterator for Adapter {
         } else {
             None
         }
-    }
-}
-
-pub struct Network;
-
-impl Network {
-    pub fn observer<F>(callback: F) -> NetworkResult<()>
-    where
-        F: Fn(NetworkStatus) + Send + Sync + 'static,
-    {
-        let mut network = Self::get()?;
-        *network = Self::list()?;
-        let callback = Arc::new(callback);
-        drop(network);
-        let handler = NetworkStatusChangedEventHandler::new(move |_| {
-            let cb = callback.clone();
-            if let Err(err) = Self::diff(move |status| cb(status)) {
-                println!("diff NetworkStatus err:{:?}", err)
-            }
-            Ok(())
-        });
-        NetworkInformation::NetworkStatusChanged(&handler).map_err(|err| NetworkError::WinOs(err))?;
-        Ok(())
-    }
-
-    fn get() -> NetworkResult<MutexGuard<'static, Vec<NetworkStatus>>> {
-        let monitor = &*NETWORK_MONITOR;
-        monitor
-            .lock()
-            .map_err(|err| NetworkError::Internal(format!("NETWORK_MONITOR lock failed: {}", err)))
-    }
-
-    fn diff<F>(callback: F) -> NetworkResult<()>
-    where
-        F: Fn(NetworkStatus) + Send + Sync + 'static,
-    {
-        let network = Self::list()?;
-        let mut guard = Self::get()?;
-
-        let old_map: HashMap<String, &NetworkStatus> = guard.iter().map(|n| (n.id.clone(), n)).collect();
-        // 处理新增或修改的状态
-        for new_net in &network {
-            match old_map.get(&new_net.id) {
-                Some(old_net)
-                    if old_net != &new_net
-                        && !(matches!(old_net.status, ConnectionStatus::Disconnected)
-                            && matches!(new_net.status, ConnectionStatus::Disconnected)) =>
-                {
-                    println!(
-                        "网卡状态变化: ID={}, status={:?} old_status={:?}",
-                        new_net.id, new_net.status, old_net.status
-                    );
-                    callback(new_net.clone());
-                    break;
-                }
-                None if matches!(new_net.status, ConnectionStatus::Connected) => {
-                    println!("新增网卡 (已连接): ID={}, Name={}", new_net.id, new_net.name);
-                    callback(new_net.clone());
-                }
-                _ => (),
-            }
-        }
-
-        // 处理被移除的状态
-        for old_net in guard.iter() {
-            if !network.iter().any(|n| n.id == old_net.id) {
-                let mut disconnected = old_net.clone();
-                disconnected.status = ConnectionStatus::Disconnected;
-                println!("网卡已移除: ID={}, Name={}", old_net.id, old_net.name);
-                callback(disconnected);
-            }
-        }
-
-        // 更新状态存储
-        *guard = network;
-
-        Ok(())
-    }
-
-    fn is_connected() -> NetworkResult<bool> {
-        let network_list = Self::get()?;
-        for item in &*network_list {
-            if matches!(item.status, ConnectionStatus::Connected) {
-                return Ok(true);
-            }
-        }
-        return Ok(false);
-    }
-
-    pub fn list() -> NetworkResult<Vec<NetworkStatus>> {
-        let profiles = NetworkInformation::GetConnectionProfiles().map_err(NetworkError::WinOs)?;
-        let mut network_status = vec![];
-        let adapter_list = Adapter::list()?;
-        for profile in profiles {
-            let adapter = profile.NetworkAdapter().map_err(NetworkError::WinOs)?;
-            let adapter_id = adapter.NetworkAdapterId().map_err(NetworkError::WinOs)?;
-            let adapter_id = Uuid::from_u128(adapter_id.to_u128());
-            let name = profile.ProfileName().map(|v| v.to_string()).unwrap_or_default();
-            let status = if profile.GetNetworkConnectivityLevel().unwrap_or_default() == NetworkConnectivityLevel::InternetAccess {
-                ConnectionStatus::Connected
-            } else {
-                ConnectionStatus::Disconnected
-            };
-            let network_type = ifType::try_from(adapter.IanaInterfaceType().map_err(NetworkError::WinOs)?)?.network_type();
-            let adapter_item = adapter_list.iter().find(|v| v.id == adapter_id);
-            let ipv4 = adapter_item.and_then(|v| v.ipv4);
-            let ipv6 = adapter_item.and_then(|v| v.ipv6);
-            let id = format!("{:x}", md5::compute(format!("{}{}", adapter_id.to_string(), name)));
-            network_status.push(NetworkStatus {
-                id,
-                adapter_id,
-                name,
-                network_type,
-                ipv4,
-                ipv6,
-                status,
-            });
-        }
-        Ok(network_status)
     }
 }

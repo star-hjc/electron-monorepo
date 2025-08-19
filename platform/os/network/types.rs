@@ -1,4 +1,4 @@
-use super::error::NetworkError;
+use super::error::{NetworkError, NetworkResult};
 use num_derive::FromPrimitive;
 use num_traits::FromPrimitive;
 use std::{
@@ -6,6 +6,9 @@ use std::{
     net::{IpAddr, Ipv4Addr, Ipv6Addr},
 };
 use uuid::Uuid;
+
+#[cfg(target_os = "macos")]
+use core_foundation::{base::TCFType, string::CFString};
 
 /// IANA 接口类型 (ifType) 的 Rust 枚举表示
 /// 参考: https://www.iana.org/assignments/ianaiftype-mib/ianaiftype-mib
@@ -32,6 +35,8 @@ pub enum ifType {
     Tunnel = 131,
     /// 144 - IEEE 1394 (Firewire) 高性能串行总线网络接口
     Ieee1394 = 144,
+    /// 215 - 6to4 interface (DEPRECATED)
+    SixToFour = 215,
     /// 243 - 3GPP WWAN (4G/LTE/5G)
     WwanPP = 243,
     /// 244 - 3GPP2 WWAN (CDMA/EV-DO)
@@ -48,6 +53,36 @@ impl TryFrom<u32> for ifType {
     }
 }
 
+#[cfg(target_os = "macos")]
+impl TryFrom<*const core_foundation::string::__CFString> for ifType {
+    type Error = NetworkError;
+
+    fn try_from(value: *const core_foundation::string::__CFString) -> Result<Self, Self::Error> {
+        if value.is_null() {
+            return Err(NetworkError::MacOs("ifType try_from, value is null ptr".to_string()));
+        }
+        let value = unsafe { CFString::wrap_under_get_rule(value) };
+        match value.to_string().as_str() {
+            "" => Err(NetworkError::MacOs("ifType try_from, value is empty".to_string())),
+            "Type6to4" => Ok(ifType::SixToFour),
+            "Ethernet" => Ok(ifType::Ethernet),
+            "IEEE80211" => Ok(ifType::Ieee80211),
+            "FireWire" => {
+                println!("macos ifType FireWire");
+                Ok(ifType::Ieee1394)
+            }
+            "WWAN" => {
+                println!("macos ifType WwanPP、WwanPP2");
+                Ok(ifType::WwanPP)
+            }
+            other => {
+                println!("Unsupported ifType value {}.", other);
+                Ok(ifType::Unknown)
+            }
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum NetworkType {
     Wired,
@@ -59,7 +94,10 @@ pub enum NetworkType {
 #[derive(Debug, Clone, PartialEq)]
 pub struct NetworkStatus {
     pub id: String,
+    #[cfg(target_os = "windows")]
     pub adapter_id: Uuid,
+    #[cfg(target_os = "macos")]
+    pub adapter_id: String,
     pub name: String,
     pub network_type: NetworkType,
     pub ipv4: Option<Ipv4Addr>,
@@ -79,7 +117,7 @@ impl ifType {
     }
 
     pub fn is_wired(&self) -> bool {
-        matches!(self, ifType::Ethernet)
+        matches!(self, ifType::Ethernet | ifType::Ieee1394)
     }
 
     pub fn is_cellular(&self) -> bool {
@@ -126,31 +164,41 @@ impl TryFrom<i32> for IfOperStatus {
 
 #[derive(Debug, Clone)]
 pub struct IpAdapterAddresses {
+    #[cfg(target_os = "windows")]
     pub id: Uuid,
-    pub friendly_name: String,
+    pub interface_name: String,
     pub ipv4: Option<Ipv4Addr>,
     pub ipv6: Option<Ipv6Addr>,
+    #[cfg(target_os = "windows")]
     pub gateway: VecDeque<IpAddr>,
+    #[cfg(target_os = "windows")]
     pub if_type: ifType,
+    #[cfg(target_os = "windows")]
     pub oper_status: Option<IfOperStatus>,
-}
-
-impl IpAdapterAddresses {
-    pub fn friendly_name(&self) -> &str {
-        &self.friendly_name
-    }
 }
 
 impl Default for IpAdapterAddresses {
     fn default() -> Self {
         Self {
+            #[cfg(target_os = "windows")]
             id: Default::default(),
-            friendly_name: Default::default(),
+            interface_name: Default::default(),
             ipv4: Default::default(),
             ipv6: Default::default(),
+            #[cfg(target_os = "windows")]
             gateway: Default::default(),
+            #[cfg(target_os = "windows")]
             if_type: Default::default(),
+            #[cfg(target_os = "windows")]
             oper_status: Default::default(),
         }
     }
+}
+
+pub trait NetworkAdapter {
+    fn observer<F>(callback: F) -> NetworkResult<()>
+    where
+        F: Fn() -> () + Send + Sync + 'static;
+
+    fn get_network_status_list() -> NetworkResult<Vec<NetworkStatus>>;
 }
