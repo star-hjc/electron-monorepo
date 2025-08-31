@@ -22,7 +22,7 @@ The config that you've selected requires the following dependencies:
 
 eslint, globals, @eslint/js, typescript-eslint, eslint-plugin-vue
 √ Would you like to install them now? · No
-Successfully created {this demo path}\eslint.config.js file.
+Successfully created {this demo path}\eslint.config.ts file.
 You will need to install the dependencies yourself.
 ```
 
