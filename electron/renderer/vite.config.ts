@@ -5,8 +5,8 @@ import path from 'path'
 import workspace from '@package/workspace'
 
 const env = (mode: string, envDir: string) => {
-	const envPath = path.join(envDir, `.env`)
-	const defaultEnvPath = path.join(envDir, `.env.${mode}`)
+	const defaultEnvPath = path.join(envDir, `.env`)
+	const envPath = path.join(envDir, `.env.${mode}`)
 	const defaultEnv = dotenv.config({ path: defaultEnvPath }).parsed || {}
 	const env = dotenv.config({ path: envPath }).parsed || {}
 	return { ...defaultEnv, ...env }
