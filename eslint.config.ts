@@ -108,6 +108,7 @@ export default [
 			'electron/ipc-restricted-import': [2, {
 				allowedFolder: [path.join(workspace.getElectronMain(), '/src/ipc')]
 			}],
+			'linebreak-style': [2, 'unix'],
 			'accessor-pairs': 2,
 			'arrow-spacing': [
 				2,

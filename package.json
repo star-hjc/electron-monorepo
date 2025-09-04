@@ -9,7 +9,10 @@
     "lint": "eslint .",
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "clean": "ts-node cli/src/clean.ts"
+    "clean": "ts-node cli/src/clean.ts",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "engines": {
     "node": ">=18",
@@ -21,8 +24,8 @@
     ]
   },
   "devDependencies": {
-    "@package/workspace": "workspace:*",
     "@eslint/js": "^9.21.0",
+    "@package/workspace": "workspace:*",
     "@types/node": "^22.13.8",
     "cspell": "^8.17.5",
     "eslint": "^9.21.0",
@@ -35,6 +38,7 @@
     "tsup": "^8.4.0",
     "turbo": "^2.4.4",
     "typescript": "5.8.2",
-    "typescript-eslint": "^8.25.0"
+    "typescript-eslint": "^8.25.0",
+    "vitepress": "^1.6.4"
   }
 }

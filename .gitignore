@@ -23,3 +23,5 @@ combined.log
 electron/resources/logs/*
 
 **/app
+
+docs/.vitepress/cache
