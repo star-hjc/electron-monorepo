@@ -1,14 +1,22 @@
 {
     "recommendations": [
-        // Vue
+        /** Vue */
         "Vue.volar",
-        // 错误提示
+        /** 错误提示 */
         "usernamehw.errorlens",
-        // 检查单词是否规范
+        /** 检查单词是否规范 */
         "streetsidesoftware.code-spell-checker",
-        // toml 文件格式化
+        /** toml 文件格式化 */
         "tamasfe.even-better-toml",
-        // 根据项目根目录的 .nvmrc 文件, 打开终端后自动切换到指定的 Node.js 版本
-        "henrynguyen5-vsc.vsc-nvm"
+        /** Eslint */
+        "dbaeumer.vscode-eslint",
+        /** Editor */
+        "editorconfig.editorconfig",
+        /** 根据项目根目录的 .nvmrc 文件, 打开终端后自动切换到指定的 Node.js 版本 */
+        "henrynguyen5-vsc.vsc-nvm",
+        /** Rust */
+        "rust-lang.rust-analyzer",
+        /** Path Intellisense */
+        "christian-kohler.path-intellisense"
     ]   
 }

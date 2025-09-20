@@ -4,6 +4,8 @@ import pluginJs from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import pluginVue from 'eslint-plugin-vue'
 import workspace from '@package/workspace'
+import type { Rule } from 'eslint'
+import type { ImportDeclaration } from 'estree'
 
 const ipcRestrictedImport = {
 	meta: {
@@ -25,10 +27,10 @@ const ipcRestrictedImport = {
 			additionalProperties: false
 		}]
 	},
-	create(context) {
+	create(context:Rule.RuleContext) {
 		const options = context.options[0]
-		const allowedFolder = options.allowedFolder || []
-		const currentFilename = context.getFilename()
+		const allowedFolder: string[] = options.allowedFolder || []
+		const currentFilename = context.filename
 		const moduleNames = ['modules/ipcConnector', '@IpcConnector']
 		const isAllowedFile = allowedFolder.some(allowedFolder => {
 			if (!path.isAbsolute(allowedFolder)) {
@@ -40,12 +42,12 @@ const ipcRestrictedImport = {
 		})
 
 		return {
-			ImportDeclaration(node) {
+			ImportDeclaration(node: ImportDeclaration) {
 				if (isAllowedFile) {
 					return
 				}
-				const importSource: string = node.source.value
-				if (moduleNames.includes(importSource)) {
+				const importSource = node.source.value
+				if (typeof (importSource) === 'string' && moduleNames.includes(importSource)) {
 					context.report({
 						node,
 						message: `禁止在此文件中使用 IpcConnector 模块, 只能在 ${allowedFolder.join(' , ')} 文件夹中使用`
@@ -65,7 +67,7 @@ const electronPlugin = {
 /** @type {import('eslint').Linter.Config[]} */
 export default [
 	/** 忽略文件 */
-	{ ignores: ['.husky/**/*', '**/dist/**', '**/node_modules/**', 'neon-bridge/**', 'doc/*'] },
+	{ ignores: ['.husky/**/*', '**/dist/**', '**/node_modules/**', 'neon-bridge/**', 'docs/.vitepress/**/*'] },
 	/* 全局环境变量 */
 	{ languageOptions: { globals: { ...globals.browser, ...globals.node, ipc: true }}},
 	/** TS 默认格式规则 */
@@ -88,7 +90,7 @@ export default [
 				2,
 				{
 					singleline: 4,
-					multiline: 1
+					multiline: 4
 				}
 			],
 			'vue/html-closing-bracket-newline': [
@@ -107,6 +109,14 @@ export default [
 		rules: {
 			'electron/ipc-restricted-import': [2, {
 				allowedFolder: [path.join(workspace.getElectronMain(), '/src/ipc')]
+			}],
+			'max-len': [2, {
+				code: 150,
+				ignoreComments: true,
+				ignoreUrls: true,
+				ignoreStrings: true,
+				ignoreTemplateLiterals: true,
+				ignoreRegExpLiterals: true
 			}],
 			'linebreak-style': [2, 'unix'],
 			'accessor-pairs': 2,
@@ -350,4 +360,3 @@ export default [
 		}
 	}
 ]
-
