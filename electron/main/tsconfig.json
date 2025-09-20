@@ -1,22 +1,18 @@
 {
     "compilerOptions": {
-        "module": "NodeNext",
+        "module": "esnext",
         "esModuleInterop": true,
         "baseUrl": "./src",
-        "moduleResolution": "nodenext",
+        "moduleResolution": "bundler",
         "outDir": "dist",
         "noImplicitAny": false,
         "resolveJsonModule": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
         "paths": {
-            "@config/*": ["./config/*"],
-            "@logger": ["./modules/logger/index"],
-            "@ipc": ["./ipc/index"],
-            "@IpcConnector": ["./modules/ipcConnector/index"],
-            "@windows": ["./windows/index"],
-            "@windows/*": ["./windows/*"],
-            "@windowPool": ["./modules/windowPool/index"],
+            "@/config/*": ["./config/*"],
+            "@/logger": ["./logger/index"],
+            "@/ipc": ["./ipc/index"],
+            "@/windows": ["./windows/index"],
+            "@/windows/*": ["./windows/*"],
         }
     }
 }

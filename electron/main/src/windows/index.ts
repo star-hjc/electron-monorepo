@@ -1,8 +1,8 @@
-import { createWindow as createMainWindow } from '@windows/main'
-import { createWindow as createMiniWindow } from '@windows/mini'
-import { logger } from '@logger'
-import initIpc from '@ipc'
-import WindowPool from '@windowPool'
+import { createWindow as createMainWindow } from '@/windows/main'
+import { createWindow as createMiniWindow } from '@/windows/mini'
+import { logger } from '@/logger'
+import initIpc from '@/ipc'
+import WindowPool from '@package/electron/windows'
 import { app, BrowserWindow } from 'electron'
 
 const windowPool = new WindowPool()
@@ -41,13 +41,7 @@ async function initRendererLog(win:BrowserWindow, name:string) {
 
 async function getTitle(win:BrowserWindow) {
 	return new Promise<string>((resolve) => {
-		const timeId = setTimeout(callback, 1000)
-		win.webContents.once('did-start-loading', callback)
-		function callback() {
-			resolve(win.title)
-			win.webContents.off('did-start-loading', callback)
-			clearTimeout(timeId)
-		}
+		win.webContents.once('did-start-loading', () => resolve(win.title))
 	})
 }
 

@@ -1,6 +1,6 @@
-import { ipcMain, IpcMainEvent } from 'electron'
-import Ipc from '@IpcConnector'
-import { create_tags } from '@logger'
+import type { IpcMainEvent } from 'electron'
+import { Ipc } from '@package/electron'
+import { create_tags } from '@/logger'
 
 const log = create_tags('ipc')
 log.info('ipc init')
@@ -12,7 +12,6 @@ ipc.on('ping', (event: IpcMainEvent, id:number, value:number, callback:(name:str
 	num++
 	log.info('ping', id, value, Date.now(), num, callback)
 	callback('end', Date.now(), num)
-	// ipc.send(action, 'pong1', Date.now(), num, [])
 })
 
 ipc.response('ping1', () => {
@@ -22,16 +21,15 @@ ipc.response('ping1', () => {
 ipc.response('ping3', () => {
 	return 1231
 })
-// ipc.response('')
+
+ipc.send('cccc', '1231', [1, 2, 3])
 
 ipc.on('cccc', (event, callback:(name:string) => void) => {
 	callback('1231')
 })
 
-ipcMain.handle('initIpc', () => {
-// IPC 初始化完成
-	log.info('ipc init finished')
-	return { request: ipc.getHandles(), emit: ipc.getListeners() }
+ipc.on('bbbb', (event, callback:(name:string) => void) => {
+	callback('1231')
 })
 
 export default async() => {

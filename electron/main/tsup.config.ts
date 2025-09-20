@@ -15,8 +15,9 @@ import workspace from '@package/workspace'
 type IpcTypeCallbackParams = Array<{ name: string; type: string }>
 
 type IpcType = {
-    filePath: string;
     line: number;
+	features: undefined | string;
+	filePath: string;
 	functionName: string;
     eventName: string;
     eventNameType: string;
@@ -30,22 +31,25 @@ let ps: ChildProcess = null
 
 export default defineConfig(({ env, watch }) => {
 	const envDir = workspace.getRoot()
-	const define = Object.entries(getEnv(env.NODE_ENV, envDir)).reduce((a: { [key: string]: string }, b) => {
+	const define = Object.entries(getEnv(env.NODE_ENV, envDir)).reduce((a, b) => {
 		a[`process.env.${b[0]}`] = b[1] as string
 		return a
 	}, {})
+	const isDev = env.NODE_ENV === process.env.DEV_ENV
 	const outDir = 'dist'
 	return {
 		define,
 		outDir: `./${outDir}/`,
 		shims: true,
-		// minify: true,
+		minify: !isDev,
 		splitting: false,
-		// keepNames: true,
+		sourcemap: isDev,
+		keepNames: isDev,
 		entry: ['src/main.ts', 'src/static', 'src/preload', 'electron.config.ts'],
 		format: ['cjs'],
 		tsconfig: 'tsconfig.json',
-		external: ['electron', /^@package\/.+/, /^electron\/.+/, ...builtinModules.flatMap(m => [m, `node:${m}`])],
+		external: ['electron', /^electron\/.+/, /^@package\/(bridge|napi).*/, ...builtinModules.flatMap(m => [m, `node:${m}`])],
+		noExternal: ['@package/electron/preload'],
 		loader: {
 			'.npmrc': 'copy',
 			'.icns': 'copy',
@@ -101,12 +105,17 @@ export default defineConfig(({ env, watch }) => {
 					continue
 				}
 			}
-			const packageJson = { main: buildMainPath, name: electronConfig.productName, version, dependencies, devDependencies }
-			writeFileSync(`${outDir}/package.json`, JSON.stringify(packageJson, null, 2))
+			const packageJson = {
+				main: buildMainPath,
+				name: electronConfig.productName,
+				version,
+				dependencies,
+				devDependencies
+			}
+
 			const cwd = path.join(__dirname, outDir)
 			fs.copySync(path.join(envDir, 'electron/renderer/dist'), path.join(__dirname, '/dist/renderer'))
-			fs.copyFileSync(path.join(envDir, '.npmrc'), path.join(__dirname, '/dist/.npmrc'))
-			execSync('npm install', { cwd, stdio: 'inherit' })
+			writeFileSync(`${outDir}/package.json`, JSON.stringify(packageJson, null, 2))
 			execSync('electron-builder --config=electron.config.js', { cwd, stdio: 'inherit' })
 		}
 	}
@@ -141,7 +150,7 @@ function getElectronPath(): string {
 }
 
 async function getIpcTypes() {
-	const ipcEventMap = { 'response': 'request', 'on': 'emit' }
+	const ipcEventMap = { 'response': 'request', 'on': 'emit', 'send': 'on' }
 	const project = new Project({
 		tsConfigFilePath: path.join(workspace.getElectronMain(), 'tsconfig.json')
 	})
@@ -156,19 +165,20 @@ async function getIpcTypes() {
 				const functionName = expr.getName()
 				if (className === 'IpcConnector' && Object.keys(ipcEventMap).includes(functionName)) {
 					const args = call.getArguments()
-
+					const lineNumber = call.getStartLineNumber()
 					if (args.length >= 2) {
 						const firstArg = args[0]
 						const callback = args[1]
-						const lineNumber = call.getStartLineNumber()
-
+						const featuresNode = args[2]
+						const features = featuresNode?.getText()
 						const result = {
+							features: functionName === 'send' ? void 0 : features,
 							filePath: sourceFile.getFilePath(),
 							line: lineNumber,
 							functionName: ipcEventMap[functionName],
 							eventName: firstArg.getText(),
 							eventNameType: firstArg.getType().getText(),
-							callbackParams: [] as Array<{name: string; type: string}>,
+							callbackParams: [],
 							callbackType: 'void'
 						}
 
@@ -185,7 +195,6 @@ async function getIpcTypes() {
 								})
 							}
 						}
-
 						results.push(result)
 					}
 				}
@@ -206,7 +215,14 @@ function createIpcTypeFile(types:IpcTypeList) {
 			item.callbackParams.shift()
 			callbackParams = item.callbackParams.map(param => `${param.name}: ${param.type}`).join(', ')
 		}
-		content += `${item.eventName}: (${callbackParams}) => ${item.callbackType}\n`
+		if (item.functionName === 'on') {
+			let eventName = item.eventName.replace(/'/g, '')
+			eventName = `'on${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}'`
+			content += `'${item.functionName}': (event: ${eventName}, callback: (...arg: unknown[]) => ${item.callbackType}) => ${item.callbackType}\n`
+			continue
+		}
+		const description = `/** ⚠️ ${item.features} 需求可用 ${item.eventName}  */\n`
+		content += `${item.features ? description : ''}${item.eventName}: (${callbackParams}) => ${item.callbackType}\n`
 	}
 	fs.writeFileSync(ipcTypeFilePath, `export interface Ipc {\n${content}}\n`)
 }

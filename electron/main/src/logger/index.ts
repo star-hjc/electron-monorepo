@@ -1,6 +1,6 @@
 import winston from 'winston'
-import config from '@config/setting'
-import { version } from '../../../package.json'
+import config from '@/config/setting'
+import { version } from '../../package.json'
 
 const levels = { log: 'info', error: 'error', warn: 'warn', debug: 'debug' }
 
@@ -27,14 +27,14 @@ export function logger(filename: string | undefined = config.log.mainProcessLogF
 			})
 		]
 	})
-	if (filename === config.log.mainProcessLogFileName) {
-		for (const [key, value] of Object.entries(levels)) {
-			// eslint-disable-next-line no-console
-			console[key] = (...args:unknown[]) => {
-				log[value](logFormat(args))
-			}
-		}
-	}
+	// if (filename === config.log.mainProcessLogFileName) {
+	// 	for (const [key, value] of Object.entries(levels)) {
+	// 		// eslint-disable-next-line no-console
+	// 		// console[key] = (...args:unknown[]) => {
+	// 		// 	log[value](logFormat(args))
+	// 		// }
+	// 	}
+	// }
 	return log
 }
 

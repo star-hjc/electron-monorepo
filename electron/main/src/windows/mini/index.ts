@@ -1,7 +1,7 @@
 import { app } from 'electron'
 import { menubar } from 'menubar'
 import path from 'path'
-import { create_tags } from 'modules/logger/index'
+import { create_tags } from '@/logger'
 import { sleep } from '@package/common/time'
 
 const log = create_tags('windows-mini')

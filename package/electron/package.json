@@ -1,0 +1,35 @@
+{
+  "name": "@package/electron",
+  "version": "1.0.0",
+  "exports": {
+    ".": {
+      "types": "./dist/ipc/index.d.ts",
+      "require": "./dist/ipc/index.js",
+      "import": "./dist/ipc/index.mjs"
+    },
+    "./preload": {
+      "types": "./dist/ipc/preload.d.ts",
+      "require": "./dist/ipc/preload.js",
+      "import": "./dist/ipc/preload.mjs"
+    },
+    "./windows": {
+      "types": "./dist/windows/index.d.ts",
+      "require": "./dist/windows/index.js",
+      "import": "./dist/windows/index.mjs"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "require": "./dist/*.js",
+      "import": "./dist/*.mjs"
+    }
+  },
+  "scripts": {
+    "postinstall": "tsup",
+    "dev": "tsup --watch",
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@package/common": "workspace:*",
+    "electron": ">=9.0.0"
+  }
+}

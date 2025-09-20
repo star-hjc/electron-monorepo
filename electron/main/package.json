@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "./dist/src/main.js",
   "scripts": {
-    "dev": "tsup --watch --env.NODE_ENV production",
+    "dev": "tsup --watch --env.NODE_ENV development",
     "dev:pro": "tsup --watch --env.NODE_ENV production",
     "build": "tsup --env.NODE_ENV production"
   },
@@ -11,6 +11,7 @@
     "@package/bridge": "workspace:*",
     "@package/common": "workspace:*",
     "@package/napi": "workspace:*",
+    "@package/electron": "workspace:*",
     "dayjs": "^1.11.13",
     "fs-extra": "^11.3.0",
     "menubar": "^9.5.1",

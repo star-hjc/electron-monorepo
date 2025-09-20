@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target":"esnext",
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "baseUrl": ".",
+        "declaration": true,
+        "allowSyntheticDefaultImports":true,
+        "paths": {
+            "@/types": ["types/index"],
+            "@/types/*": ["types/*"],
+        }
+    },
+    "include": ["src", "types"]
+}

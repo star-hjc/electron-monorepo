@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "module": "NodeNext",
-        "moduleResolution": "nodenext",
+        "module": "esnext",
+        "moduleResolution": "bundler",
         "baseUrl": ".",
         "declaration": true,
         "allowSyntheticDefaultImports":true

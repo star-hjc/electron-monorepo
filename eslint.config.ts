@@ -112,6 +112,7 @@ export default [
 			}],
 			'max-len': [2, {
 				code: 150,
+				tabWidth: 2,
 				ignoreComments: true,
 				ignoreUrls: true,
 				ignoreStrings: true,

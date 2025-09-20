@@ -1,6 +1,6 @@
 import path from 'path'
 import { app, BrowserWindow } from 'electron'
-import { create_tags } from 'modules/logger/index'
+import { create_tags } from '@/logger'
 
 const log = create_tags('windows-main')
 log.info('main', 888)
@@ -13,6 +13,7 @@ export async function createWindow() {
 		autoHideMenuBar: true,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload/index.js')
+			// nodeIntegration: true
 		}
 	})
 
