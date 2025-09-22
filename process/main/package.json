@@ -10,7 +10,7 @@
     "case:build": "cross-env ENV=development cargo clean && cross-env ENV=development cargo update && cross-env ENV=development cargo build --release",
     "case:build2": "cross-env ENV=development pnpm run case:build"
   },
-  "dependencies": {
-    "cross-env": "^7.0.3"
+  "peerDependencies": {
+    "cross-env": ">=7.0.3"
   }
 }

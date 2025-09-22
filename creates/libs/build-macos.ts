@@ -15,6 +15,7 @@ macosFiles.forEach((item) => {
 })
 
 macosLibsPath.forEach((libPath) => {
+	// eslint-disable-next-line no-console
 	console.log(`⭐️start build swift project ${libPath}`)
 	exec('swift build -c release', { cwd: libPath })
 	// spawn('swift', ['build -c release'], { cwd: libPath, stdio: 'inherit' });

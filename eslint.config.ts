@@ -4,6 +4,7 @@ import pluginJs from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import pluginVue from 'eslint-plugin-vue'
 import workspace from '@package/workspace'
+import oxlint from 'eslint-plugin-oxlint'
 import type { Rule } from 'eslint'
 import type { ImportDeclaration } from 'estree'
 
@@ -353,11 +354,9 @@ export default [
 				}
 			],
 			'array-bracket-spacing': [2, 'never'],
-			'no-async-promise-executor': 'off',
-			'require-atomic-updates': 'off',
-			'no-prototype-builtins': 'off',
 			'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
 			'no-console': process.env.NODE_ENV === 'production' ? 2 : 1
 		}
-	}
+	},
+	...oxlint.buildFromOxlintConfigFile('./.oxlintrc.json')
 ]

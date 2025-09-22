@@ -4,7 +4,7 @@ function emits(channel: string, ...args: [...unknown[], (...callbackArgs: unknow
 	const callback = args[args.length - 1] as (...callbackArgs: unknown[]) => void
 	const options = args.slice(0, -1)
 	const action = `${channel}-${crypto.randomUUID()}`
-	const handler = (event: IpcRendererEvent, ...args: unknown[]) => callback(...args)
+	const handler = (_event: IpcRendererEvent, ...args: unknown[]) => callback(...args)
 	ipcRenderer.on(action, handler)
 	ipcRenderer.send(channel, action, ...options)
 	return [() => ipcRenderer.removeListener(action, handler)]
@@ -23,7 +23,7 @@ export const preloadInit = (feature?: string) => {
 
 		for (const name of on) {
 			const fnName = name.charAt(0).toUpperCase() + name.slice(1)
-			api[`on${fnName}`] = (callback: (...arg:unknown[]) => void) => ipcRenderer.on(name, (event, ...arg) => callback(...arg))
+			api[`on${fnName}`] = (callback: (...arg:unknown[]) => void) => ipcRenderer.on(name, (_event, ...arg) => callback(...arg))
 		}
 		contextBridge.exposeInMainWorld('ipc', api)
 	})

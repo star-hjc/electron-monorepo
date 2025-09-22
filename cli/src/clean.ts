@@ -31,19 +31,22 @@ async function deleteDirByDirName(dirPath: string, needDeleteDirName:string): Pr
 					continue
 				}
 				if (isMatchDeleteDirName) {
+					// eslint-disable-next-line no-console
 					console.log(`🗑️ 正在删除: ${fullPath}`)
 					// 删除 node_modules 目录及其所有内容
-					await fs.rm(fullPath, { recursive: true, force: true })
+					fs.rm(fullPath, { recursive: true, force: true })
 				} else {
 					// 递归扫描子目录
-					await deleteDirByDirName(fullPath, needDeleteDirName)
+					deleteDirByDirName(fullPath, needDeleteDirName)
 				}
 			}
 		}
 	} catch (error) {
 		if (error instanceof Error) {
+			// eslint-disable-next-line no-console
 			console.error(`❌ 错误在 "${dirPath}": ${error.message}`)
 		} else {
+			// eslint-disable-next-line no-console
 			console.error(`❌ 未知错误: ${error}`)
 		}
 	}
@@ -53,6 +56,7 @@ async function deleteDirByDirName(dirPath: string, needDeleteDirName:string): Pr
 async function main() {
 	// 获取目标目录，默认为当前工作目录
 	const targetDir = process.argv[2] || process.cwd()
+	// eslint-disable-next-line no-console
 	console.log(`🔍 正在扫描目录: ${targetDir}`)
 
 	const userSelectResult = await askByCmd('checkbox', [
@@ -69,11 +73,13 @@ async function main() {
 		// await deleteDirByDirName(targetDir,'dist');
 		// console.log(userSelectResult.cleanOptions,"clean.ts::51行");
 	}
+	// eslint-disable-next-line no-console
 	console.log('✅ 清理完成')
 }
 
 // 执行主函数并捕获错误
 main().catch((err) => {
+	// eslint-disable-next-line no-console
 	console.error('❌ 清理失败:', err)
 	process.exit(1)
 })

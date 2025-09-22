@@ -13,7 +13,8 @@ interface IInquireConfig {
 }
 export function askByCmd(type:cmdInquireType, config:IInquireConfig[]|IInquireConfig) {
 	if (!['list', 'checkbox', 'input'].includes(type)) {
-		console.error('仅支持的type的值为：', 'list,checkbox,input')
+		// eslint-disable-next-line no-console
+		console.error('仅支持的type的值为:', 'list,checkbox,input')
 		return
 	}
 	config = Array.isArray(config) ? config : [config]

@@ -6,9 +6,10 @@
   "type": "module",
   "scripts": {
     "spell-check": "cspell .",
-    "lint": "eslint .",
-    "dev": "turbo run dev",
-    "build": "turbo run build",
+    "lint": "oxlint . && eslint .",
+    "lint:pro": "cross-env NODE_ENV=production oxlint . && cross-env NODE_ENV=production eslint .",
+    "dev": "pnpm lint && turbo run dev",
+    "build": "pnpm lint:pro && turbo run build",
     "clean": "ts-node cli/src/clean.ts",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
@@ -20,21 +21,25 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
+      "oxlint",
       "eslint"
     ]
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@eslint/js": "^9.21.0",
     "@package/workspace": "workspace:*",
     "@types/estree": "^1.0.8",
     "@types/node": "^22.13.8",
     "cspell": "^8.17.5",
     "eslint": "^9.21.0",
+    "eslint-plugin-oxlint": "^1.16.0",
     "eslint-plugin-vue": "^9.32.0",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
     "jiti": "^2.5.1",
     "lint-staged": "^15.4.3",
+    "oxlint": "^1.16.0",
     "ts-node": "^10.9.2",
     "tsup": "^8.4.0",
     "turbo": "^2.4.4",
