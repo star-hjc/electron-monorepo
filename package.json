@@ -7,7 +7,7 @@
   "scripts": {
     "spell-check": "cspell .",
     "lint": "oxlint . && eslint .",
-    "lint:pro": "cross-env NODE_ENV=production oxlint . && cross-env NODE_ENV=production eslint .",
+    "lint:pro": "oxlint . && cross-env NODE_ENV=production eslint .",
     "dev": "pnpm lint && turbo run dev",
     "build": "pnpm lint:pro && turbo run build",
     "clean": "ts-node cli/src/clean.ts",

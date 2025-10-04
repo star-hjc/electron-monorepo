@@ -68,7 +68,7 @@ const electronPlugin = {
 /** @type {import('eslint').Linter.Config[]} */
 export default [
 	/** 忽略文件 */
-	{ ignores: ['.husky/**/*', '**/dist/**', '**/node_modules/**', 'neon-bridge/**', 'docs/.vitepress/**/*'] },
+	{ ignores: ['.husky/**/*', '**/dist/**', '**/node_modules/**', 'neon-bridge/**', 'docs/.vitepress/**/*', 'electron/renderer/types/ipc.d.ts'] },
 	/* 全局环境变量 */
 	{ languageOptions: { globals: { ...globals.browser, ...globals.node, ipc: true }}},
 	/** TS 默认格式规则 */

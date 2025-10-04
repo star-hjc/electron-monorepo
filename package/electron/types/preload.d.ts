@@ -1,1 +1,1 @@
-export type Features = [string, ...string[]]
+export type Features = 'main'

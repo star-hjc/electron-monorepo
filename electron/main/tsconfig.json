@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "target": "esnext",
         "module": "esnext",
         "esModuleInterop": true,
         "baseUrl": "./src",
@@ -8,11 +9,21 @@
         "noImplicitAny": false,
         "resolveJsonModule": true,
         "paths": {
-            "@/config/*": ["./config/*"],
-            "@/logger": ["./logger/index"],
-            "@/ipc": ["./ipc/index"],
-            "@/windows": ["./windows/index"],
-            "@/windows/*": ["./windows/*"],
+            "@/config/*": [
+                "./config/*"
+            ],
+            "@/logger": [
+                "./logger/index"
+            ],
+            "@/ipc": [
+                "./ipc/index"
+            ],
+            "@/windows": [
+                "./windows/index"
+            ],
+            "@/windows/*": [
+                "./windows/*"
+            ],
         }
     }
 }

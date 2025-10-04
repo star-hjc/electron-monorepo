@@ -100,6 +100,6 @@ const Ipc = singleton(IpcConnector)
 
 const ipc = new Ipc()
 
-ipcMain.handle('initIpc', (event, feature?:string) => ({ request: ipc.getHandles(feature), emit: ipc.getListeners(feature), on: [...ipc.getRendererListeners()] }))
+ipcMain.handle('initIpc', (event, feature?:string) => ({ request: ipc.getHandles(feature), emit: ipc.getListeners(feature), on: ipc.getRendererListeners() }))
 
 export { Ipc }

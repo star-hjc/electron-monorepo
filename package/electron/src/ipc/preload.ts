@@ -11,8 +11,10 @@ function emits(channel: string, ...args: [...unknown[], (...callbackArgs: unknow
 }
 
 export const preloadInit = (feature?: string) => {
-	ipcRenderer.invoke('initIpc', feature).then(({ request, emit, on }) => {
-		const api = { feature }
+	ipcRenderer.invoke('initIpc', feature).then(({ request, emit }) => {
+		const api = { feature,
+			on: (name: string, callback: (...arg:unknown[]) => void) => ipcRenderer.on(name, (_event, ...arg) => callback(...arg))
+		}
 		for (const name of request) {
 			api[name] = (...args: unknown[]) => ipcRenderer.invoke(name, ...args)
 		}
@@ -21,10 +23,7 @@ export const preloadInit = (feature?: string) => {
 			api[name] = (...args: [...unknown[], (...callbackArgs: unknown[]) => void]) => emits(name, ...args)
 		}
 
-		for (const name of on) {
-			const fnName = name.charAt(0).toUpperCase() + name.slice(1)
-			api[`on${fnName}`] = (callback: (...arg:unknown[]) => void) => ipcRenderer.on(name, (_event, ...arg) => callback(...arg))
-		}
 		contextBridge.exposeInMainWorld('ipc', api)
 	})
 }
+

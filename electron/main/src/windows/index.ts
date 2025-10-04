@@ -1,9 +1,9 @@
+import { app, BrowserWindow } from 'electron'
+import WindowPool from '@package/electron/windows'
+import { logger } from '@/logger'
 import { createWindow as createMainWindow } from '@/windows/main'
 import { createWindow as createMiniWindow } from '@/windows/mini'
-import { logger } from '@/logger'
-import initIpc from '@/ipc'
-import WindowPool from '@package/electron/windows'
-import { app, BrowserWindow } from 'electron'
+import '@/ipc'
 
 const windowPool = new WindowPool()
 
@@ -25,7 +25,6 @@ async function initWindows() {
 
 async function initApplication() {
 	await initWindows()
-	await initIpc()
 }
 
 async function initApplicationAfter() {

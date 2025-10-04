@@ -32,6 +32,4 @@ ipc.on('bbbb', (event, callback:(name:string) => void) => {
 	callback('1231')
 })
 
-export default async() => {
-	log.info('ipc init')
-}
+log.info('ipc init end')

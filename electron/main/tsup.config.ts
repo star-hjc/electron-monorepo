@@ -84,8 +84,8 @@ export default defineConfig(({ env, watch }) => {
 		],
 		onSuccess: async() => {
 			if (watch) {
-				const ipcTypes = await getIpcTypes()
-				createIpcTypeFile(ipcTypes)
+				const { ipcTypes, features } = await getIpcTypes()
+				createIpcTypeFile(ipcTypes, features)
 
 				ps = spawn(getElectronPath(), ['--disable-gpu ', '.'], { stdio: 'inherit' })
 				return
@@ -151,6 +151,7 @@ function getElectronPath(): string {
 
 async function getIpcTypes() {
 	const ipcEventMap = { 'response': 'request', 'on': 'emit', 'send': 'on' }
+	const features = new Set<string>()
 	const project = new Project({
 		tsConfigFilePath: path.join(workspace.getElectronMain(), 'tsconfig.json')
 	})
@@ -160,31 +161,36 @@ async function getIpcTypes() {
 		const calls = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression)
 		for (const call of calls) {
 			const expr = call.getExpression()
+
+			if (expr.getText() === 'preloadInit') {
+				const feature = call.getArguments()[0]?.getText()
+				if (feature) {
+					features.add(feature)
+				}
+			}
+
 			if (Node.isPropertyAccessExpression(expr)) {
 				const className = expr.getExpression().getType().getSymbol()?.getName()
 				const functionName = expr.getName()
 				if (className === 'IpcConnector' && Object.keys(ipcEventMap).includes(functionName)) {
 					const args = call.getArguments()
-					const lineNumber = call.getStartLineNumber()
+
 					if (args.length >= 2) {
-						const firstArg = args[0]
-						const callback = args[1]
-						const featuresNode = args[2]
-						const features = featuresNode?.getText()
-						const result = {
-							features: functionName === 'send' ? void 0 : features,
+						const [eventName, callback, features] = args
+						const result:IpcType = {
+							features: functionName === 'send' ? void 0 : features?.getText(),
 							filePath: sourceFile.getFilePath(),
-							line: lineNumber,
+							line: call.getStartLineNumber(),
 							functionName: ipcEventMap[functionName],
-							eventName: firstArg.getText(),
-							eventNameType: firstArg.getType().getText(),
+							eventName: eventName.getText(),
+							eventNameType: eventName.getType().getText(),
 							callbackParams: [],
 							callbackType: 'void'
 						}
 
 						if (Node.isFunctionExpression(callback) ||
-                Node.isArrowFunction(callback) ||
-                Node.isFunctionDeclaration(callback)) {
+                            Node.isArrowFunction(callback) ||
+                            Node.isFunctionDeclaration(callback)) {
 							const params = callback.getParameters()
 							const callbackType = callback.getReturnType().getText()
 							result.callbackType = functionName === 'response' ? `Promise<${callbackType}>` : callbackType
@@ -202,12 +208,18 @@ async function getIpcTypes() {
 		}
 	}
 
-	return results
+	return {
+		ipcTypes: results,
+		features: [...features]
+	}
 }
 
-function createIpcTypeFile(types:IpcTypeList) {
+// oxlint-disable-next-line no-unused-vars
+function createIpcTypeFile(types:IpcTypeList, features:Array<string>) {
 	const ipcTypeFilePath = path.join(workspace.getElectronRenderer(), 'types', 'ipc.d.ts')
+	const preloadTypeFilePath = path.join(workspace.getWorkspaceByName('@package/electron'), 'types', 'preload.d.ts')
 	fs.removeSync(ipcTypeFilePath)
+	fs.removeSync(preloadTypeFilePath)
 	let content = ''
 	for (const item of types) {
 		let callbackParams = ''
@@ -216,13 +228,12 @@ function createIpcTypeFile(types:IpcTypeList) {
 			callbackParams = item.callbackParams.map(param => `${param.name}: ${param.type}`).join(', ')
 		}
 		if (item.functionName === 'on') {
-			let eventName = item.eventName.replace(/'/g, '')
-			eventName = `'on${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}'`
-			content += `'${item.functionName}': (event: ${eventName}, callback: (...arg: unknown[]) => ${item.callbackType}) => ${item.callbackType}\n`
+			content += `'${item.functionName}': (event: ${item.eventName}, callback: (...arg: unknown[]) => ${item.callbackType}) => ${item.callbackType}\n`
 			continue
 		}
 		const description = `/** ⚠️ ${item.features} 需求可用 ${item.eventName}  */\n`
 		content += `${item.features ? description : ''}${item.eventName}: (${callbackParams}) => ${item.callbackType}\n`
 	}
+	fs.writeFileSync(preloadTypeFilePath, `export type Features = ${features.length > 0 ? features.join(' | ') : 'undefined | [string, ...string[]]'}\n`)
 	fs.writeFileSync(ipcTypeFilePath, `export interface Ipc {\n${content}}\n`)
 }
