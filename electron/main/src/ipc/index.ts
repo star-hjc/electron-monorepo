@@ -20,7 +20,7 @@ ipc.response('ping1', () => {
 
 ipc.response('ping3', () => {
 	return 1231
-})
+}, ['main'])
 
 ipc.send('cccc', '1231', [1, 2, 3])
 

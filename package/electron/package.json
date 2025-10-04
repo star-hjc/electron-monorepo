@@ -3,24 +3,24 @@
   "version": "1.0.0",
   "exports": {
     ".": {
-      "types": "./dist/ipc/index.d.ts",
-      "require": "./dist/ipc/index.js",
-      "import": "./dist/ipc/index.mjs"
+      "types": "./dist/src/ipc/index.d.ts",
+      "require": "./dist/src/ipc/index.js",
+      "import": "./dist/src/ipc/index.mjs"
     },
     "./preload": {
-      "types": "./dist/ipc/preload.d.ts",
-      "require": "./dist/ipc/preload.js",
-      "import": "./dist/ipc/preload.mjs"
+      "types": "./dist/src/ipc/preload.d.ts",
+      "require": "./dist/src/ipc/preload.js",
+      "import": "./dist/src/ipc/preload.mjs"
     },
     "./windows": {
-      "types": "./dist/windows/index.d.ts",
-      "require": "./dist/windows/index.js",
-      "import": "./dist/windows/index.mjs"
+      "types": "./dist/src/windows/index.d.ts",
+      "require": "./dist/src/windows/index.js",
+      "import": "./dist/src/windows/index.mjs"
     },
     "./*": {
-      "types": "./dist/*.d.ts",
-      "require": "./dist/*.js",
-      "import": "./dist/*.mjs"
+      "types": "./dist/src/*.d.ts",
+      "require": "./dist/src/*.js",
+      "import": "./dist/src/*.mjs"
     }
   },
   "scripts": {

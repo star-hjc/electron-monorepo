@@ -1,1 +1,2 @@
-export type Features = 'main'
+type Feature = 'main'
+export type Features = [Feature, ...Feature[]]

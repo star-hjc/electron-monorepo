@@ -214,7 +214,6 @@ async function getIpcTypes() {
 	}
 }
 
-// oxlint-disable-next-line no-unused-vars
 function createIpcTypeFile(types:IpcTypeList, features:Array<string>) {
 	const ipcTypeFilePath = path.join(workspace.getElectronRenderer(), 'types', 'ipc.d.ts')
 	const preloadTypeFilePath = path.join(workspace.getWorkspaceByName('@package/electron'), 'types', 'preload.d.ts')
@@ -234,6 +233,6 @@ function createIpcTypeFile(types:IpcTypeList, features:Array<string>) {
 		const description = `/** ⚠️ ${item.features} 需求可用 ${item.eventName}  */\n`
 		content += `${item.features ? description : ''}${item.eventName}: (${callbackParams}) => ${item.callbackType}\n`
 	}
-	fs.writeFileSync(preloadTypeFilePath, `export type Features = ${features.length > 0 ? features.join(' | ') : 'undefined | [string, ...string[]]'}\n`)
+	fs.writeFileSync(preloadTypeFilePath, `type Feature = ${features.length > 0 ? features.join(' | ') : 'never'}\nexport type Features = ${features.length > 0 ? '[Feature, ...Feature[]]' : 'undefined | [string, ...string[]]'}\n`)
 	fs.writeFileSync(ipcTypeFilePath, `export interface Ipc {\n${content}}\n`)
 }
