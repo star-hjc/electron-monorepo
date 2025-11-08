@@ -14,8 +14,8 @@ ipc.on('ping', (event: IpcMainEvent, id:number, value:number, callback:(name:str
 	callback('end', Date.now(), num)
 })
 
-ipc.response('ping1', () => {
-	return { name: 1, num: '' }
+ipc.response('ping1', (event, id:string, name:string) => {
+	return { name, num: 1, id }
 })
 
 ipc.response('ping3', () => {

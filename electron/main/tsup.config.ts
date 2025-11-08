@@ -222,6 +222,9 @@ function createIpcTypeFile(types:IpcTypeList, features:Array<string>) {
 	let content = ''
 	for (const item of types) {
 		let callbackParams = ''
+		if (item.functionName === 'emit') {
+			item.callbackParams.push({ name: 'options?', type: 'EmitsOptions' })
+		}
 		if (item.callbackParams?.length > 1) {
 			item.callbackParams.shift()
 			callbackParams = item.callbackParams.map(param => `${param.name}: ${param.type}`).join(', ')
@@ -233,6 +236,9 @@ function createIpcTypeFile(types:IpcTypeList, features:Array<string>) {
 		const description = `/** ⚠️ ${item.features} 需求可用 ${item.eventName}  */\n`
 		content += `${item.features ? description : ''}${item.eventName}: (${callbackParams}) => ${item.callbackType}\n`
 	}
-	fs.writeFileSync(preloadTypeFilePath, `type Feature = ${features.length > 0 ? features.join(' | ') : 'never'}\nexport type Features = ${features.length > 0 ? '[Feature, ...Feature[]]' : 'undefined | [string, ...string[]]'}\n`)
-	fs.writeFileSync(ipcTypeFilePath, `export interface Ipc {\n${content}}\n`)
+	const titleTop = '/** 由 electron/main/tsup.config.ts  自动生成, 请勿手动修改 */\n'
+	const EmitsOptions = `type EmitsOptions = {\n\tonce?: boolean\n\tprivate?: boolean\n}\n`
+
+	fs.writeFileSync(preloadTypeFilePath, `${titleTop}\n${EmitsOptions}\ntype Feature = ${features.length > 0 ? features.join(' | ') : 'never'}\nexport type Features = ${features.length > 0 ? '[Feature, ...Feature[]]' : 'undefined | [string, ...string[]]'}\n`)
+	fs.writeFileSync(ipcTypeFilePath, `${titleTop}\n${EmitsOptions}\nexport interface Ipc {\n${content}}\n`)
 }

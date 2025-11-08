@@ -1,5 +1,6 @@
 import { ipcMain, IpcMainEvent, IpcMainInvokeEvent, webContents } from 'electron'
 import { singleton } from '@package/common/singleton'
+import type { EmitsArgs } from './preload'
 import type { Features } from '@/types/preload'
 
 class IpcConnector {
@@ -54,12 +55,13 @@ class IpcConnector {
 
 	on(
 		channel:string,
-		listener:(event: IpcMainEvent, ...args: [...unknown[], (...callbackArgs:unknown[]) => void]) => unknown,
+		listener:(event: IpcMainEvent, ...args: EmitsArgs) => unknown,
 		features?: Features
 	) {
 		if (this.listeners.has(channel)) throw new Error(`IpcConnector.on Channel ${channel} already registered`)
 		this.listeners.set(channel, features)
 		ipcMain.on(channel, (event: IpcMainEvent, action:string, ...args: unknown[]) => {
+			args.pop()
 			listener(event, ...args, (...callbackArgs) => event.reply(action, ...callbackArgs))
 		})
 		if (features === void 0) {
