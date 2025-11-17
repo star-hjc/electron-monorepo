@@ -4,14 +4,20 @@ import type { EmitsOptions } from '@/types/preload'
 export type EmitsArgs = [...unknown[], (...args: unknown[]) => void]
 type EmitsArgsDefault = [...EmitsArgs, EmitsOptions]
 
+const DEFAULT_EMITS_OPTIONS: EmitsOptions = {
+	once: false,
+	private: true
+}
+
 function emits(channel: string, ...args: EmitsArgsDefault) {
-	const emitsOptions: EmitsOptions = {
-		once: false,
-		private: true,
-		...args[args.length - 1] as EmitsOptions
+	let emitsOptions = DEFAULT_EMITS_OPTIONS
+	const last = args[args.length - 1]
+	if (typeof (last) !== 'function') {
+		emitsOptions = { ...emitsOptions, ...last as EmitsOptions }
+		args.pop()
 	}
-	const callback = args[args.length - 2] as (...callbackArgs: unknown[]) => void
-	const options = args.slice(0, -2)
+	const callback = args[args.length - 1] as (...callbackArgs: unknown[]) => void
+	const options = args.slice(0, -1)
 	const action = emitsOptions.private ? `${channel}-${crypto.randomUUID()}` : channel
 	const handler = (_event: IpcRendererEvent, ...args: unknown[]) => callback(...args)
 

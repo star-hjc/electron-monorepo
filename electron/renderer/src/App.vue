@@ -14,10 +14,26 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 import { create_tags } from './logger'
 const console = create_tags('vue')
 console.log('app vue init')
+ipc.ping(1,2,(a,b,c)=>{
+	console.log('pong from main process',a,b,c);
+},{})
+
+ipc.on('cccc',(...args)=>{
+	console.log('cccc',args);
+})
+
+onMounted(()=>{
+	ipc.ping1('666','8888').then((result)=>{
+		console.log('ping1 result:',result)
+	}).catch((error)=>{
+		console.error('ping1 error:',error)
+	})
+})
 </script>
 
 <style scoped>

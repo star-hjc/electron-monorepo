@@ -61,7 +61,6 @@ class IpcConnector {
 		if (this.listeners.has(channel)) throw new Error(`IpcConnector.on Channel ${channel} already registered`)
 		this.listeners.set(channel, features)
 		ipcMain.on(channel, (event: IpcMainEvent, action:string, ...args: unknown[]) => {
-			args.pop()
 			listener(event, ...args, (...callbackArgs) => event.reply(action, ...callbackArgs))
 		})
 		if (features === void 0) {
