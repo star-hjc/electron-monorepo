@@ -1,6 +1,6 @@
 import { singleton } from '@package/common/singleton'
 import { execSync } from 'child_process'
-import type { WorkspaceType, WorkspacePath } from './typings'
+import type { WorkspaceType, WorkspacePath } from './types'
 
 class Workspace {
 	private readonly workspace: WorkspaceType
@@ -16,7 +16,7 @@ class Workspace {
 		return this.workspace
 	}
 
-	getWorkspaceByName(name: string): WorkspacePath {
+	getWorkspaceByName(name?: string): WorkspacePath {
 		const item = this.workspace.find((item) => item.name === name)
 		if (!item) throw new Error(`Cannot find ${name} in workspace`)
 		return item.path

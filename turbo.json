@@ -10,6 +10,12 @@
                 "dist/**"
             ]
         },
+        "cli#dev": {
+            "persistent": false,
+            "outputs": [
+                "bin/**"
+            ]
+        },
         "@package/bridge#dev": {
             "persistent": false,
             "outputs": [

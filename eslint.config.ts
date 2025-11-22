@@ -3,10 +3,12 @@ import globals from 'globals'
 import pluginJs from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import pluginVue from 'eslint-plugin-vue'
-import workspace from '@package/workspace'
 import oxlint from 'eslint-plugin-oxlint'
 import type { Rule } from 'eslint'
 import type { ImportDeclaration } from 'estree'
+import workspace from '@package/workspace'
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 const ipcRestrictedImport = {
 	meta: {
@@ -68,7 +70,7 @@ const electronPlugin = {
 /** @type {import('eslint').Linter.Config[]} */
 export default [
 	/** 忽略文件 */
-	{ ignores: ['.husky/**/*', '**/dist/**', '**/node_modules/**', 'neon-bridge/**', 'docs/.vitepress/**/*', 'electron/renderer/types/ipc.d.ts'] },
+	{ ignores: ['.husky/**/*', 'cli/bin/**', '**/dist/**', '**/node_modules/**', 'neon-bridge/**', 'docs/.vitepress/**/*', 'electron/renderer/types/ipc.d.ts'] },
 	/* 全局环境变量 */
 	{ languageOptions: { globals: { ...globals.browser, ...globals.node, ipc: true }}},
 	/** TS 默认格式规则 */
@@ -109,7 +111,7 @@ export default [
 		plugins: { electron: electronPlugin },
 		rules: {
 			'electron/ipc-restricted-import': [2, {
-				allowedFolder: [path.join(workspace.getElectronMain(), '/src/ipc')]
+				allowedFolder: [path.join(workspace.getWorkspaceByName(process.env.ELECTRON_MAIN || ''), '/src/ipc')]
 			}],
 			'max-len': [2, {
 				code: 150,

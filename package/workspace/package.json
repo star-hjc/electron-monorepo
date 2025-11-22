@@ -6,12 +6,20 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "require": "./dist/*.js",
+      "import": "./dist/*.mjs"
     }
   },
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
     "postinstall": "tsup"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.3"
   },
   "peerDependencies": {
     "@package/common": "workspace:*"

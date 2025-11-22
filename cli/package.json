@@ -1,14 +1,25 @@
 {
   "name": "cli",
   "version": "1.0.0",
-  "description": "",
+  "description": "CLI 工具集",
   "scripts": {
-    "clean": "ts-node src/clean.ts"
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "preinstall": "tsup"
+  },
+  "bin": {
+    "env": "./bin/env.js",
+    "clean": "./bin/clean.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@package/workspace": "workspace:*",
     "chokidar": "^4.0.3",
     "inquirer": "^12.4.2"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3"
   }
 }

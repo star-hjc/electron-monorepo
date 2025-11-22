@@ -20,7 +20,8 @@
         "*.toml",
         "**/dist/**",
         "**/target/**",
-        "configs/tsconfig.schema.json"
+        "configs/tsconfig.schema.json",
+        "cli/bin/**"
     ],
     "words": [
         "AF_UNSPEC",
@@ -83,7 +84,25 @@
         "Vite",
         "vitepress",
         "wlan",
-        "YYMMDDHHmmss"
+        "YYMMDDHHmmss",
+        "Unsubscription",
+        "unsubscription",
+        "rawlist",
+        "KARASZI",
+        "Istvan",
+        "Cmder",
+        "shiftjis",
+        "dbcs",
+        "mskanji",
+        "xsjis",
+        "eucjp",
+        "euccn",
+        "xgbk",
+        "euckr",
+        "hkscs",
+        "cnbig",
+        "xxbig",
+        "conv"
     ],
     "flagWords": []
 }

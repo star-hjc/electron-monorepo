@@ -14,7 +14,7 @@ package-lock.json
 *index.node
 
 **/*/cargo.log
-
+cli/bin/**
 **/dist/**
 **/.DS_Store
 .DS_Store

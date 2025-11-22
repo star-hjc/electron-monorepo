@@ -5,9 +5,11 @@
   "scripts": {
     "dev": "tsup --watch --env.NODE_ENV development",
     "dev:pro": "tsup --watch --env.NODE_ENV production",
-    "build": "tsup --env.NODE_ENV production"
+    "build": "tsup --env.NODE_ENV production",
+    "preinstall": "env ELECTRON_MAIN"
   },
   "dependencies": {
+    "cli": "workspace:*",
     "@package/bridge": "workspace:*",
     "@package/common": "workspace:*",
     "@package/napi": "workspace:*",

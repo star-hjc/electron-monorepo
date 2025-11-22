@@ -7,9 +7,11 @@
     "dev": "vite --mode development",
     "dev:pro": "vite --mode production",
     "build": "vue-tsc -b && vite build --mode production",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preinstall": "env ELECTRON_RENDERER"
   },
   "dependencies": {
+    "cli": "workspace:*",
     "@package/common": "workspace:*",
     "@package/wasm": "workspace:*",
     "colorette": "^2.0.20",
@@ -20,7 +22,6 @@
     "@package/workspace": "workspace:*",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
-    "dotenv": "^16.4.7",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
     "vue-tsc": "^2.2.4"

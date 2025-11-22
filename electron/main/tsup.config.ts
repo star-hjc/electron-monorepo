@@ -1,6 +1,5 @@
 
 import path from 'node:path'
-import * as dotenv from 'dotenv'
 import { Project, SyntaxKind, Node } from 'ts-morph'
 import { defineConfig } from 'tsup'
 import { existsSync, readFileSync, writeFileSync, readdirSync } from 'node:fs'
@@ -11,6 +10,7 @@ import { dependencies, devDependencies, main, name as packageName } from './pack
 import electronConfig from './electron.config'
 import { version } from '../../package.json'
 import workspace from '@package/workspace'
+import workspaceEnv from '@package/workspace/env'
 
 type IpcTypeCallbackParams = Array<{ name: string; type: string }>
 
@@ -31,8 +31,15 @@ let ps: ChildProcess = null
 
 export default defineConfig(({ env, watch }) => {
 	const envDir = workspace.getRoot()
-	const define = Object.entries(getEnv(env.NODE_ENV, envDir)).reduce((a, b) => {
-		a[`process.env.${b[0]}`] = b[1] as string
+	const define = Object.entries(workspaceEnv.get()).reduce((a, b) => {
+		// 只包含有效的 JavaScript 字面量值（字符串、数字、布尔值）
+		// 过滤掉包名等无效值
+		// console.log(); `
+
+		const value = b[1] as string
+		if (value && typeof value === 'string' && !value.includes('@')) {
+			a[`process.env.${b[0]}`] = value
+		}
 		return a
 	}, {})
 	const isDev = env.NODE_ENV === process.env.DEV_ENV
@@ -51,7 +58,6 @@ export default defineConfig(({ env, watch }) => {
 		external: ['electron', /^electron\/.+/, /^@package\/(bridge|napi).*/, ...builtinModules.flatMap(m => [m, `node:${m}`])],
 		noExternal: ['@package/electron/preload'],
 		loader: {
-			'.npmrc': 'copy',
 			'.icns': 'copy',
 			'.png': 'copy',
 			'.jpg': 'copy',
@@ -120,14 +126,6 @@ export default defineConfig(({ env, watch }) => {
 		}
 	}
 })
-
-function getEnv(mode: string, envDir: string) {
-	const envPath = path.join(envDir, `.env`)
-	const defaultEnvPath = path.join(envDir, `.env.${mode}`)
-	const defaultEnv = dotenv.config({ path: defaultEnvPath }).parsed || {}
-	const env = dotenv.config({ path: envPath }).parsed || {}
-	return { ...defaultEnv, ...env }
-}
 
 function getElectronPath(): string {
 	let electronExecPath = process.env.ELECTRON_EXEC_PATH || ''
