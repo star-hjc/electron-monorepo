@@ -4,7 +4,7 @@ import { version } from '../../package.json'
 
 const levels = { log: 'info', error: 'error', warn: 'warn', debug: 'debug' }
 
-const formatIsCombine = (childPid:number = 0) => [
+const formatIsCombine = (childPid:number = process.pid) => [
 	winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
 	winston.format.printf(({ timestamp, level, message }) => `[${version}] ${timestamp} ${process.pid} ${childPid} [${level}] ${message}`)
 ]

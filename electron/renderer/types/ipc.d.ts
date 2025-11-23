@@ -13,4 +13,5 @@ export interface Ipc {
 'on': (event: 'cccc', callback: (...arg: unknown[]) => void) => void
 'cccc': (callback: (name: string) => void, options?: EmitsOptions) => void
 'bbbb': (callback: (name: string) => void, options?: EmitsOptions) => void
+'send': (event: string, ...args: unknown[]) => void
 }

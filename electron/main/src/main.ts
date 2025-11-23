@@ -5,15 +5,12 @@ import dayjs from 'dayjs'
 import { create_tags } from '@/logger'
 import { initApplication, initApplicationAfter, initApplicationBefore } from '@/windows'
 
-console.log(nativeNapi.sum(1, 2), 'main.ts::7行')
-
 const log = create_tags('main')
-log.info('main', 888)
+log.info('main', 888, nativeNapi.sum(1, 2), nativeModule.hello(), dayjs().format())
 
 initApplicationBefore()
 
 app.whenReady().then(async() => {
-	console.log(nativeModule.hello(), dayjs().format(), 'main.ts::622行')
 	// nativeModule.callCase((...a) => {
 	// 	log.info('callCase', a, a.length)
 	// })

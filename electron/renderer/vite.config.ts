@@ -7,8 +7,6 @@ import workspaceEnv from '@package/workspace/env'
 export default defineConfig(({ mode }) => {
 	const envDir = workspace.getRoot()
 	const envPrefix = 'VITE_'
-	console.log('workspaceEnv:', workspaceEnv.get(mode))
-
 	const define = Object.entries(workspaceEnv.get(mode)).reduce((a: { [key: string]: string }, b) => {
 		if (b[0].startsWith(envPrefix) || b[0] === 'NODE_ENV') {
 			return a

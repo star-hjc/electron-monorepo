@@ -8,7 +8,7 @@ import workspace from '@package/workspace'
 export default {
 	productName: 'test-app',
 	appId: 'com.xxx.xxx',
-	artifactName: `\${productName}-\${version}-\${arch}-${dayjs().format('YYMMDDHHmmss')}.\${ext}`,
+	artifactName: `\${productName}-\${version}-\${arch}-${dayjs().format('YYMMDDHHmmss')}-${workspace.getCommitHash()}.\${ext}`,
 	files: [
 		'./**/*'
 	],
@@ -17,7 +17,7 @@ export default {
 		output: path.join(workspace.getRoot(), 'app')
 	},
 	extraResources: {
-		from: '../resources/',
+		from: '../../resources/',
 		to: './'
 	},
 	nsis: {
@@ -44,6 +44,7 @@ export default {
 				fs.removeSync(filePath)
 			}
 		}
-		console.log(context)
+		// eslint-disable-next-line no-console
+		console.warn(context)
 	}
 }

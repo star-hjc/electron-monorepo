@@ -16,6 +16,7 @@ async function initApplicationBefore() {
 			windowPool.remove(win.id)
 		})
 	})
+	await initEnvInfoLog()
 }
 
 async function initWindows() {
@@ -29,6 +30,11 @@ async function initApplication() {
 
 async function initApplicationAfter() {
 	if (BrowserWindow.getAllWindows().length === 0) createMainWindow()
+}
+
+async function initEnvInfoLog() {
+	const log = logger(`env`, process.pid)
+	log.info(`OS: ${process.env.OS} | version: ${process.env.VERSION} | commit: ${process.env.COMMIT_HASH}`)
 }
 
 async function initRendererLog(win:BrowserWindow, name:string) {

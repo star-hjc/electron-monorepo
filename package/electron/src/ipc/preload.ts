@@ -35,6 +35,7 @@ export const preloadInit = (feature?: string) => {
 	ipcRenderer.invoke('initIpc', feature).then(({ request, emit }) => {
 		const api = {
 			feature,
+			send: ipcRenderer.send,
 			on: (name: string, callback: (...arg:unknown[]) => void) => ipcRenderer.on(name, (_event, ...arg) => callback(...arg)),
 			once: (name: string, callback: (...arg:unknown[]) => void) => ipcRenderer.once(name, (_event, ...arg) => callback(...arg))
 		}

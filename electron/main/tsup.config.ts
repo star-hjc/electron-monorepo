@@ -11,6 +11,7 @@ import electronConfig from './electron.config'
 import { version } from '../../package.json'
 import workspace from '@package/workspace'
 import workspaceEnv from '@package/workspace/env'
+import os from 'node:os'
 
 type IpcTypeCallbackParams = Array<{ name: string; type: string }>
 
@@ -32,16 +33,13 @@ let ps: ChildProcess = null
 export default defineConfig(({ env, watch }) => {
 	const envDir = workspace.getRoot()
 	const define = Object.entries(workspaceEnv.get()).reduce((a, b) => {
-		// 只包含有效的 JavaScript 字面量值（字符串、数字、布尔值）
-		// 过滤掉包名等无效值
-		// console.log(); `
-
-		const value = b[1] as string
-		if (value && typeof value === 'string' && !value.includes('@')) {
-			a[`process.env.${b[0]}`] = value
-		}
+		a[`process.env.${b[0]}`] = `'${b[1]}'`
 		return a
-	}, {})
+	}, {
+		'process.env.COMMIT_HASH': `'${workspace.getCommitHash()}'`,
+		'process.env.VERSION': `'${version}'`,
+		'process.env.OS': `'${os.type()}'`
+	})
 	const isDev = env.NODE_ENV === process.env.DEV_ENV
 	const outDir = 'dist'
 	return {
@@ -150,16 +148,16 @@ function getElectronPath(): string {
 async function getIpcTypes() {
 	const ipcEventMap = { 'response': 'request', 'on': 'emit', 'send': 'on' }
 	const features = new Set<string>()
+	const projectRoot = workspace.getWorkspaceByName(process.env.ELECTRON_MAIN)
 	const project = new Project({
-		tsConfigFilePath: path.join(workspace.getElectronMain(), 'tsconfig.json')
+		tsConfigFilePath: path.join(projectRoot, 'tsconfig.json')
 	})
-	const sourceFiles = project.getSourceFiles()
-	const results: IpcTypeList = []
-	for (const sourceFile of sourceFiles) {
+	const ipcTypes: IpcTypeList = []
+	for (const sourceFile of project.getSourceFiles()) {
+		if (!path.normalize(sourceFile.getFilePath()).startsWith(projectRoot)) continue
 		const calls = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression)
 		for (const call of calls) {
 			const expr = call.getExpression()
-
 			if (expr.getText() === 'preloadInit') {
 				const feature = call.getArguments()[0]?.getText()
 				if (feature) {
@@ -199,21 +197,20 @@ async function getIpcTypes() {
 								})
 							}
 						}
-						results.push(result)
+						ipcTypes.push(result)
 					}
 				}
 			}
 		}
 	}
-
 	return {
-		ipcTypes: results,
+		ipcTypes,
 		features: [...features]
 	}
 }
 
 function createIpcTypeFile(types:IpcTypeList, features:Array<string>) {
-	const ipcTypeFilePath = path.join(workspace.getElectronRenderer(), 'types', 'ipc.d.ts')
+	const ipcTypeFilePath = path.join(workspace.getWorkspaceByName(process.env.ELECTRON_RENDERER), 'types', 'ipc.d.ts')
 	const preloadTypeFilePath = path.join(workspace.getWorkspaceByName('@package/electron'), 'types', 'preload.d.ts')
 	fs.removeSync(ipcTypeFilePath)
 	fs.removeSync(preloadTypeFilePath)
@@ -234,6 +231,7 @@ function createIpcTypeFile(types:IpcTypeList, features:Array<string>) {
 		const description = `/** ⚠️ ${item.features} 需求可用 ${item.eventName}  */\n`
 		content += `${item.features ? description : ''}${item.eventName}: (${callbackParams}) => ${item.callbackType}\n`
 	}
+	content += `'send': (event: string, ...args: unknown[]) => void\n`
 	const titleTop = '/** 由 electron/main/tsup.config.ts  自动生成, 请勿手动修改 */\n'
 	const EmitsOptions = `type EmitsOptions = {\n\tonce?: boolean\n\tprivate?: boolean\n}\n`
 

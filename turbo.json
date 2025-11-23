@@ -44,8 +44,7 @@
             "cache": false,
             "persistent": false,
             "dependsOn": [
-                "^build",
-                "lint"
+                "^build"
             ]
         },
         "@electron/main#build": {

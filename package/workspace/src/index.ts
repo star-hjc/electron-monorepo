@@ -22,18 +22,15 @@ class Workspace {
 		return item.path
 	}
 
-	getElectronMain(): WorkspacePath {
-		if (this.electronMain) return this.electronMain
-		const path = this.getWorkspaceByName('@electron/main')
-		this.electronMain = path
-		return path
-	}
-
-	getElectronRenderer(): string {
-		if (this.electronRenderer) return this.electronRenderer
-		const path = this.getWorkspaceByName('@electron/renderer')
-		this.electronRenderer = path
-		return path
+	getCommitHash(): string {
+		try {
+			return execSync('git rev-parse --short HEAD').toString().trim()
+		} catch (error) {
+			// 在打包后的应用中可能无法执行 git 命令
+			// eslint-disable-next-line no-console
+			console.warn('无法获取 git commit hash:', error)
+			return 'unknown'
+		}
 	}
 
 	getRoot(): string {

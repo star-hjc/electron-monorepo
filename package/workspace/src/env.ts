@@ -36,7 +36,9 @@ class Env {
 		const modeExists = modeEnvPath === void 0 ? false : existsSync(modeEnvPath)
 
 		if (!baseExists && !modeExists) {
+			// eslint-disable-next-line no-console
 			console.warn(`⚠️  环境文件不存在: ${baseEnvPath} 和 ${modeEnvPath}`)
+			// eslint-disable-next-line no-console
 			console.warn('💡 请创建 .env 文件或设置 NODE_ENV 环境变量')
 		}
 
@@ -91,16 +93,19 @@ class Env {
 		if (baseExists) {
 			loadedAnyFile = this.#loadEnvFile(baseEnvPath) || loadedAnyFile
 		} else {
+			// eslint-disable-next-line no-console
 			console.warn(`⚠️  基础环境文件不存在: ${baseEnvPath}`)
 		}
 
 		if (modeExists) {
 			loadedAnyFile = this.#loadEnvFile(modeEnvPath) || loadedAnyFile
 		} else {
+			// eslint-disable-next-line no-console
 			console.warn(`⚠️  模式环境文件不存在: ${modeEnvPath}`)
 		}
 
 		if (!loadedAnyFile) {
+			// eslint-disable-next-line no-console
 			console.warn('💡 没有加载任何环境文件，请检查环境配置')
 		}
 	}

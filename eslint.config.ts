@@ -356,7 +356,7 @@ export default [
 				}
 			],
 			'array-bracket-spacing': [2, 'never'],
-			'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+			'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 1,
 			'no-console': process.env.NODE_ENV === 'production' ? 2 : 1
 		}
 	},
