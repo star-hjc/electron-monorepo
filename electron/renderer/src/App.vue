@@ -9,13 +9,21 @@
 				alt="Vue logo"
 			/>
 		</a>
+		<!-- {{ count }} -->
+		{{ appStore.count }}
 	</div>
 	<HelloWorld msg="Vite + Vue" />
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+// import { storeToRefs } from 'pinia'
 import HelloWorld from './components/HelloWorld.vue'
+import { useAppStore } from '@/store'
+const appStore = useAppStore()
+// const { count } = storeToRefs(appStore)
+
+
 import { create_tags } from './logger'
 const console = create_tags('vue')
 console.log('app vue init')
@@ -28,6 +36,9 @@ ipc.on('cccc',(...args)=>{
 })
 
 onMounted(()=>{
+	setInterval(()=>{
+		appStore.count++
+	},1000)
 	ipc.ping1('666','8888').then((result)=>{
 		console.log('ping1 result:',result)
 	}).catch((error)=>{

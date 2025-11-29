@@ -76,24 +76,32 @@ class IpcConnector {
 		}
 	}
 
-	send(channel:string, ...args: [...unknown[], wins:number[]]) {
+	send(channel:string, ...args: unknown[]) {
+		webContents.getAllWebContents().map(v => v.send(channel, ...args))
+	}
+
+	sendByIds(channel:string, ...args:[...unknown[], targetWindowIds:number[]] ) {
 		this.rendererListeners.add(channel)
-		const wins = args.pop() as number[]
-		// eslint-disable-next-line no-console
-		console.info(`IpcConnector send to ${wins} windows`)
-		if (wins.length === 0) {
-			webContents.getAllWebContents().map(v => v.send(channel, ...args))
-			return
-		}
-		for (const id of wins) {
-			const content = webContents.fromId(id)
+		const targetWindowIds = args.pop() as number[]
+		if (targetWindowIds?.length === 0) throw(`IpcConnector sendByIds to ${targetWindowIds} windows`)
+		for (const windowId of targetWindowIds) {
+			const content = webContents.fromId(windowId)
 			if (!content) {
 				// eslint-disable-next-line no-console
-				console.warn(`IpcConnector.send to Window not exit WindowId: ${id} `)
+				console.warn(`IpcConnector.sendByIds to Window not exit WindowId: ${windowId} `)
 				continue
 			}
 			content.send(channel, ...args)
 		}
+	}
+
+	sendByNotIds(channel:string, ...args:[...unknown[], excludedWindowIds:number[]] ) {
+		this.rendererListeners.add(channel)
+		const ids = args.pop() as number[]
+		webContents.getAllWebContents().map(v => {
+			if (ids.includes(v.id)) return
+			v.send(channel, ...args)
+		})
 	}
 }
 

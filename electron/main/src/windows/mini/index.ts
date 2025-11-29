@@ -45,10 +45,11 @@ export async function createWindow() {
 			height: 400,
 			webPreferences: {
 				preload: path.join(__dirname, 'preload/index.js'),
-				devTools: true // 配置为false，可禁用打开控制台
+				devTools: false // 配置为false，可禁用打开控制台
 			}
 		}
 	})
+	
 
 	mb.on('ready', () => {
 		// tray.removeAllListeners();
@@ -63,6 +64,7 @@ export async function createWindow() {
 	})
 
 	mb.on('after-create-window', () => {
+		// mb.window.webContents.openDevTools({ mode: 'undocked' })
 		log.info('窗体创建成功', 'mini.ts::75行', mb.window.title)
 	})
 

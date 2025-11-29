@@ -1,0 +1,24 @@
+{
+  "name": "@package/pinia",
+  "version": "1.0.0",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "require": "./dist/src/index.js",
+      "import": "./dist/src/index.mjs"
+    },
+    "./*": {
+      "types": "./dist/src/*.d.ts",
+      "require": "./dist/src/*.js",
+      "import": "./dist/src/*.mjs"
+    }
+  },
+  "scripts": {
+    "postinstall": "tsup",
+    "dev": "tsup --watch",
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "pinia": "^3.0.4"
+  }
+}

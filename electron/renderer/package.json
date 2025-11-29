@@ -11,12 +11,14 @@
     "preinstall": "env ELECTRON_RENDERER"
   },
   "dependencies": {
-    "cli": "workspace:*",
     "@package/common": "workspace:*",
     "@package/wasm": "workspace:*",
+    "@package/pinia": "workspace:*",
+    "cli": "workspace:*",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.13",
-    "vue": "^3.5.13"
+    "pinia": "^3.0.4",
+    "vue": "^3.5.21"
   },
   "devDependencies": {
     "@package/workspace": "workspace:*",

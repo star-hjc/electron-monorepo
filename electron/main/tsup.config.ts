@@ -147,7 +147,7 @@ function getElectronPath(): string {
 }
 
 async function getIpcTypes() {
-	const ipcEventMap = { 'response': 'request', 'on': 'emit', 'send': 'on' }
+	const ipcEventMap = { 'response': 'request', 'on': 'emit', 'send': 'on', 'sendByIds': 'on', 'sendByNotIds': 'on' }
 	const features = new Set<string>()
 	const projectRoot = workspace.getWorkspaceByName(process.env.ELECTRON_MAIN)
 	const project = new Project({
@@ -169,6 +169,9 @@ async function getIpcTypes() {
 			if (Node.isPropertyAccessExpression(expr)) {
 				const className = expr.getExpression().getType().getSymbol()?.getName()
 				const functionName = expr.getName()
+				console.log(Object.keys(ipcEventMap).includes(functionName),className);
+				
+				
 				if (className === 'IpcConnector' && Object.keys(ipcEventMap).includes(functionName)) {
 					const args = call.getArguments()
 
@@ -226,13 +229,13 @@ function createIpcTypeFile(types:IpcTypeList, features:Array<string>) {
 			callbackParams = item.callbackParams.map(param => `${param.name}: ${param.type}`).join(', ')
 		}
 		if (item.functionName === 'on') {
-			content += `'${item.functionName}': (event: ${item.eventName}, callback: (...arg: unknown[]) => ${item.callbackType}) => ${item.callbackType}\n`
+			content += `${item.functionName}(event: ${item.eventName}, callback: (...arg) => ${item.callbackType}): ${item.callbackType}\n`
 			continue
 		}
 		const description = `/** ⚠️ ${item.features} 需求可用 ${item.eventName}  */\n`
 		content += `${item.features ? description : ''}${item.eventName}: (${callbackParams}) => ${item.callbackType}\n`
 	}
-	content += `'send': (event: string, ...args: unknown[]) => void\n`
+	content += `'send': (event: string, ...args) => void\n`
 	const titleTop = '/** 由 electron/main/tsup.config.ts  自动生成, 请勿手动修改 */\n'
 	const EmitsOptions = `type EmitsOptions = {\n\tonce?: boolean\n\tprivate?: boolean\n}\n`
 

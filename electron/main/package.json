@@ -9,12 +9,13 @@
     "preinstall": "env ELECTRON_MAIN"
   },
   "dependencies": {
-    "cli": "workspace:*",
     "@package/bridge": "workspace:*",
     "@package/common": "workspace:*",
-    "@package/napi": "workspace:*",
     "@package/electron": "workspace:*",
+    "@package/napi": "workspace:*",
+    "cli": "workspace:*",
     "dayjs": "^1.11.13",
+    "electron-store": "^11.0.2",
     "fs-extra": "^11.3.0",
     "menubar": "^9.5.1",
     "winston": "^3.17.0"

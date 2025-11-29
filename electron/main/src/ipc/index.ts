@@ -1,11 +1,17 @@
 import type { IpcMainEvent } from 'electron'
 import { Ipc } from '@package/electron'
 import { create_tags } from '@/logger'
+import initStoreIpc from './store'
+
+initStoreIpc()
 
 const log = create_tags('ipc')
 log.info('ipc init')
 
 const ipc = new Ipc()
+ipc.response('openDevTools', (event) => {
+	event.sender.openDevTools({ mode: 'undocked' })
+})
 
 let num = 0
 ipc.on('ping', (event: IpcMainEvent, id:number, value:number, callback:(name:string, time:number, num:number) => void) => {

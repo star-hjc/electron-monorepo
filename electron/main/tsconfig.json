@@ -9,21 +9,13 @@
         "noImplicitAny": false,
         "resolveJsonModule": true,
         "paths": {
-            "@/config/*": [
-                "./config/*"
-            ],
-            "@/logger": [
-                "./logger/index"
-            ],
-            "@/ipc": [
-                "./ipc/index"
-            ],
-            "@/windows": [
-                "./windows/index"
-            ],
-            "@/windows/*": [
-                "./windows/*"
+            "@/*": [
+                "./*"
             ],
         }
-    }
+    },
+    "include": [
+        "src/**/*",
+        "tsup.config.ts"
+    ]
 }
