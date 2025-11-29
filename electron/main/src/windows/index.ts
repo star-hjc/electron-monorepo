@@ -1,4 +1,5 @@
-import { app, BrowserWindow } from 'electron'
+import path from 'node:path'
+import { app, session, BrowserWindow } from 'electron'
 import WindowPool from '@package/electron/windows'
 import { logger } from '@/logger'
 import { createWindow as createMainWindow } from '@/windows/main'
@@ -25,11 +26,17 @@ async function initWindows() {
 }
 
 async function initApplication() {
+	initVueDevTools()
 	await initWindows()
 }
 
 async function initApplicationAfter() {
 	if (BrowserWindow.getAllWindows().length === 0) createMainWindow()
+}
+
+function initVueDevTools() {
+	if (app.isPackaged) return
+	session.defaultSession.loadExtension(path.join(process.env.ROOT_DIR, '.devtools/vue'))
 }
 
 async function initEnvInfoLog() {

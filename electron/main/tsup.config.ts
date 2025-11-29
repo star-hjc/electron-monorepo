@@ -38,7 +38,8 @@ export default defineConfig(({ env, watch }) => {
 	}, {
 		'process.env.COMMIT_HASH': `'${workspace.getCommitHash()}'`,
 		'process.env.VERSION': `'${version}'`,
-		'process.env.OS': `'${os.type()}'`
+		'process.env.OS': `'${os.type()}'`,
+		'process.env.ROOT_DIR': JSON.stringify(workspace.getRoot())
 	})
 	const isDev = env.NODE_ENV === process.env.DEV_ENV
 	const outDir = 'dist'

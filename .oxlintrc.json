@@ -1,5 +1,8 @@
 {
     "plugins": [],
+    "ignorePatterns": [
+        ".devtools/**/*"
+    ],
     "categories": {
         "correctness": "error",
         "suspicious": "warn",
