@@ -11,8 +11,7 @@
         "comments": false,
         "strings": true
     },
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",    
-    
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "[toml]": {
         "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
@@ -24,5 +23,8 @@
     },
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "oxc.oxc-vscode"
     }
 }

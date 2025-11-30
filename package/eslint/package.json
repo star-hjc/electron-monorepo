@@ -1,0 +1,28 @@
+{
+  "name": "@package/eslint",
+  "version": "1.0.0",
+  "description": "Custom ESLint rules for the project",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "devDependencies": {
+    "@types/estree": "^1.0.8",
+    "@types/node": "^22.13.8",
+    "tsup": "^8.4.0",
+    "typescript": "5.8.2"
+  },
+  "peerDependencies": {
+    "eslint": "^9.21.0"
+  }
+}
