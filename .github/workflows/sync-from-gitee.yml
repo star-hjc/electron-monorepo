@@ -1,0 +1,118 @@
+name: Sync from Gitee to GitHub
+
+on:
+  # 手动触发工作流
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: '同步原因'
+        required: false
+        default: '手动同步'
+  # 定时同步 - 每天凌晨2点
+  schedule:
+    - cron: '0 2 * * *'
+  # 当GitHub仓库有push时触发（避免循环同步）
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+      - '.github/**'
+
+jobs:
+  sync-gitee-to-github:
+    name: Sync Gitee to GitHub
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout GitHub code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Git identity
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+
+    - name: Add Gitee remote
+      run: git remote add gitee https://gitee.com/hejiachen/ai-chat-ultral-pc.git
+
+    - name: Fetch from Gitee
+      run: git fetch gitee --tags
+
+    - name: Check if Gitee has new changes
+      id: check-changes
+      run: |
+        # 检查Gitee是否有新的提交
+        if git log master..gitee/master --oneline | grep -q .; then
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "发现Gitee有新提交，开始同步..."
+        else
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "Gitee没有新提交，跳过同步"
+        fi
+
+    - name: Merge Gitee changes
+      if: steps.check-changes.outputs.has_changes == 'true'
+      run: |
+        # 合并Gitee的更改
+        git checkout master
+        git merge gitee/master --allow-unrelated-histories --no-edit
+        
+        # 处理可能的冲突（简单策略：优先Gitee）
+        if [ -f .git/MERGE_HEAD ]; then
+          echo "处理合并冲突..."
+          # 使用theirs策略解决冲突（优先Gitee的更改）
+          git checkout --theirs .
+          git add .
+          git commit -m "Merge conflict resolution: prefer Gitee changes"
+        fi
+
+    - name: Push to GitHub
+      if: steps.check-changes.outputs.has_changes == 'true'
+      run: |
+        git push origin master
+        git push --tags origin
+
+    - name: Show sync status
+      run: |
+        echo "同步完成！"
+        echo "Gitee仓库: https://gitee.com/hejiachen/ai-chat-ultral-pc"
+        echo "GitHub仓库: https://github.com/star-hjc/electron-monorepo"
+        echo "最后一次提交:"
+        git log -1 --oneline
+
+    - name: Send notification on success
+      if: success()
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.issue?.number || 1,
+            body: '✅ Gitee到GitHub同步完成！\n\n' +
+                  `同步时间: ${new Date().toLocaleString('zh-CN')}\n` +
+                  `最后一次提交: ${process.env.LAST_COMMIT || '未知'}\n` +
+                  '[查看Gitee仓库](https://gitee.com/hejiachen/ai-chat-ultral-pc)\n' +
+                  '[查看GitHub仓库](https://github.com/star-hjc/electron-monorepo)'
+          })
+
+    - name: Send notification on failure
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.issue?.number || 1,
+            body: '❌ Gitee到GitHub同步失败！\n\n' +
+                  `失败时间: ${new Date().toLocaleString('zh-CN')}\n` +
+                  '请检查工作流日志以获取详细信息。\n' +
+                  '[查看工作流运行](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})'
+          })
