@@ -49,7 +49,6 @@ export async function createWindow() {
 			}
 		}
 	})
-	
 
 	mb.on('ready', () => {
 		// tray.removeAllListeners();

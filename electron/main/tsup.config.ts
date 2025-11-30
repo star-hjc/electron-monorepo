@@ -169,9 +169,6 @@ async function getIpcTypes() {
 			if (Node.isPropertyAccessExpression(expr)) {
 				const className = expr.getExpression().getType().getSymbol()?.getName()
 				const functionName = expr.getName()
-				console.log(Object.keys(ipcEventMap).includes(functionName),className);
-				
-				
 				if (className === 'IpcConnector' && Object.keys(ipcEventMap).includes(functionName)) {
 					const args = call.getArguments()
 

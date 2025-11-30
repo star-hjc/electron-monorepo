@@ -1,3 +1,3 @@
 import electronPlugin from './electron'
 
-export {electronPlugin}
+export { electronPlugin }

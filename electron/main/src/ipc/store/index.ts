@@ -5,11 +5,9 @@ const log = create_tags('ipc-store')
 const ipc = new Ipc()
 
 ipc.response('syncStore', (event, storeId:string, property:string, value:unknown) => {
-    
-    log.info('rendererSyncStore', storeId, property, value, event.frameId)
-    ipc.sendByNotIds('syncStore', storeId, property, value, [event.frameId])
+	ipc.sendByNotIds('syncStore', storeId, property, value, event.frameId, [event.frameId])
 })
 
-export default () =>{
-    log.info('init ipc store')
+export default () => {
+	log.info('init ipc store')
 }

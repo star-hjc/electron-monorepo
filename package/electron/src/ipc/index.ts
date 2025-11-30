@@ -80,10 +80,10 @@ class IpcConnector {
 		webContents.getAllWebContents().map(v => v.send(channel, ...args))
 	}
 
-	sendByIds(channel:string, ...args:[...unknown[], targetWindowIds:number[]] ) {
+	sendByIds(channel:string, ...args:[...unknown[], targetWindowIds:number[]]) {
 		this.rendererListeners.add(channel)
 		const targetWindowIds = args.pop() as number[]
-		if (targetWindowIds?.length === 0) throw(`IpcConnector sendByIds to ${targetWindowIds} windows`)
+		if (targetWindowIds?.length === 0) throw Error(`IpcConnector sendByIds to ${targetWindowIds} windows`)
 		for (const windowId of targetWindowIds) {
 			const content = webContents.fromId(windowId)
 			if (!content) {
@@ -95,7 +95,7 @@ class IpcConnector {
 		}
 	}
 
-	sendByNotIds(channel:string, ...args:[...unknown[], excludedWindowIds:number[]] ) {
+	sendByNotIds(channel:string, ...args:[...unknown[], excludedWindowIds:number[]]) {
 		this.rendererListeners.add(channel)
 		const ids = args.pop() as number[]
 		webContents.getAllWebContents().map(v => {
