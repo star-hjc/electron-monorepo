@@ -90,16 +90,38 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          github.rest.issues.createComment({
+          const syncTitle = "Gitee Sync Logs";
+          
+          // 查找已存在的同步日志 Issue
+          const issues = await github.rest.search.issuesAndPullRequests({
+            q: `repo:${context.repo.owner}/${context.repo.repo} is:issue "${syncTitle}"`
+          });
+          
+          let issueNumber;
+          
+          if (issues.data.total_count > 0) {
+            issueNumber = issues.data.items[0].number;
+          } else {
+            // 如果不存在，创建一个新的 Issue
+            const newIssue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: syncTitle,
+              body: "This issue tracks the sync status from Gitee to GitHub."
+            });
+            issueNumber = newIssue.data.number;
+          }
+          
+          // 在该 Issue 下发表评论
+          await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: context.payload.issue?.number || 1,
+            issue_number: issueNumber,
             body: '✅ Gitee到GitHub同步完成！\n\n' +
-                  `同步时间: ${new Date().toLocaleString('zh-CN')}\n` +
-                  `最后一次提交: ${process.env.LAST_COMMIT || '未知'}\n` +
+                  `同步时间: ${new Date().toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'})}\n` +
                   '[查看Gitee仓库](https://gitee.com/hejiachen/ai-chat-ultral-pc)\n' +
                   '[查看GitHub仓库](https://github.com/star-hjc/electron-monorepo)'
-          })
+          });
 
     - name: Send notification on failure
       if: failure()
