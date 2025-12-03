@@ -14,7 +14,7 @@ export default {
 	],
 	directories: {
 		buildResources: './',
-		output: path.join(workspace.getRoot(), 'app')
+		output: path.join(workspace.getRoot(), '.app')
 	},
 	extraResources: {
 		from: '../../resources/',
@@ -30,7 +30,7 @@ export default {
 		'./node_modules/@package/bridge/**/*'
 	],
 	afterPack: async(context:AfterPackContext) => {
-		if (context.packager.platform.buildConfigurationKey === 'win') {
+		if (context.packager.platform.buildConfigurationKey === 'win1') {
 			const bridgePath = path.join(context.appOutDir, 'resources/app.asar.unpacked/node_modules/@package/bridge')
 			for (const file of readdirSync(bridgePath)) {
 				const filePath = path.join(bridgePath, file)

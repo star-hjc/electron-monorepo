@@ -3,8 +3,7 @@ import { app } from 'electron'
 import path from 'node:path'
 
 export const resourcesDir = path.join(process.cwd(), app.isPackaged ? 'resources' : '../resources')
-// eslint-disable-next-line no-console
-console.log('resourcesDir:', resourcesDir)
+
 const logDirname = path.join(resourcesDir, 'logs')
 export default {
 	log: {

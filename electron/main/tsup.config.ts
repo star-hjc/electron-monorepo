@@ -6,12 +6,13 @@ import { existsSync, readFileSync, writeFileSync, readdirSync } from 'node:fs'
 import { createRequire, builtinModules } from 'node:module'
 import { type ChildProcess, spawn, execSync } from 'node:child_process'
 import fs from 'fs-extra'
-import { dependencies, devDependencies, main, name as packageName } from './package.json'
+import { dependencies, devDependencies, main, type, name as packageName } from './package.json'
 import electronConfig from './electron.config'
 import { version } from '../../package.json'
 import workspace from '@package/workspace'
 import workspaceEnv from '@package/workspace/env'
 import os from 'node:os'
+import bytenode from 'bytenode'
 
 type IpcTypeCallbackParams = Array<{ name: string; type: string }>
 
@@ -88,10 +89,18 @@ export default defineConfig(({ env, watch }) => {
 			}
 		],
 		onSuccess: async() => {
+			const output = main.replace('.js', '.jsc')
+			const electronPath = getElectronPath()
+			await bytenode.compileFile({
+				filename: main,
+				output,
+				electron: true,
+				electronPath
+			})
+			writeFileSync(main, `require('bytenode');\nrequire('./${path.basename(output)}')`)
 			if (watch) {
 				const { ipcTypes, features } = await getIpcTypes()
 				createIpcTypeFile(ipcTypes, features)
-
 				ps = spawn(getElectronPath(), ['--disable-gpu ', '.'], { stdio: 'inherit' })
 				return
 			}
@@ -110,14 +119,17 @@ export default defineConfig(({ env, watch }) => {
 					continue
 				}
 			}
+
 			const packageJson = {
 				main: buildMainPath,
 				name: electronConfig.productName,
 				version,
+				type,
 				dependencies,
 				devDependencies
 			}
-
+			// eslint-disable-next-line no-console
+			console.log('packageJson---------', packageJson)
 			const cwd = path.join(__dirname, outDir)
 			fs.copySync(path.join(envDir, 'electron/renderer/dist'), path.join(__dirname, '/dist/renderer'))
 			writeFileSync(`${outDir}/package.json`, JSON.stringify(packageJson, null, 2))

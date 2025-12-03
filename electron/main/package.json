@@ -1,6 +1,7 @@
 {
   "name": "@electron/main",
   "version": "0.0.1",
+  "type": "commonjs",
   "main": "./dist/src/main.js",
   "scripts": {
     "dev": "tsup --watch --env.NODE_ENV development",
@@ -13,7 +14,7 @@
     "@package/common": "workspace:*",
     "@package/electron": "workspace:*",
     "@package/napi": "workspace:*",
-    "cli": "workspace:*",
+    "bytenode": "^1.5.7",
     "dayjs": "^1.11.13",
     "electron-store": "^11.0.2",
     "fs-extra": "^11.3.0",
@@ -21,6 +22,7 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "cli": "workspace:*",
     "@package/workspace": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.13.8",
