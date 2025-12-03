@@ -19,6 +19,10 @@ on:
       - '.gitignore'
       - '.github/**'
 
+permissions:
+  contents: write
+  issues: write
+
 jobs:
   sync-gitee-to-github:
     name: Sync Gitee to GitHub
@@ -129,12 +133,30 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          github.rest.issues.createComment({
+          const syncTitle = "Gitee Sync Logs";
+          const issues = await github.rest.search.issuesAndPullRequests({
+            q: `repo:${context.repo.owner}/${context.repo.repo} is:issue "${syncTitle}"`
+          });
+          
+          let issueNumber;
+          if (issues.data.total_count > 0) {
+            issueNumber = issues.data.items[0].number;
+          } else {
+            const newIssue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: syncTitle,
+              body: "This issue tracks the sync status from Gitee to GitHub."
+            });
+            issueNumber = newIssue.data.number;
+          }
+
+          await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: context.payload.issue?.number || 1,
+            issue_number: issueNumber,
             body: '❌ Gitee到GitHub同步失败！\n\n' +
-                  `失败时间: ${new Date().toLocaleString('zh-CN')}\n` +
+                  `失败时间: ${new Date().toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'})}\n` +
                   '请检查工作流日志以获取详细信息。\n' +
                   '[查看工作流运行](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})'
-          })
+          });
