@@ -1,0 +1,3 @@
+provider: generic
+updaterCacheDirName: dev-updater
+url: http://starworkroom.xyz:38080

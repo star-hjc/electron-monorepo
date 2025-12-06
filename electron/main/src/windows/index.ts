@@ -5,10 +5,12 @@ import { logger } from '@/logger'
 import { createWindow as createMainWindow } from '@/windows/main'
 import { createWindow as createMiniWindow } from '@/windows/mini'
 import '@/ipc'
+import { initAutoUpdater } from '@/update'
 
 const windowPool = new WindowPool()
 
 async function initApplicationBefore() {
+	console.log('------------------------------', app.getPath('userData'))
 	app.on('browser-window-created', async(event, win) => {
 		const title = await getTitle(win)
 		windowPool.add(win.id, title)
@@ -21,7 +23,7 @@ async function initApplicationBefore() {
 }
 
 async function initWindows() {
-	await createMainWindow()
+	await createMainWindow().then(initAutoUpdater)
 	await createMiniWindow()
 }
 

@@ -9,20 +9,32 @@
 				alt="Vue logo"
 			/>
 		</a>
-		<!-- {{ count }} -->
-		{{ appStore.count }}
+		<div>当前版本: {{ version }}</div>
+		<div>appUpdateStatus:{{ appUpdateStatus }}</div>
+		<div>下载进度: {{ progress }}</div>
+		<div>
+			<button @click="checkUpdate">检查更新</button>&nbsp;&nbsp;
+			<button @click="downloadUpdate">安装更新</button>
+		</div>
+		<div>count: {{ appStore.count }}</div>
 	</div>
 	<HelloWorld msg="Vite + Vue" />
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 // import { storeToRefs } from 'pinia'
 import HelloWorld from './components/HelloWorld.vue'
 import { useAppStore } from '@/store'
 const appStore = useAppStore()
 // const { count } = storeToRefs(appStore)
+const appUpdateStatus = ref('')
+const progress = ref(0)
+const version = ref('')
 
+ipc.version().then((value)=>{
+	version.value = value
+})
 
 import { create_tags } from './logger'
 const console = create_tags('vue')
@@ -31,8 +43,45 @@ ipc.ping(1,2,(a,b,c)=>{
 	console.log('pong from main process',a,b,c);
 },{})
 
-ipc.on('cccc',(...args)=>{
-	console.log('cccc',args);
+const checkUpdate = () => {
+	ipc.checkUpdate()
+}
+
+const downloadUpdate = () => {
+	ipc.downloadUpdate()
+}
+
+
+
+ipc.on('appUpdate',({status, progress})=>{
+	switch (status) {
+		case 0:
+			appUpdateStatus.value = `正在检查更新... ,status: ${status}`
+			break;
+		case 1:
+			appUpdateStatus.value = `当前版本为最新版本, status: ${status}`
+			break;
+		case 2:
+			appUpdateStatus.value = `有可用更新, status: ${status}`
+			break;
+		case 3:
+			appUpdateStatus.value = `下载中...`
+			progress.value = progress.percent || 0
+			break;
+		case 4:
+			appUpdateStatus.value = `更新错误: ${status.error}`
+			break;
+		case 5:
+			appUpdateStatus.value = `更新下载完成，准备安装, status: ${status}`
+			if (confirm('是否现在安装更新？')) {
+				ipc.quitAndInstall(false, false)
+			}
+			break;
+		default:
+			appUpdateStatus.value = `未知状态: ${status}`
+			break;
+	}
+	console.log('status',status);
 })
 
 onMounted(()=>{

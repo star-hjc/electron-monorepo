@@ -21,7 +21,8 @@
         "**/dist/**",
         "**/target/**",
         "configs/tsconfig.schema.json",
-        "cli/bin/**"
+        "cli/bin/**",
+        "electron/renderer/types/ipc.d.ts"
     ],
     "words": [
         "AF_UNSPEC",

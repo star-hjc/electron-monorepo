@@ -1,11 +1,20 @@
-import { AfterPackContext } from 'electron-builder'
+import { AfterPackContext, Configuration } from 'electron-builder'
 import path from 'node:path'
 import dayjs from 'dayjs'
 import fs from 'fs-extra'
 import { readdirSync } from 'node:fs'
 import workspace from '@package/workspace'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
+// eslint-disable-next-line no-console
+console.log('ELECTRON_APP_UPDATE_URL:', process.env.ELECTRON_APP_UPDATE_URL)
 
 export default {
+	publish: {
+		provider: 'generic',
+		url: process.env.ELECTRON_APP_UPDATE_URL || ''
+	},
 	productName: 'test-app',
 	appId: 'com.xxx.xxx',
 	artifactName: `\${productName}-\${version}-\${arch}-${dayjs().format('YYMMDDHHmmss')}-${workspace.getCommitHash()}.\${ext}`,
@@ -47,4 +56,4 @@ export default {
 		// eslint-disable-next-line no-console
 		console.warn(context)
 	}
-}
+} as Configuration

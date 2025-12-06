@@ -29,13 +29,13 @@ class Windows {
 		this.names.clear()
 	}
 
-	getId(name:WindowsName): Set<WindowId> | undefined {
-		return this.names.get(name)
+	getId(name:WindowsName): Array<WindowId> {
+		return [...this.names.get(name)]
 	}
 }
 const Win = singleton(Windows)
 
-export const Wins = new Win()
+export const wins = new Win()
 
 export default Win
 

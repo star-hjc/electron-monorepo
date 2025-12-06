@@ -7,7 +7,6 @@ log.info('main', 888)
 
 export async function createWindow() {
 	const win = new BrowserWindow({
-		name: 'main',
 		title: 'main',
 		width: 850,
 		height: 830,

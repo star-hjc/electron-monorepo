@@ -107,8 +107,8 @@ class IpcConnector {
 
 const Ipc = singleton(IpcConnector)
 
-const ipc = new Ipc()
+export const ipc = new Ipc()
 
 ipcMain.handle('initIpc', (event, feature?:string) => ({ request: ipc.getHandles(feature), emit: ipc.getListeners(feature), on: ipc.getRendererListeners() }))
 
-export { Ipc }
+export default Ipc

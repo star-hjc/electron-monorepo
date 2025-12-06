@@ -70,10 +70,9 @@ export default defineConfig(({ env, watch }) => {
 			{
 				name: 'electron-plugin',
 				buildStart: () => {
-					const targetVersion = dependencies['electron-store']
-					const maxVersion = '9.0.0'
-					if (format !== 'esm' && targetVersion && !semver.lt(semver.clean(targetVersion.replace(/\^|~/, '')), maxVersion)) {
-						throw new Error(`package.json electron-store: targetVersion(${targetVersion}) > maxVersion(${maxVersion}) 不支持 CJS 格式`)
+					validateElectronStoreVersine(format)
+					if (isDev) {
+						createDevAppUpdateConfigFile('dev-updater')
 					}
 					if (existsSync(outDir)) {
 						for (const file of readdirSync(outDir)) {
@@ -135,6 +134,18 @@ export default defineConfig(({ env, watch }) => {
 		}
 	}
 })
+
+function createDevAppUpdateConfigFile(configFileDirName:string) {
+	writeFileSync('dev-app-update.yml', `provider: generic\nupdaterCacheDirName: ${configFileDirName}\nurl: ${process.env.ELECTRON_APP_UPDATE_URL}`)
+}
+
+function validateElectronStoreVersine(format:string) {
+	const targetVersion = dependencies['electron-store']
+	const maxVersion = '9.0.0'
+	if (format !== 'esm' && targetVersion && !semver.lt(semver.clean(targetVersion.replace(/\^|~/, '')), maxVersion)) {
+		throw new Error(`package.json electron-store: targetVersion(${targetVersion}) > maxVersion(${maxVersion}) 不支持 CJS 格式`)
+	}
+}
 
 async function encryptionCode(format: string, filename: string) {
 	if (format === 'esm') {

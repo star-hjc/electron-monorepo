@@ -1,14 +1,19 @@
+import { app } from 'electron'
 import type { IpcMainEvent } from 'electron'
-import { Ipc } from '@package/electron'
+import { ipc } from '@package/electron'
 import { create_tags } from '@/logger'
 import initStoreIpc from './store'
+import initAutoUpdaterIpc from './update'
 
 initStoreIpc()
+initAutoUpdaterIpc()
+
+ipc.response('version', () => {
+	return app.getVersion()
+})
 
 const log = create_tags('ipc')
 log.info('ipc init')
-
-const ipc = new Ipc()
 ipc.response('openDevTools', (event) => {
 	event.sender.openDevTools({ mode: 'undocked' })
 })
