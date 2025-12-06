@@ -13,6 +13,9 @@ export default {
 		maxsize: 10 * 1024 * 1024,
 		maxFiles: 5
 	},
+	preload: {
+		getPath: (name:string = '') => path.join(__dirname, 'preload', name)
+	},
 	icons: {
 		getPath: (name:string = '') => path.join(__dirname, `static/icons/${name}`)
 	}

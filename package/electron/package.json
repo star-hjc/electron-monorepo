@@ -24,7 +24,7 @@
     }
   },
   "scripts": {
-    "postinstall": "tsup",
+    "pretask": "tsup",
     "dev": "tsup --watch",
     "build": "tsup"
   },

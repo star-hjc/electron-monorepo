@@ -7,7 +7,7 @@
     "dev": "tsup --watch --env.NODE_ENV development",
     "dev:pro": "tsup --watch --env.NODE_ENV production",
     "build": "tsup --env.NODE_ENV production",
-    "preinstall": "env ELECTRON_MAIN"
+    "pretask": "env ELECTRON_MAIN"
   },
   "dependencies": {
     "@package/bridge": "workspace:*",
@@ -16,19 +16,21 @@
     "@package/napi": "workspace:*",
     "bytenode": "^1.5.7",
     "dayjs": "^1.11.13",
-    "electron-store": "^11.0.2",
+    "electron-store": "^8.2.0",
     "fs-extra": "^11.3.0",
     "menubar": "^9.5.1",
     "winston": "^3.17.0"
   },
   "devDependencies": {
-    "cli": "workspace:*",
     "@package/workspace": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.13.8",
+    "@types/semver": "^7.7.1",
+    "cli": "workspace:*",
     "dotenv": "^16.4.7",
     "electron": "35.2.0",
     "electron-builder": "26.0.1",
+    "semver": "^7.7.3",
     "ts-morph": "^26.0.0"
   }
 }

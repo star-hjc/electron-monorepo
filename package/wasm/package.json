@@ -14,6 +14,7 @@
     }
   },
   "scripts": {
+    "pretask": "pnpm dev",
     "dev": "wasm-pack build --out-dir ./dist --out-name index --target web",
     "build": "wasm-pack build --release --out-dir ./dist --out-name index --target web"
   },

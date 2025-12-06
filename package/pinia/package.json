@@ -14,7 +14,6 @@
     }
   },
   "scripts": {
-    "postinstall": "tsup",
     "dev": "tsup --watch",
     "build": "tsup"
   },

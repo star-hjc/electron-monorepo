@@ -1,4 +1,6 @@
+import { createRequire } from 'module'
 import { BridgeModule } from './types'
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const nativeModule:BridgeModule = require('./libs/index.node')
+const _require = createRequire(import.meta.url)
+const nativeModule: BridgeModule = _require('./index.node')
+
 export default nativeModule

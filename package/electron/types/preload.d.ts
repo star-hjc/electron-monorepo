@@ -5,5 +5,5 @@ type EmitsOptions = {
 	private?: boolean
 }
 
-type Feature = 'main'
-export type Features = [Feature, ...Feature[]]
+type Feature = never
+export type Features = undefined | [string, ...string[]]

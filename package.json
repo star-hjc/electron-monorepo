@@ -8,12 +8,14 @@
     "spell-check": "cspell .",
     "lint": "oxlint . && eslint .",
     "lint:pro": "oxlint . && cross-env NODE_ENV=production eslint .",
-    "dev": "pnpm lint && turbo run dev",
+    "dev": "pnpm pretask && pnpm lint && turbo run dev",
     "build": "pnpm lint:pro && turbo run build",
     "clean": "node cli/bin/clean.js",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "pretask": "turbo run pretask",
+    "postinstall": "pnpm pretask"
   },
   "engines": {
     "node": ">=18",

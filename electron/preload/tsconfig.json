@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "esModuleInterop": true,
+        "baseUrl": "./src",
+        "moduleResolution": "bundler",
+        "outDir": "dist",
+        "noImplicitAny": false,
+        "resolveJsonModule": true,
+    },
+    "include": [
+        "src/**/*",
+    ]
+}

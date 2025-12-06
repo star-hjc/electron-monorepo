@@ -16,7 +16,7 @@
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
-    "postinstall": "tsup"
+    "pretask": "tsup"
   },
   "devDependencies": {
     "dotenv": "^17.2.3"

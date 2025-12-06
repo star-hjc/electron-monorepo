@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
-    "preinstall": "tsup"
+    "pretask": "tsup"
   },
   "bin": {
     "env": "./bin/env.js",

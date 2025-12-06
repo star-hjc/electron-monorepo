@@ -13,6 +13,7 @@ import workspace from '@package/workspace'
 import workspaceEnv from '@package/workspace/env'
 import os from 'node:os'
 import bytenode from 'bytenode'
+import semver from 'semver'
 
 type IpcTypeCallbackParams = Array<{ name: string; type: string }>
 
@@ -44,6 +45,7 @@ export default defineConfig(({ env, watch }) => {
 	})
 	const isDev = env.NODE_ENV === process.env.DEV_ENV
 	const outDir = 'dist'
+	const format = type === 'module' ? 'esm' : 'cjs'
 	return {
 		define,
 		outDir: `./${outDir}/`,
@@ -52,11 +54,10 @@ export default defineConfig(({ env, watch }) => {
 		splitting: false,
 		sourcemap: isDev,
 		keepNames: isDev,
-		entry: ['src/main.ts', 'src/static', 'src/preload', 'electron.config.ts'],
-		format: ['cjs'],
+		entry: ['src/main.ts', 'src/static', 'electron.config.ts'],
+		format: [format],
 		tsconfig: 'tsconfig.json',
 		external: ['electron', /^electron\/.+/, /^@package\/(bridge|napi).*/, ...builtinModules.flatMap(m => [m, `node:${m}`])],
-		noExternal: ['@package/electron/preload'],
 		loader: {
 			'.icns': 'copy',
 			'.png': 'copy',
@@ -69,11 +70,16 @@ export default defineConfig(({ env, watch }) => {
 			{
 				name: 'electron-plugin',
 				buildStart: () => {
+					const targetVersion = dependencies['electron-store']
+					const maxVersion = '9.0.0'
+					if (format !== 'esm' && targetVersion && !semver.lt(semver.clean(targetVersion.replace(/\^|~/, '')), maxVersion)) {
+						throw new Error(`package.json electron-store: targetVersion(${targetVersion}) > maxVersion(${maxVersion}) 不支持 CJS 格式`)
+					}
 					if (existsSync(outDir)) {
 						for (const file of readdirSync(outDir)) {
 							const filePath = path.join(outDir, file)
 							const stats = fs.statSync(filePath)
-							if (stats.isDirectory() && file === 'node_modules') {
+							if (stats.isDirectory() && !['node_modules', 'preload'].includes(file)) {
 								continue
 							}
 							fs.removeSync(filePath)
@@ -89,15 +95,7 @@ export default defineConfig(({ env, watch }) => {
 			}
 		],
 		onSuccess: async() => {
-			const output = main.replace('.js', '.jsc')
-			const electronPath = getElectronPath()
-			await bytenode.compileFile({
-				filename: main,
-				output,
-				electron: true,
-				electronPath
-			})
-			writeFileSync(main, `require('bytenode');\nrequire('./${path.basename(output)}')`)
+			encryptionCode(format, main)
 			if (watch) {
 				const { ipcTypes, features } = await getIpcTypes()
 				createIpcTypeFile(ipcTypes, features)
@@ -137,6 +135,30 @@ export default defineConfig(({ env, watch }) => {
 		}
 	}
 })
+
+async function encryptionCode(format: string, filename: string) {
+	if (format === 'esm') {
+		// eslint-disable-next-line no-console
+		console.warn('esm 格式不支持加密')
+		return
+	}
+	if (!filename) {
+		// eslint-disable-next-line no-console
+		console.warn('Filename is undefined, skipping encryption')
+		return
+	}
+	const output = filename.replace('.js', '.jsc')
+	const electronPath = getElectronPath()
+	await bytenode.compileFile({
+		filename,
+		output,
+		compileAsModule: true,
+		createLoader: true,
+		loaderFilename: path.basename(filename),
+		electron: true,
+		electronPath
+	})
+}
 
 function getElectronPath(): string {
 	let electronExecPath = process.env.ELECTRON_EXEC_PATH || ''

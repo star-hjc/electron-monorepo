@@ -1,5 +1,44 @@
 {
     "tasks": {
+        "pretask": {
+            "cache": true,
+            "persistent": false,
+            "outputs": [
+                "dist/**"
+            ]
+        },
+        "@electron/renderer#pretask": {
+            "dependsOn": [
+                "cli#pretask"
+            ]
+        },
+        "@electron/main#pretask": {
+            "dependsOn": [
+                "cli#pretask"
+            ]
+        },
+        "cli#pretask": {
+            "dependsOn": [
+                "@package/workspace#pretask"
+            ]
+        },
+        "@package/workspace#pretask": {
+            "dependsOn": [
+                "@package/common#pretask"
+            ]
+        },
+        "@electron/preload#pretask": {
+            "outputs": [
+                "../main/dist/src/preload"
+            ],
+            "dependsOn": [
+                "@package/electron#pretask"
+            ]
+        },
+        "lint": {
+            "cache": true,
+            "persistent": false
+        },
         "dev": {
             "cache": true,
             "persistent": true,
@@ -24,6 +63,12 @@
             ]
         },
         "@package/wasm#dev": {
+            "persistent": false,
+            "outputs": [
+                "dist/**"
+            ]
+        },
+        "@electron/preload#dev": {
             "persistent": false,
             "outputs": [
                 "dist/**"

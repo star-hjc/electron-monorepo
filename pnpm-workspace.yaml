@@ -1,5 +1,6 @@
 packages:
   - electron/renderer/
+  - electron/preload/
   - electron/main/
   - process/main/
   - package/*
