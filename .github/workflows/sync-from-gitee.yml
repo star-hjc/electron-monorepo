@@ -3,10 +3,6 @@ name: Sync from Gitee to GitHub
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-  workflows: write
-
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -53,7 +49,7 @@ jobs:
 
   publish-docs:
     needs: sync
-    if: needs.sync.outputs.docs_changed == 'true'
+    if: needs.sync.outputs.docs_changed == 'true' || needs.sync.outputs.docs_changed == '' || needs.sync.outputs.docs_changed == 'false'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
