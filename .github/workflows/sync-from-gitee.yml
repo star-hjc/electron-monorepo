@@ -1,162 +1,75 @@
 name: Sync from Gitee to GitHub
 
 on:
-  # 手动触发工作流
   workflow_dispatch:
-    inputs:
-      reason:
-        description: '同步原因'
-        required: false
-        default: '手动同步'
-  # 定时同步 - 每天凌晨2点
-  schedule:
-    - cron: '0 2 * * *'
-  # 当GitHub仓库有push时触发（避免循环同步）
-  push:
-    branches: [ master ]
-    paths-ignore:
-      - 'README.md'
-      - '.gitignore'
-      - '.github/**'
-
-permissions:
-  contents: write
-  issues: write
 
 jobs:
-  sync-gitee-to-github:
-    name: Sync Gitee to GitHub
+  sync:
     runs-on: ubuntu-latest
-    
+    outputs:
+      docs_changed: ${{ steps.check-docs.outputs.docs_changed }}
     steps:
-    - name: Checkout GitHub code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Setup Git identity
-      run: |
+    - run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
+    - run: git remote add gitee https://gitee.com/hejiachen/ai-chat-ultral-pc.git
+    - run: git fetch gitee master --tags
+    - name: Record current commit
+      id: record-before
+      run: echo "before=$(git rev-parse master)" >> $GITHUB_OUTPUT
 
-    - name: Add Gitee remote
-      run: git remote add gitee https://gitee.com/hejiachen/ai-chat-ultral-pc.git
-
-    - name: Fetch from Gitee
-      run: git fetch gitee --tags
-
-    - name: Check if Gitee has new changes
-      id: check-changes
+    - name: Fast-forward from Gitee
       run: |
-        # 检查Gitee是否有新的提交
-        if git log master..gitee/master --oneline | grep -q .; then
-          echo "has_changes=true" >> $GITHUB_OUTPUT
-          echo "发现Gitee有新提交，开始同步..."
-        else
-          echo "has_changes=false" >> $GITHUB_OUTPUT
-          echo "Gitee没有新提交，跳过同步"
-        fi
-
-    - name: Merge Gitee changes
-      if: steps.check-changes.outputs.has_changes == 'true'
-      run: |
-        # 合并Gitee的更改
         git checkout master
-        git merge gitee/master --allow-unrelated-histories --no-edit
-        
-        # 处理可能的冲突（简单策略：优先Gitee）
-        if [ -f .git/MERGE_HEAD ]; then
-          echo "处理合并冲突..."
-          # 使用theirs策略解决冲突（优先Gitee的更改）
-          git checkout --theirs .
-          git add .
-          git commit -m "Merge conflict resolution: prefer Gitee changes"
+        if git rev-parse --verify gitee/master >/dev/null 2>&1; then
+          if ! git diff --quiet master gitee/master; then
+            git merge --ff-only gitee/master
+          fi
+        fi
+    - name: Check docs changed
+      id: check-docs
+      run: |
+        after=$(git rev-parse master)
+        if git diff --name-only "${{ steps.record-before.outputs.before }}" "$after" | grep -q '^docs/'; then
+          echo "docs_changed=true" >> $GITHUB_OUTPUT
+          echo "Docs changed between ${{ steps.record-before.outputs.before }} and $after"
+        else
+          echo "docs_changed=false" >> $GITHUB_OUTPUT
+          echo "Docs not changed"
         fi
 
     - name: Push to GitHub
-      if: steps.check-changes.outputs.has_changes == 'true'
       run: |
         git push origin master
         git push --tags origin
 
-    - name: Show sync status
+  publish-docs:
+    needs: sync
+    if: needs.sync.outputs.docs_changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20.19.5'
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 10.8.1
+    - run: pnpm install --no-frozen-lockfile
+    - run: pnpm docs:build
+    - name: Upload docs via SSH
+      env:
+        HOST: ${{ secrets.DOCS_SSH_HOST }}
+        USERNAME: ${{ secrets.DOCS_SSH_USERNAME }}
+        PASSWORD: ${{ secrets.DOCS_SSH_PASSWORD }}
+        TARGET: ${{ secrets.DOCS_TARGET_PATH }}
       run: |
-        echo "同步完成！"
-        echo "Gitee仓库: https://gitee.com/hejiachen/ai-chat-ultral-pc"
-        echo "GitHub仓库: https://github.com/star-hjc/electron-monorepo"
-        echo "最后一次提交:"
-        git log -1 --oneline
-
-    - name: Send notification on success
-      if: success()
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const syncTitle = "Gitee Sync Logs";
-          
-          // 查找已存在的同步日志 Issue
-          const issues = await github.rest.search.issuesAndPullRequests({
-            q: `repo:${context.repo.owner}/${context.repo.repo} is:issue "${syncTitle}"`
-          });
-          
-          let issueNumber;
-          
-          if (issues.data.total_count > 0) {
-            issueNumber = issues.data.items[0].number;
-          } else {
-            // 如果不存在，创建一个新的 Issue
-            const newIssue = await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: syncTitle,
-              body: "This issue tracks the sync status from Gitee to GitHub."
-            });
-            issueNumber = newIssue.data.number;
-          }
-          
-          // 在该 Issue 下发表评论
-          await github.rest.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: issueNumber,
-            body: '✅ Gitee到GitHub同步完成！\n\n' +
-                  `同步时间: ${new Date().toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'})}\n` +
-                  '[查看Gitee仓库](https://gitee.com/hejiachen/ai-chat-ultral-pc)\n' +
-                  '[查看GitHub仓库](https://github.com/star-hjc/electron-monorepo)'
-          });
-
-    - name: Send notification on failure
-      if: failure()
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const syncTitle = "Gitee Sync Logs";
-          const issues = await github.rest.search.issuesAndPullRequests({
-            q: `repo:${context.repo.owner}/${context.repo.repo} is:issue "${syncTitle}"`
-          });
-          
-          let issueNumber;
-          if (issues.data.total_count > 0) {
-            issueNumber = issues.data.items[0].number;
-          } else {
-            const newIssue = await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: syncTitle,
-              body: "This issue tracks the sync status from Gitee to GitHub."
-            });
-            issueNumber = newIssue.data.number;
-          }
-
-          await github.rest.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: issueNumber,
-            body: '❌ Gitee到GitHub同步失败！\n\n' +
-                  `失败时间: ${new Date().toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'})}\n` +
-                  '请检查工作流日志以获取详细信息。\n' +
-                  '[查看工作流运行](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})'
-          });
+        sudo apt-get update && sudo apt-get install -y sshpass
+        sshpass -p "$PASSWORD" scp -o StrictHostKeyChecking=no -r docs/.vitepress/dist/* "$USERNAME@$HOST:$TARGET/"

@@ -1,0 +1,7 @@
+.vp-doc ul {
+  list-style-type: disc;
+}
+
+.vp-doc ul ul {
+  list-style-type: circle;
+}
