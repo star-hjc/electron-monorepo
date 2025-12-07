@@ -7,7 +7,7 @@
     "dev": "tsup --watch --env.NODE_ENV development",
     "dev:pro": "tsup --watch --env.NODE_ENV production",
     "build": "tsup --env.NODE_ENV production",
-    "pretask": "env ELECTRON_MAIN"
+    "pretask": "local_env ELECTRON_MAIN"
   },
   "dependencies": {
     "@package/bridge": "workspace:*",

@@ -8,7 +8,7 @@
     "dev:pro": "vite --mode production",
     "build": "vue-tsc -b && vite build --mode production",
     "preview": "vite preview",
-    "pretask": "env ELECTRON_RENDERER"
+    "pretask": "local_env ELECTRON_RENDERER"
   },
   "dependencies": {
     "@package/common": "workspace:*",

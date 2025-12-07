@@ -8,7 +8,7 @@
     "pretask": "tsup"
   },
   "bin": {
-    "env": "./bin/env.js",
+    "local_env": "./bin/env.js",
     "clean": "./bin/clean.js"
   },
   "author": "",
