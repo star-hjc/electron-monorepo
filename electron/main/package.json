@@ -7,7 +7,7 @@
     "dev": "tsup --watch --env.NODE_ENV development",
     "dev:pro": "tsup --watch --env.NODE_ENV production",
     "build": "tsup --env.NODE_ENV production",
-    "pretask": "local_env ELECTRON_MAIN"
+    "pretask": "tsx pretask"
   },
   "dependencies": {
     "@package/bridge": "workspace:*",
@@ -32,6 +32,7 @@
     "electron": "35.2.0",
     "electron-builder": "26.0.1",
     "semver": "^7.7.3",
-    "ts-morph": "^26.0.0"
+    "ts-morph": "^26.0.0",
+    "tsx": "^4.21.0"
   }
 }

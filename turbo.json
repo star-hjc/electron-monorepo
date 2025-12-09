@@ -93,8 +93,6 @@
             ]
         },
         "@electron/main#build": {
-            "cache": false,
-            "persistent": false,
             "dependsOn": [
                 "@electron/renderer#build"
             ]

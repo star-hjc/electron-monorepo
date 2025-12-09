@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node build-macos.ts",
-    "build": "ts-node build-macos.ts"
+    "dev": "tsx build-macos.ts",
+    "build": "tsx build-macos.ts"
   },
   "keywords": [],
   "author": "",

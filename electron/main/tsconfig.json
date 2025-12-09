@@ -16,6 +16,7 @@
     },
     "include": [
         "src/**/*",
-        "tsup.config.ts"
+        "tsup.config.ts",
+        "pretask.ts"
     ]
 }
