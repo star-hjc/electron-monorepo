@@ -73,4 +73,5 @@ jobs:
         PORT: ${{ secrets.DOCS_SSH_PORT }}
       run: |
         sudo apt-get update && sudo apt-get install -y sshpass
+        sshpass -p "$PASSWORD" ssh -p "$PORT" -o StrictHostKeyChecking=no "$USERNAME@$HOST" "mkdir -p '$TARGET'"
         sshpass -p "$PASSWORD" scp -P "$PORT" -o StrictHostKeyChecking=no -r docs/.vitepress/dist/* "$USERNAME@$HOST:$TARGET/"
