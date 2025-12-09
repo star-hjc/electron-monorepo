@@ -70,6 +70,7 @@ jobs:
         USERNAME: ${{ secrets.DOCS_SSH_USERNAME }}
         PASSWORD: ${{ secrets.DOCS_SSH_PASSWORD }}
         TARGET: ${{ secrets.DOCS_TARGET_PATH }}
+        PORT: ${{ secrets.DOCS_SSH_PORT }}
       run: |
         sudo apt-get update && sudo apt-get install -y sshpass
-        sshpass -p "$PASSWORD" scp -o StrictHostKeyChecking=no -r docs/.vitepress/dist/* "$USERNAME@$HOST:$TARGET/"
+        sshpass -p "$PASSWORD" scp -P "$PORT" -o StrictHostKeyChecking=no -r docs/.vitepress/dist/* "$USERNAME@$HOST:$TARGET/"
